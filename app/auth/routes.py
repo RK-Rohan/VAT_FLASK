@@ -1,11 +1,11 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, current_user, logout_user
 from auth import auth
 from auth.models import Users
 
 from app import db
 
-from auth.forms import LoginForm, CreateAccountForm
+from auth.forms import LoginForm, CreateAccountForm, EmployeesForm
 from auth.util import verify_pass, hash_pass
 
 
@@ -93,3 +93,62 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
+
+
+# Employees Page
+@auth.route('/employees/')
+def employees_page():
+    form = EmployeesForm(request.form)
+    all_data = Users.query.all()
+    return render_template('employees/index.html', users=all_data, form=form)
+
+
+@auth.route('/employees/create', methods=['GET', 'POST'])
+def employees_create():
+    form = EmployeesForm(request.form)
+    if 'employees' in request.form:
+        # Check username exists
+        user = Users.query.filter_by(username=form.username.data).first()
+        if user:
+            return render_template('auth/register.html',
+                                   msg='Username already registered',
+                                   success=False,
+                                   form=form)
+
+        # Check email exists
+        user = Users.query.filter_by(email=form.email.data).first()
+        if user:
+            return render_template('auth/register.html',
+                                   msg='Email already registered',
+                                   success=False,
+                                   form=form)
+        # else we can create the user
+        data = Users(
+            username=form.username.data,
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            email=form.email.data,
+            password=hash_pass(request.form['password']),
+        )
+        db.session.add(data)
+        db.session.commit()
+
+        return redirect(url_for('auth.employees_page'))
+
+    else:
+        return redirect(url_for('auth.employees_page'))
+
+
+@auth.route('/users/update', methods=['GET', 'POST'])
+def users_update():
+    if request.method == 'POST':
+        data = Users.query.get(request.form.get('id'))
+
+        data.first_name = request.form['first_name']
+        data.last_name = request.form['last_name']
+        data.email = request.form['email']
+
+        db.session.commit()
+        flash("Units Updated Successfully")
+
+        return redirect(url_for('auth.employees_page'))

@@ -4,7 +4,6 @@ from wtforms.validators import Email, DataRequired
 
 
 # Company Forms
-Country = [('1', '8am'), ('2', '10am')]
 Vat_type = [('1', 'Deducted'), ('2', 'Not Deducted')]
 Currency = [('1', 'Taka'), ('2', 'US Dollar'), ('3', 'Yuan'), ('4', 'Ruble')]
 
@@ -14,7 +13,7 @@ class CompanyForm(FlaskForm):
     short_name = StringField('short_name', validators=[DataRequired()])
     email_address = EmailField('email_address', validators=[DataRequired(), Email()])
     phone_number = StringField('phone_number', validators=[DataRequired()])
-    country = SelectField(u'country', choices=Country)
+    country = SelectField('country', choices=[])
     address = StringField('address', validators=[DataRequired()])
     invoice_logo = StringField('invoice_logo', validators=[DataRequired()])
     bank_name = StringField('bank_name', validators=[DataRequired()])
@@ -31,5 +30,4 @@ class CompanyForm(FlaskForm):
     person_phone_number = StringField('person_phone_number', validators=[DataRequired()])
     nid = StringField('nid', validators=[DataRequired()])
     person_email = StringField('person_email', validators=[DataRequired()])
-
 

@@ -1,8 +1,7 @@
-from flask_login import UserMixin
 from app import db
 
 
-class Company(UserMixin, db.Model):
+class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company_name = db.Column(db.String(100))
     short_name = db.Column(db.String(50))
@@ -26,3 +25,11 @@ class Company(UserMixin, db.Model):
     nid = db.Column(db.String(100))
     person_email = db.Column(db.String(100))
 
+
+class Country(db.Model):
+    __tablename__ = 'countries'
+
+    id = db.Column(db.Integer, primary_key=True)
+    shortname = db.Column(db.String(100))
+    country_name = db.Column(db.String(100))
+    country_code = db.Column(db.Integer)

@@ -1,18 +1,19 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
-
+from flask_wtf.csrf import CSRFProtect
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
+csrf = CSRFProtect()
 
 
 def create_app():
     app = Flask(__name__)
 
     # Configure SQLAlchemy Connection
-    app.config['SECRET_KEY'] = 'f5sdf43sd4cds5vf2sd154fsd3'
+    app.config['SECRET_KEY'] = 'seCREtKeY'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:''@localhost/bmit_vat_service'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
@@ -21,10 +22,13 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    csrf.init_app(app)
 
     # Import models file
     from auth.models import Users
     from company.models import Company
+    from units.models import Units
+    # from customers.models import Customers
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -39,5 +43,11 @@ def create_app():
 
     from company import company as company_blueprint
     app.register_blueprint(company_blueprint)
+
+    from units import units as units_blueprint
+    app.register_blueprint(units_blueprint)
+
+    from customers import customers as customers_blueprint
+    app.register_blueprint(customers_blueprint)
 
     return app

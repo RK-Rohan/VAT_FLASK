@@ -1,0 +1,156 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+     <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Employees Information </h5>
+                                                <button type="button" class="btn btn-success float-right"
+                                                                data-toggle="modal" data-target="#usermodal">Add Employee</button>
+                                            </div>
+                                            <div class="card-block table-border-style">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Username</th>
+                                                                <th>First Name</th>
+                                                                <th>Last Name</th>
+                                                                <th>Email</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for row in users %}
+                                                            <tr>
+                                                                <th>{{loop.index}}</th>
+                                                                <td>{{row.username}}</td>
+                                                                <td>{{row.first_name}}</td>
+                                                                <td>{{row.last_name}}</td>
+                                                                <td>{{row.email}}</td>
+                                                                <td>
+                                                                    <a href="users/update/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal"
+                                                                        data-target="#modaledit{{row.id}}">Edit</a>
+                                                                </td>
+                                                            </tr>
+                                <!-- Modal Edit Employee -->
+                                <div class="modal fade" id="modaledit{{row.id}}" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Edit Users</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ url_for('auth.users_update') }}" method="POST">
+                                                {{ form.csrf_token }}
+                                                    <div class="form-group">
+                                                        <label for="first_name">First Name:</label>
+                                                        <input type="hidden" name="id" value="{{row.id}}">
+                                                        <input type="text" name="first_name" value="{{row.first_name}}" required="1" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="last_name">Last Name:</label>
+                                                        <input type="text" name="last_name" value="{{row.last_name}}" required="1" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="email">email:</label>
+                                                        <input type="email" name="email" value="{{row.email}}" required="1" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary" type="submit">Update</button>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Edit Employee Modal -->
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            <!-- Modal Add Employee -->
+                                            <div class="modal fade" id="usermodal" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Add Employee</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="{{ url_for('auth.employees_create') }}" method="POST">
+                                                            {{ form.csrf_token }}
+                                                                <div class="form-group">
+                                                                    <label for="username">Username:</label>
+                                                                    {{ form.username(placeholder="Username", class="form-control") }}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="first_name">First Name:</label>
+                                                                    {{ form.first_name(placeholder="First Name", class="form-control") }}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="last_name">Last Name:</label>
+                                                                    {{ form.last_name(placeholder="Last Name", class="form-control") }}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="name">Email:</label>
+                                                                    {{ form.email(placeholder="Email", class="input form-control", type="email") }}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="name">Password:</label>
+                                                                    {{ form.password(placeholder="Password", class="form-control", type="password") }}
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <button name="employees" class="btn btn-primary" type="submit">Add Employee</button>
+                                                                </div>
+                                
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End Add Employee Modal -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
