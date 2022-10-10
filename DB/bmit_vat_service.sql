@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 27, 2022 at 02:46 PM
+-- Generation Time: Oct 10, 2022 at 08:20 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.28
 
@@ -36,7 +36,7 @@ CREATE TABLE `alembic_version` (
 --
 
 INSERT INTO `alembic_version` (`version_num`) VALUES
-('2a100b47edb8');
+('26e8299c418f');
 
 -- --------------------------------------------------------
 
@@ -344,6 +344,34 @@ INSERT INTO `countries` (`id`, `shortname`, `country_name`, `country_code`) VALU
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `customers`
+--
+
+CREATE TABLE `customers` (
+  `id` int(11) NOT NULL,
+  `customer_name` varchar(100) DEFAULT NULL,
+  `email_address` varchar(100) DEFAULT NULL,
+  `phone_number` varchar(100) DEFAULT NULL,
+  `country` varchar(100) DEFAULT NULL,
+  `customer_type` varchar(100) DEFAULT NULL,
+  `customer_address` varchar(100) DEFAULT NULL,
+  `shipping_address` varchar(100) DEFAULT NULL,
+  `shipping_country` varchar(100) DEFAULT NULL,
+  `customer_bin` varchar(100) DEFAULT NULL,
+  `customer_tin` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`id`, `customer_name`, `email_address`, `phone_number`, `country`, `customer_type`, `customer_address`, `shipping_address`, `shipping_country`, `customer_bin`, `customer_tin`) VALUES
+(1, 'Rezaul Karim', 'bmit@gmail.com', '01710336617', '18', '1', 'Nikunju 2', 'Nikunju', '1', '25414132554122', '78546745675467'),
+(2, 'Test Customer 1', 'testcustomer1@gmail.com', '01850145577', '18', '1', 'Nikunju', 'Nikunju', '18', '25414132554122', '78546745675467');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `units`
 --
 
@@ -360,7 +388,8 @@ CREATE TABLE `units` (
 INSERT INTO `units` (`id`, `unit_name`, `short_name`) VALUES
 (1, 'Kilogram', 'KG'),
 (2, 'Milometer', 'MM'),
-(3, 'Service', 'Service');
+(3, 'Service', 'Service'),
+(4, 'Box', 'Box');
 
 -- --------------------------------------------------------
 
@@ -410,6 +439,12 @@ ALTER TABLE `countries`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `customers`
+--
+ALTER TABLE `customers`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `units`
 --
 ALTER TABLE `units`
@@ -440,10 +475,16 @@ ALTER TABLE `countries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
 
 --
+-- AUTO_INCREMENT for table `customers`
+--
+ALTER TABLE `customers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `units`
 --
 ALTER TABLE `units`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`

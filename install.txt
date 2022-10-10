@@ -1,0 +1,20 @@
+// Install Virtual Enviroment
+pip install virtualenv
+
+// Activate Virtual Enviroment
+venv\scripts\activate
+
+// Install All required Pakage
+pip3 install -r requirements.txt
+
+
+// Configure MySQL Database on app.py file
+
+// Flask-Migrate Database
+
+flask db init
+
+flask db migrate -m "Initial migration."
+
+flask db upgrade
+
