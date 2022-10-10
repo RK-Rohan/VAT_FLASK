@@ -50,4 +50,7 @@ def create_app():
     from customers import customers as customers_blueprint
     app.register_blueprint(customers_blueprint)
 
+    # from supplier import supplier as supplier_blueprint
+    # app.register_blueprint(supplier_blueprint)
+
     return app

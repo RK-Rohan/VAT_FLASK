@@ -24,13 +24,13 @@
                     <label>Contacts</label>
                 </li>
 
-                <li class="nav-item">
-                    <a href="/profile.html" class="nav-link">
+                <li class="nav-item {% if request.path == '/customers/' %}active{% endif %}">
+                    <a href="{{ url_for('customers.customers_page') }}" class="nav-link">
                         <span class="pcoded-micon"><i class="feather icon-users"></i></span>
                             <span class="pcoded-mtext">Customers</span></a>
                 </li>
                 <li class="nav-item">
-                    <a href="/profile.html" class="nav-link">
+                    <a href="{{ url_for('customers.customers_page') }}" class="nav-link">
                         <span class="pcoded-micon"><i class="feather icon-users"></i></span>
                             <span class="pcoded-mtext">Suppliers</span></a>
                 </li>
