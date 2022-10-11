@@ -23,7 +23,7 @@ def upgrade():
     sa.Column('customer_name', sa.String(length=100), nullable=True),
     sa.Column('email_address', sa.String(length=100), nullable=True),
     sa.Column('phone_number', sa.String(length=100), nullable=True),
-    sa.Column('country', sa.String(length=100), nullable=True),
+    sa.Column('country_id', sa.String(length=100), nullable=True),
     sa.Column('customer_type', sa.String(length=100), nullable=True),
     sa.Column('customer_address', sa.String(length=100), nullable=True),
     sa.Column('shipping_address', sa.String(length=100), nullable=True),

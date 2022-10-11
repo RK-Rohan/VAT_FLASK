@@ -7,7 +7,7 @@ class Customers(db.Model):
     customer_name = db.Column(db.String(100))
     email_address = db.Column(db.String(100))
     phone_number = db.Column(db.String(100))
-    country = db.Column(db.String(100))
+    country_id = db.Column(db.String(100))
     customer_type = db.Column(db.String(100))
     customer_address = db.Column(db.String(100))
     shipping_address = db.Column(db.String(100))

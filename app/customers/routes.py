@@ -13,14 +13,14 @@ login_manager = LoginManager()
 @customers.route('/customers/')
 def customers_page():
     form = CustomersForm(request.form)
-    form.country.choices = [(country.id, country.country_name) for country in Country.query.all()]
+    form.country_id.choices = [(country.id, country.country_name) for country in Country.query.all()]
     form.shipping_country.choices = [(country.id, country.country_name) for country in Country.query.all()]
     all_data = Customers.query.all()
     result = db.session.execute(
         "SELECT customers.*, countries.country_name "
         "FROM `customers` "
         "JOIN countries "
-        "ON customers.country = countries.id"
+        "ON customers.country_id = countries.id"
     )
     return render_template('customers/index.html', customers=result, form=form)
 
@@ -34,7 +34,7 @@ def customers_create():
             customer_name=form.customer_name.data,
             email_address=form.email_address.data,
             phone_number=form.phone_number.data,
-            country=form.country.data,
+            country_id=form.country_id.data,
             customer_type=form.customer_type.data,
             customer_address=form.customer_address.data,
             shipping_address=form.shipping_address.data,
@@ -58,7 +58,7 @@ def customers_update():
         data.customer_name = request.form['customer_name']
         data.email_address = request.form['email_address']
         data.phone_number = request.form['phone_number']
-        data.country = request.form['country']
+        data.country_id = request.form['country_id']
         data.customer_type = request.form['customer_type']
         data.customer_address = request.form['customer_address']
         data.shipping_address = request.form['shipping_address']

@@ -8,10 +8,10 @@ customerType = [('1', 'Local'), ('2', 'Foreign')]
 
 
 class CustomersForm(FlaskForm):
-    customer_name = StringField('unit_name', validators=[DataRequired()])
+    customer_name = StringField('customer_name', validators=[DataRequired()])
     email_address = EmailField('email_address', validators=[DataRequired(), Email()])
     phone_number = StringField('phone_number', validators=[DataRequired()])
-    country = SelectField('country', choices=[])
+    country_id = SelectField('country_id', choices=[])
     customer_type = SelectField(u'customer_type', choices=customerType)
     customer_address = StringField('customer_address', validators=[DataRequired()])
     shipping_address = StringField('shipping_address')
