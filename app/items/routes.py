@@ -3,8 +3,9 @@ from flask_login import LoginManager, login_required
 
 from items import items
 from app import db
-from items.models import Items
+from items.models import Items, HSCode
 from items.forms import ItemsForm
+from units.models import Units
 
 login_manager = LoginManager()
 
@@ -12,40 +13,47 @@ login_manager = LoginManager()
 @items.route('/items/')
 def items_page():
     form = ItemsForm(request.form)
-    result = Items.query.all()
-    # result = db.session.execute(
-    #     "SELECT customers.*, countries.country_name "
-    #     "FROM `customers` "
-    #     "JOIN countries "
-    #     "ON customers.country_id = countries.id"
-    # )
-    return render_template('customers/index.html', items=result, form=form)
+    # result = Items.query.all()
+    result = db.session.execute(
+        "SELECT items.*, hs_code.hs_code, units.unit_name "
+        "FROM `items` "
+        "JOIN units ON items.unit_id = units.id "
+        "JOIN hs_code  ON items.hs_code = hs_code.id "
+    )
+    return render_template('items/index.html', items=result, form=form)
 
 
-# @customers.route('/customers/create', methods=['GET', 'POST'])
-# @login_required
-# def customers_create():
-#     form = CustomersForm(request.form)
-#     if 'add_customer' in request.form:
-#         data = Customers(
-#             customer_name=form.customer_name.data,
-#             email_address=form.email_address.data,
-#             phone_number=form.phone_number.data,
-#             country_id=form.country_id.data,
-#             customer_type=form.customer_type.data,
-#             customer_address=form.customer_address.data,
-#             shipping_address=form.shipping_address.data,
-#             shipping_country=form.shipping_country.data,
-#             customer_bin=form.customer_bin.data,
-#             customer_tin=form.customer_tin.data
-#         )
-#         db.session.add(data)
-#         db.session.commit()
-#
-#         flash("Customers Inserted Successfully")
-#     return redirect(url_for('customers.customers_page'))
-#
-#
+@items.route('/items/create/', methods=['GET', 'POST'])
+def items_create():
+    form = ItemsForm(request.form)
+    form.unit_id.choices = [(units.id, units.unit_name) for units in Units.query.all()]
+    form.hs_code.choices = [(hs_code.id, hs_code.hs_code) for hs_code in HSCode.query.all()]
+    hs_code = HSCode.query.all()
+
+    return render_template('items/create.html', form=form, hs_code=hs_code)
+
+
+@items.route('/items/store/', methods=['GET', 'POST'])
+def items_store():
+    form = ItemsForm(request.form)
+    # hs_code_id = form.hs_code.data
+    # hs_code = db.session.execute("SELECT hs_code FROM hs_code WHERE id = %s", [hs_code_id])
+
+    if 'item_create' in request.form:
+        data = Items(
+            item_name=form.item_name.data,
+            unit_id=form.unit_id.data,
+            hs_code=form.hs_code.data,
+            hs_code_id=form.hs_code.data,
+            item_type=form.item_type.data,
+        )
+        db.session.add(data)
+        db.session.commit()
+    flash("Item Inserted Successfully")
+
+    return redirect(url_for('items.items_page'))
+
+
 # @customers.route('/customers/update', methods=['GET', 'POST'])
 # def customers_update():
 #

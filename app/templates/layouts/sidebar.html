@@ -41,8 +41,8 @@
                 <li class="nav-item pcoded-hasmenu">
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-package"></i></span><span
                             class="pcoded-mtext">Inventory</span></a>
-                    <ul class="pcoded-submenu {% if 'settings' in segment %} active {% endif %}">
-                        <li {% if request.path == '/company/edit/' %}class="active"{% endif %}><a href="{{ url_for('company.company_update') }}" class="" >Items</a></li>
+                    <ul class="pcoded-submenu {% if 'items/' in segment %} active {% endif %}">
+                        <li {% if request.path == '/items/' %}class="active"{% endif %}><a href="{{ url_for('items.items_page') }}" class="" >Items</a></li>
                     </ul>
                 </li>
 

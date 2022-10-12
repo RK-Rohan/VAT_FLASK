@@ -44,8 +44,7 @@ def customers_create():
         )
         db.session.add(data)
         db.session.commit()
-
-        flash("Customers Inserted Successfully")
+    flash("Customers Inserted Successfully")
     return redirect(url_for('customers.customers_page'))
 
 
