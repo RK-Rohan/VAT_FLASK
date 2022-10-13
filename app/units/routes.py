@@ -32,6 +32,21 @@ def units_create():
     return redirect(url_for('units.units_page'))
 
 
+@units.route('/items/units', methods=['GET', 'POST'])
+def items_unit():
+    form = UnitsForm(request.form)
+    if 'add_unit' in request.form:
+        data = Units(
+            unit_name=form.unit_name.data,
+            short_name=form.short_name.data
+        )
+        db.session.add(data)
+        db.session.commit()
+
+        flash("Unit Inserted Successfully")
+    return redirect(url_for('items.items_create'))
+
+
 @units.route('/units/update', methods=['GET', 'POST'])
 def units_update():
 

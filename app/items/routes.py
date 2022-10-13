@@ -5,7 +5,9 @@ from items import items
 from app import db
 from items.models import Items, HSCode
 from items.forms import ItemsForm
+
 from units.models import Units
+from units.forms import UnitsForm
 
 login_manager = LoginManager()
 
@@ -26,11 +28,12 @@ def items_page():
 @items.route('/items/create/', methods=['GET', 'POST'])
 def items_create():
     form = ItemsForm(request.form)
+    unitsform = UnitsForm(request.form)
     form.unit_id.choices = [(units.id, units.unit_name) for units in Units.query.all()]
     form.hs_code.choices = [(hs_code.id, hs_code.hs_code) for hs_code in HSCode.query.all()]
     hs_code = HSCode.query.all()
 
-    return render_template('items/create.html', form=form, hs_code=hs_code)
+    return render_template('items/create.html', form=form, hs_code=hs_code, units=unitsform)
 
 
 @items.route('/items/store/', methods=['GET', 'POST'])
