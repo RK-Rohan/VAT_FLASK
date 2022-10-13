@@ -42,9 +42,10 @@
                                                 <div class="col-sm-3 mb-4">
                                                     <div class="form-group">
                                                         <label for="unit_id">Unit </label>
-                                                    {{ form.unit_id(class="form-control") }}
+                                                        {{ form.unit_id(class="form-control") }}
                                                     </div>
                                                 </div>
+
 
                                                 <div class="col-sm-4 mb-4">
                                                     <div class="form-group">
@@ -54,6 +55,7 @@
                                                                 <option value="{{ row.id }}">{{ row.hs_code }} - {{ row.description }}</option>
                                                                 {% endfor %}
                                                             </select>
+
                                                     <input type="hidden" name="hs_code_id" id="hs_code_id">
                                                     </div>
                                                 </div>
