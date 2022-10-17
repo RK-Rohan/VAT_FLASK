@@ -1,4 +1,4 @@
-from app import db
+from app import db, ma
 from sqlalchemy import Column
 from sqlalchemy.dialects.mysql import TINYINT, YEAR
 
@@ -33,3 +33,14 @@ class HSCode(db.Model):
     year_start = db.Column(db.Date)
     year_end = db.Column(db.Date)
     calculate_year = Column(YEAR)
+
+
+class ItemSchema(ma.Schema):
+    class Meta:
+        fields = (
+            "id", "item_name", "item_type", "hs_code", "hs_code_id", "sd",
+            "vat", "calculate_year", "unit_id", "stock_status", "status"
+        )
+
+
+

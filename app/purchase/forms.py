@@ -13,6 +13,7 @@ class PurchaseForm(FlaskForm):
     challan_no = StringField('challan_no')
     challan_date = DateField('challan_date')
     fiscal_year = SelectField(u'fiscal_year', choices=[('1', '2021'), ('2', '2022')])
+    item_name = StringField('item_name')
     total_vds = DecimalField('total_vds')
     grand_total = DecimalField('grand_total')
     total_tax = DecimalField('total_tax')

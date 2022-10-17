@@ -1,9 +1,12 @@
 from app import db
 from sqlalchemy import Column
 from sqlalchemy.dialects.mysql import DATE, DATETIME
+from sqlalchemy_serializer import SerializerMixin
 
 
-class Purchase(db.Model):
+class Purchase(db.Model, SerializerMixin):
+    serialize_only = ('non_sqlalchemy_field', 'id')
+    serialize_rules = ()
     id = db.Column(db.Integer, primary_key=True)
     p_invoice_no = db.Column(db.String(100))
     purchase_type = db.Column(db.Integer)

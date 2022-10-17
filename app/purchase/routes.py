@@ -1,4 +1,6 @@
-from flask import render_template, request, flash, redirect, url_for
+import json
+
+from flask import render_template, request, flash, redirect, url_for, jsonify
 from flask_login import LoginManager, login_required
 
 from purchase import purchase
@@ -7,6 +9,7 @@ from purchase.models import Purchase
 from purchase.forms import PurchaseForm
 
 from suppliers.models import Suppliers
+from items.models import Items, ItemSchema
 
 login_manager = LoginManager()
 
@@ -29,27 +32,9 @@ def purchase_create():
     form = PurchaseForm(request.form)
     form.supplier_id.choices = [(suppliers.id, suppliers.supplier_name) for suppliers in Suppliers.query.all()]
     if request.method == "GET":
-        items = ["C++", "Python", "PHP", "Java", "C", "Ruby"]
-    return render_template('purchase/create.html', form=form, items=items)
-#
-#
-# @items.route('/items/store/', methods=['GET', 'POST'])
-# def items_store():
-#     form = ItemsForm(request.form)
-#     # hs_code_id = form.hs_code.data
-#     # hs_code = db.session.execute("SELECT hs_code FROM hs_code WHERE id = %s", [hs_code_id])
-#
-#     if 'item_create' in request.form:
-#         data = Items(
-#             item_name=form.item_name.data,
-#             unit_id=form.unit_id.data,
-#             hs_code=form.hs_code.data,
-#             hs_code_id=form.hs_code.data,
-#             item_type=form.item_type.data,
-#         )
-#         db.session.add(data)
-#         db.session.commit()
-#     flash("Item Inserted Successfully")
-#
-#     return redirect(url_for('items.items_page'))
-
+        items = Items.query.all()
+        result = db.session.execute(
+            "SELECT items.item_name "
+            "FROM `items` "
+        )
+    return render_template('purchase/create.html', form=form, items=result)

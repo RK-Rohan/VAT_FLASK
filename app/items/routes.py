@@ -1,9 +1,9 @@
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, jsonify
 from flask_login import LoginManager, login_required
 
 from items import items
 from app import db
-from items.models import Items, HSCode
+from items.models import Items, HSCode, ItemSchema
 from items.forms import ItemsForm
 
 from units.models import Units
@@ -22,6 +22,7 @@ def items_page():
         "JOIN units ON items.unit_id = units.id "
         "JOIN hs_code  ON items.hs_code = hs_code.id "
     )
+
     return render_template('items/index.html', items=result, form=form)
 
 
@@ -57,24 +58,56 @@ def items_store():
     return redirect(url_for('items.items_page'))
 
 
-# @customers.route('/customers/update', methods=['GET', 'POST'])
-# def customers_update():
-#
-#     if request.method == 'POST':
-#         data = Customers.query.get(request.form.get('id'))
-#
-#         data.customer_name = request.form['customer_name']
-#         data.email_address = request.form['email_address']
-#         data.phone_number = request.form['phone_number']
-#         data.country_id = request.form['country_id']
-#         data.customer_type = request.form['customer_type']
-#         data.customer_address = request.form['customer_address']
-#         data.shipping_address = request.form['shipping_address']
-#         data.shipping_country = request.form['shipping_country']
-#         data.customer_bin = request.form['customer_bin']
-#         data.customer_tin = request.form['customer_tin']
-#
-#         db.session.commit()
-#         flash("Customers Updated Successfully")
-#
-#         return redirect(url_for('customers.customers_page'))
+@items.route('/api/items/',  methods=['GET', 'POST'])
+def item_list():
+    # item_lists = Items.query.all()
+    item_lists = db.session.execute(
+        "SELECT items.*, hs_code.sd, hs_code.vat "
+        "FROM `items`"
+        "JOIN hs_code ON items.hs_code_id = hs_code.id "
+    )
+    item_schema = ItemSchema()
+    output = item_schema.dump(item_lists, many=True)
+    return jsonify({'items': output})
+
+
+@items.route('/api/items/<itemid>/', methods=['GET', 'POST'])
+def item_details(itemid):
+    # item_lists = Items.query.get(id)
+    itemList = Items.query.join(HSCode, Items.hs_code_id == HSCode.id)\
+        .add_columns\
+        (
+            Items.id,
+            Items.item_name,
+            Items.item_type,
+            Items.hs_code_id,
+            Items.unit_id,
+            HSCode.hs_code,
+            HSCode.sd,
+            HSCode.vat
+        ).filter(Items.id == itemid)
+
+    item_schema = ItemSchema()
+    output = item_schema.dump(itemList, many=True)
+    return jsonify({'items': output})
+
+
+@items.route('/api/items/terms/<term>/', methods=['GET', 'POST'])
+def item_term(term):
+    # item_lists = Items.query.get(id)
+    itemList = Items.query.join(HSCode, Items.hs_code_id == HSCode.id)\
+        .add_columns\
+        (
+            Items.id,
+            Items.item_name,
+            Items.item_type,
+            Items.hs_code_id,
+            Items.unit_id,
+            HSCode.hs_code,
+            HSCode.sd,
+            HSCode.vat
+        ).filter(Items.item_name.ilike("%" + term + "%"))
+    print(itemList)
+    item_schema = ItemSchema()
+    output = item_schema.dump(itemList, many=True)
+    return jsonify({'items': output})

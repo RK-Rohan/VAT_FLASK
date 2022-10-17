@@ -1,12 +1,16 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
+from flask_marshmallow import Marshmallow
+
+
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
 csrf = CSRFProtect()
+ma = Marshmallow()
 
 
 def create_app():
@@ -23,12 +27,10 @@ def create_app():
     migrate.init_app(app, db)
     login_manager.init_app(app)
     csrf.init_app(app)
+    ma.init_app(app)
 
     # Import models file
     from auth.models import Users
-    from company.models import Company
-    from units.models import Units
-    # from customers.models import Customers
 
     @login_manager.user_loader
     def load_user(user_id):
