@@ -6,6 +6,12 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <style>
+        table, th, td {
+          border: 1px solid #dee2e6;
+        }
+    </style>
 {% endblock stylesheets %}
 
 {% block content %}
@@ -67,28 +73,28 @@
 
                                                 <div class="col-md-12">
                                                    <div class="form-group">
-                                                      <label for="serach_item">Add Items</label>
-                                                      <input id="serach_item" class="form-control serach_item" type="text" name="serach_item" placeholder="Enter Hs-Code or product name" autocomplete="off">
+                                                      <label for="item_search">Add Items</label>
+                                                      <input id="item_search" class="form-control item_search" type="text" placeholder="Enter Hs-Code or product name" autocomplete="off">
                                                    </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="card-block table-border-style">
                                                         <div class="table-responsive">
-                                                            <table class="table table-hover">
+                                                            <table class="table table-hover purchase_table" id="purchase_table">
                                                                 <thead class="thead-light">
                                                                 <tr>
-                                                                    <th>Item Name</th>
-                                                                    <th>Quantity</th>
+                                                                    <th style='width:220px'>Item Name</th>
+                                                                    <th style='width:100px'>Quantity</th>
                                                                     <th>Rate (BDT)</th>
-                                                                    <th>Value</th>
-                                                                    <th>SD%</th>
+                                                                    <th style='width:120px'>Value</th>
+                                                                    <th style='width:100px'>SD%</th>
                                                                     <th>SD (BDT)</th>
-                                                                    <th>Vatable Value(BDT)</th>
-                                                                    <th>VAT Type</th>
-                                                                    <th>VAT (%)</th>
+                                                                    <th>Vatable Value</th>
+                                                                    <th style='width:215px'>VAT Type</th>
+                                                                    <th style='width:100px'>VAT (%)</th>
                                                                     <th>VAT (BDT)</th>
-                                                                    <th> VDS </th>
-                                                                    <th> Rebate </th>
+                                                                    <th style='width:115px'> VDS </th>
+                                                                    <th style="width:115px"> Rebate </th>
                                                                     <th> Total Amount </th>
                                                                     <th> Action </th>
                                                                 </tr>
@@ -143,64 +149,109 @@
         $('select').selectpicker();
 
         // Autocomplete Item Name
-         //var mapping = new Map();
-        $( "#serach_item" ).autocomplete({
+        $( "#item_search" ).autocomplete({
             minChars: 1,
 
             source: function(request, response){
-                let term = request.term.toString().toLowerCase()
+                let term = request.term;
                    $.ajax({
                        url: "/api/items/terms/"+term+"/",
                        type: "GET",
                        dataType: "json",
                       success: function(data){
-                        let info = data.items;
                         var suggestions = [];
-                        for(var i = 0; i < info.length; ++i){
-                            suggestions.push(info[i].item_name);
-                            //mapping[info[i].item_name] = info[i].items_id;
-                            //mapping.set(info[i].items_id);
+                        for(var i = 0; i < data.length; ++i){
+                            suggestions.push(data[i].item_name);
                          }
-                        response(suggestions);
+                        //response(suggestions);
+                        response($.map(data, function(objet){
+                            return {
+                                label: objet.item_name,
+                                value: objet.item_name,
+                                id: objet.id
+                                };
+                        }));
                       }
                    });
             },
             select: function (event, ui) {
-                        console.log(event);
-                        console.log(ui);
-                let itemid = '2';
-                            $.ajax({
-                                method: 'GET',
-                                url: '/api/items/'+itemid+'/',
-                                dataType: 'json'
-                            }).done(function (data1) {
-                                $.map(data1, function (items, i) {
-                                    $('#table_input').append(
-                                        "<tr><td><input type='text' class='form-control item_name' name='item_name' value='" + items.id + "' /></td>" +
-                                        "<td><input type='text' class='form-control' name='quantity' /></td>" +
-                                        "<td><input type='text' class='form-control' name='rate' value=''" + "/></td>" +
-                                        "<td><input type='text' class='form-control' name='rate_value' value=''" + "/></td>" +
-                                        "<td><input type='text' class='form-control' name='sd_percent' value='" + items.sd + "' /></td>" +
-                                        "<td><input type='text' class='form-control' name='sd_bdt' value=''" + "/></td>" +
-                                        "<td><input type='text' class='form-control' name='vatable_value' value=''" + "/></td>" +
-                                        "<td><input type='text' class='form-control' name='vat_type' value=''" + "/></td>" +
-                                        "<td><input type='text' class='form-control' name='vat_percent' value='" + items.vat + "' /></td>" +
-                                        "<td><input type='text' class='form-control' name='vat_bdt' value=''" + "/></td>" +
-                                        "<td><input type='text' class='form-control' name='vds' value=''" + "/></td>" +
-                                        "<td><input type='text' class='form-control' name='rebate' value=''" + "/></td>" +
-                                        "<td><input type='text' class='form-control' name='total_amount' value=''" + "/></td></tr>"
-                                    )
-                                })
-                            });
-                           // End Ajax
+                let itemid = ui.item.id;
+                $.ajax({
+                    method: 'GET',
+                    url: '/api/items/'+itemid+'/',
+                    dataType: 'json'
+                }).done(function (data1) {
+                    $.map(data1, function (items, i) {
+                        $('#table_input').append(
+                            "<tr><input type='hidden' name='items_id' value='" + items.id + "' />" +
+                            "<input type='hidden' name='hs_code_id' value='" + items.hs_code_id + "' />" +
+                            "<input type='hidden' name='hs_code' value='" + items.hs_code + "' />" +
+                            "<td><input type='text' class='form-control' name='item_name' value='" + items.item_name + "' readonly/></td>" +
+                            "<td><input type='text' class='form-control qty' id='qty' name='quantity' /></td>" +
+                            "<td><input type='text' class='form-control rate' name='rate' value=''" + "/></td>" +
+                            "<td><input type='text' class='form-control rate_value' name='rate_value' value=''" + "/></td>" +
+                            "<td><input type='text' class='form-control sd_percent' name='sd_percent' value='" + items.sd + "' /></td>" +
+                            "<td><input type='text' class='form-control sd_bdt' name='sd_bdt' value=''" + "/></td>" +
+                            "<td><input type='text' class='form-control vatable_value' name='vatable_value' value=''" + "/></td>" +
+                            "<td>" +
+                                '<select name="vat_type[]" id="vat_type" class="form-control">'+
+                                    '<option  value="1" data-vds = "0" data-category ="1" data-vat="15" selected>Standard Rate(15%)</option>'+
+                                    '<option  value="2" data-vds = "0" data-category ="2" data-vat="0">Zero Rate(0%)</option>'+
+                                    '<option  value="3" data-vds = "0" data-category ="2" data-vat="0">Exempted</option>'+
+                                    '<option  value="4" data-vds = "1" data-category ="1" data-vat="Specific">Specific</option>'+
+                                    '<option  value="5" data-vds = "1" data-category ="1" data-vat="others">Other Than Standard Rate </option>'+
+                                    '<option  value="7" data-vds = "1" data-category ="2" data-vat="unregistered">Unregistered Entities</option>'+
+                                    '<option  value="6" data-vds = "1" data-category ="2" data-vat="4">Turnover TAX</option>'+
+                                '</select>'+
+                            "</td>" +
+                            "<td><input type='text' class='form-control' name='vat_percent' value='" + items.vat + "' /></td>" +
+                            "<td><input type='text' class='form-control' name='vat_bdt' value=''" + "/></td>" +
+                            "<td>" +
+                                '<select name="vds[]" id="vds_" class="form-control">'+
+                                    '<option value="1" >Yes</option>'+
+                                    '<option value="0" >No</option>'+
+                                '</select>'+
+                            "</td>" +
+                            "<td>" +
+                                '<select name="rebate[]" id="rebate_" class="form-control">'+
+                                    '<option value="1">Yes</option>'+
+                                    '<option value="0">No</option>'+
+                                    '<option value="2">Zero/Exmptd/Turn/unreg</option>'+
+                                '</select>'+
+                            "</td>" +
+                            "<td><input type='text' class='form-control' name='total_amount' value=''" + "/></td>" +
+                            '<td>' +
+                                '<button type="button" class="btn btn-outline-danger delete">' +
+                                '<span><i class="fa-solid fa-xmark"></i></span>' +
+                                '</button>' +
+                            '</td></tr>'
+                        )
+                    })
+                    $('#item_search').val('');
+
+                    $( ".qty, .rate" ).change(function() {
+                        let qty=$('.qty').val();
+                        let rate=$('.rate').val();
+                        let rate_value=parseFloat(rate)*qty;
+                        let sd_amount=parseFloat(rate_value)*sd_rate/100;
+                        $('.rate_value').val(rate_value.toFixed(2));
+                    });
+                });
+               // End Ajax
             }
         });
         // End Autocomplete
 
+       $('#purchase_table').on('click', '.delete', function(){
+           var row_id = $(this).attr("id");
+           $(this).closest('tr').remove();
+       });
 
 
 
     });
+
+
 </script>
 
 {#  <script>#}

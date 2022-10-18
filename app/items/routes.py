@@ -58,17 +58,17 @@ def items_store():
     return redirect(url_for('items.items_page'))
 
 
-@items.route('/api/items/',  methods=['GET', 'POST'])
-def item_list():
-    # item_lists = Items.query.all()
-    item_lists = db.session.execute(
-        "SELECT items.*, hs_code.sd, hs_code.vat "
-        "FROM `items`"
-        "JOIN hs_code ON items.hs_code_id = hs_code.id "
-    )
-    item_schema = ItemSchema()
-    output = item_schema.dump(item_lists, many=True)
-    return jsonify({'items': output})
+# @items.route('/api/items/',  methods=['GET', 'POST'])
+# def item_list():
+#     # item_lists = Items.query.all()
+#     item_lists = db.session.execute(
+#         "SELECT items.*, hs_code.sd, hs_code.vat "
+#         "FROM `items`"
+#         "JOIN hs_code ON items.hs_code_id = hs_code.id "
+#     )
+#     item_schema = ItemSchema()
+#     output = item_schema.dump(item_lists, many=True)
+#     return jsonify(output)
 
 
 @items.route('/api/items/<itemid>/', methods=['GET', 'POST'])
@@ -89,7 +89,7 @@ def item_details(itemid):
 
     item_schema = ItemSchema()
     output = item_schema.dump(itemList, many=True)
-    return jsonify({'items': output})
+    return jsonify(output)
 
 
 @items.route('/api/items/terms/<term>/', methods=['GET', 'POST'])
@@ -110,4 +110,4 @@ def item_term(term):
     print(itemList)
     item_schema = ItemSchema()
     output = item_schema.dump(itemList, many=True)
-    return jsonify({'items': output})
+    return jsonify(output)
