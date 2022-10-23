@@ -38,3 +38,21 @@ def purchase_create():
             "FROM `items` "
         )
     return render_template('purchase/create.html', form=form, items=result)
+
+
+@purchase.route('/purchase/store/', methods=['GET', 'POST'])
+def purchase_store():
+    form = PurchaseForm(request.form)
+    if 'purchase_store' in request.form:
+        data = Purchase(
+            supplier_id=form.supplier_id.data,
+            entry_date=form.entry_date.data,
+            challan_date=form.challan_date.data,
+            purchase_type='3',
+            vendor_invoice=form.challan_no.data,
+        )
+        db.session.add(data)
+        db.session.commit()
+    flash("Puchase Store Successfully")
+
+    return redirect(url_for('purchase.purchase_page'))

@@ -86,7 +86,7 @@ def item_details(itemid):
             HSCode.sd,
             HSCode.vat
         ).filter(Items.id == itemid)
-
+    print(itemList)
     item_schema = ItemSchema()
     output = item_schema.dump(itemList, many=True)
     return jsonify(output)
