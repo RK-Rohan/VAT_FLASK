@@ -26,3 +26,11 @@ class PurchaseForm(FlaskForm):
     boe_item_no = IntegerField('boe_item_no')
     notes = TextAreaField('notes')
     user_id = IntegerField('user_id')
+
+
+class Purchase_line(FlaskForm):
+    item_id = DecimalField('items_id')
+    hs_code_id = StringField('hs_code_id')
+    qty = StringField('qty')
+    rate = DecimalField('rate')
+    rate_value = DecimalField('rate_value')

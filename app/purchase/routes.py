@@ -1,11 +1,9 @@
-import json
-
-from flask import render_template, request, flash, redirect, url_for, jsonify
+from flask import render_template, request, flash, redirect, url_for
 from flask_login import LoginManager, login_required
 
 from purchase import purchase
 from app import db
-from purchase.models import Purchase
+from purchase.models import Purchase, Purchase_line
 from purchase.forms import PurchaseForm
 
 from suppliers.models import Suppliers
@@ -15,6 +13,7 @@ login_manager = LoginManager()
 
 
 @purchase.route('/purchase/')
+@login_required
 def purchase_page():
     form = PurchaseForm(request.form)
     result = Purchase.query.all()
@@ -51,7 +50,16 @@ def purchase_store():
             purchase_type='3',
             vendor_invoice=form.challan_no.data,
         )
-        db.session.add(data)
+        data_line = Purchase_line(
+            item_id=form.items_id.data,
+            hs_code_id=form.hs_code_id.data,
+            # purchase_id=form.challan_date.data,
+            qty=form.qty.data,
+            rate=form.rate.data,
+            rate_value=form.rate_value.data,
+        )
+
+        db.session.add(data, data_line)
         db.session.commit()
     flash("Puchase Store Successfully")
 

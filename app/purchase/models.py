@@ -1,6 +1,6 @@
 from app import db
 from sqlalchemy import Column
-from sqlalchemy.dialects.mysql import DATE, DATETIME
+from sqlalchemy.dialects.mysql import DATE, DATETIME, FLOAT, DOUBLE
 from sqlalchemy_serializer import SerializerMixin
 
 
@@ -26,4 +26,37 @@ class Purchase(db.Model, SerializerMixin):
     entry_date = Column(DATETIME)
     notes = db.Column(db.String(200))
     user_id = db.Column(db.Integer)
+
+
+class Purchase_line(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer)
+    hs_code_id = db.Column(db.Integer)
+    purchase_id = db.Column(db.Integer)
+    qty = Column(FLOAT)
+    rate = Column(DOUBLE)
+    rate_value = Column(DOUBLE)
+    vatable_value = Column(DOUBLE)
+    vat_percent = Column(DOUBLE)
+    vat_amount = Column(DOUBLE)
+    cd_percent = Column(DOUBLE)
+    cd_amount = Column(DOUBLE)
+    sd_percent = Column(DOUBLE)
+    sd_amount = Column(DOUBLE)
+    rd_percent = Column(DOUBLE)
+    rd_amount = Column(DOUBLE)
+    at_amount = Column(DOUBLE)
+    ait_amount = Column(DOUBLE)
+    tti_percent = Column(DOUBLE)
+    tti_amount = Column(DOUBLE)
+    vat_type = db.Column(db.String(100))
+    vds = db.Column(db.String(100))
+    rebate = db.Column(db.String(100))
+    purchase_date = Column(DATE)
+    entry_date = Column(DATETIME)
+    sub_total = Column(DOUBLE)
+    grand_total = Column(DOUBLE)
+
+
+
 
