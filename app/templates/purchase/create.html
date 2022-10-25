@@ -139,7 +139,7 @@
                                                 <div class="col-sm-12 mb-2">
                                                     <div class="form-group">
                                                         <center>
-                                                            <button type="submit" name="purchase_store" class="btn btn-primary">Submit</button>
+                                                            <button type="submit" name="purchase_store" id="purchase_store" class="btn btn-primary">Submit</button>
                                                             <a type="button" class="btn btn-warning">Cancel</a>
                                                         </center>
 
@@ -209,7 +209,7 @@
                 }).done(function (data1) {
                     $.map(data1, function (items, i) {
                         $('#table_input').append(
-                            "<tr><input type='hidden' name='items_id' value='" + itemid + "' />" +
+                            "<tr class='purchase_data'><input type='hidden' name='items_id' id='item_id' value='" + itemid + "' />" +
                             '<input type="hidden" name="hs_code_id" id="hs_code_id_'+itemid+'" value=" '+ items.hs_code_id +' " />' +
                             '<input type="hidden" name="hs_code" value="' + items.hs_code +'" id="hs_code_'+itemid+'" />' +
                             '<td><input type="text" class="form-control" name="item_name" id="item_name_'+itemid+'" value="' + items.item_name + '" readonly/></td>' +
@@ -325,6 +325,7 @@
            $(this).closest('tr').remove();
        });
 
+
        // Table Footer Calculation
        function grandTotal(){
           var Total = 0;
@@ -347,6 +348,18 @@
           });
           $("#total_sd").val(sdTotal.toFixed(2));
        }
+
+       $("#purchase_store").on("click", function() {
+
+           $('.purchase_data').each(function () {
+               let row = $(this).closest('tr');
+               let items_id =+row.find('#item_id').val();
+               let quantity =+row.find('.qty').val();
+               let rate =+row.find('.rate').val();
+               let rate_value =+row.find('.rate_value').val();
+               alert(quantity)
+           });
+       });
 
     });
 </script>

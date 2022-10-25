@@ -54,28 +54,28 @@ def purchase_store():
         db.session.add(data)
         db.session.commit()
 
-        data_line = Purchase_line(
-            item_id=request.form['items_id'],
-            hs_code_id=request.form['hs_code_id'],
-            purchase_id=data.id,
-            qty=request.form['quantity'],
-            rate=request.form['rate'],
-            rate_value=request.form['rate_value'],
-            sd_percent=request.form['sd_percent'],
-            sd_amount=request.form['sd_bdt'],
-            vatable_value=request.form['vatable_value'],
-            vat_type=request.form['vat_type'],
-            vat_percent=request.form['vat_percent'],
-            vat_amount=request.form['vat_bdt'],
-            vds=request.form['vds'],
-            rebate=request.form['rebate'],
-            sub_total=request.form['sub_amount'],
-            grand_total=request.form['grand_total'],
-            entry_date=form.entry_date.data,
-            purchase_date=form.challan_date.data,
-        )
-
-        db.session.add(data_line)
+        data_line = [
+            Purchase_line(
+                item_id=request.form['items_id'],
+                hs_code_id=request.form['hs_code_id'],
+                purchase_id=data.id,
+                qty=request.form['quantity'],
+                rate=request.form['rate'],
+                rate_value=request.form['rate_value'],
+                sd_percent=request.form['sd_percent'],
+                sd_amount=request.form['sd_bdt'],
+                vatable_value=request.form['vatable_value'],
+                vat_type=request.form['vat_type'],
+                vat_percent=request.form['vat_percent'],
+                vat_amount=request.form['vat_bdt'],
+                vds=request.form['vds'],
+                rebate=request.form['rebate'],
+                sub_total=request.form['sub_amount'],
+                grand_total=request.form['grand_total'],
+                entry_date=form.entry_date.data,
+                purchase_date=form.challan_date.data)
+            ]
+        db.session.add_all(data_line)
         db.session.commit()
 
     flash("Purchase Store Successfully")
