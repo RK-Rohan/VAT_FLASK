@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired
 
 # Purchase Forms
 class PurchaseForm(FlaskForm):
+    id = StringField('purchase_id')
     supplier_id = SelectField('supplier_id', choices=[], validators=[DataRequired()])
     supplier_address = StringField('supplier_address', render_kw={'readonly': True})
     entry_date = DateTimeLocalField('entry_date', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
@@ -28,7 +29,7 @@ class PurchaseForm(FlaskForm):
     user_id = IntegerField('user_id')
 
 
-class Purchase_line(FlaskForm):
+class PurchaseLine(FlaskForm):
     item_id = DecimalField('items_id')
     hs_code_id = StringField('hs_code_id')
     qty = StringField('qty')

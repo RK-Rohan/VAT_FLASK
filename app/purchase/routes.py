@@ -4,7 +4,7 @@ from flask_login import LoginManager, login_required
 from purchase import purchase
 from app import db
 from purchase.models import Purchase, Purchase_line
-from purchase.forms import PurchaseForm
+from purchase.forms import PurchaseForm, PurchaseLine
 
 from suppliers.models import Suppliers
 from items.models import Items, ItemSchema
@@ -50,17 +50,34 @@ def purchase_store():
             purchase_type='3',
             vendor_invoice=form.challan_no.data,
         )
+
+        db.session.add(data)
+        db.session.commit()
+
         data_line = Purchase_line(
-            item_id=form.items_id.data,
-            hs_code_id=form.hs_code_id.data,
-            # purchase_id=form.challan_date.data,
-            qty=form.qty.data,
-            rate=form.rate.data,
-            rate_value=form.rate_value.data,
+            item_id=request.form['items_id'],
+            hs_code_id=request.form['hs_code_id'],
+            purchase_id=data.id,
+            qty=request.form['quantity'],
+            rate=request.form['rate'],
+            rate_value=request.form['rate_value'],
+            sd_percent=request.form['sd_percent'],
+            sd_amount=request.form['sd_bdt'],
+            vatable_value=request.form['vatable_value'],
+            vat_type=request.form['vat_type'],
+            vat_percent=request.form['vat_percent'],
+            vat_amount=request.form['vat_bdt'],
+            vds=request.form['vds'],
+            rebate=request.form['rebate'],
+            sub_total=request.form['sub_amount'],
+            grand_total=request.form['grand_total'],
+            entry_date=form.entry_date.data,
+            purchase_date=form.challan_date.data,
         )
 
-        db.session.add(data, data_line)
+        db.session.add(data_line)
         db.session.commit()
-    flash("Puchase Store Successfully")
+
+    flash("Purchase Store Successfully")
 
     return redirect(url_for('purchase.purchase_page'))

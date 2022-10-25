@@ -209,7 +209,7 @@
                 }).done(function (data1) {
                     $.map(data1, function (items, i) {
                         $('#table_input').append(
-                            "<tr><input type='hidden' name='items_id' value='" + items.itemid + "' />" +
+                            "<tr><input type='hidden' name='items_id' value='" + itemid + "' />" +
                             '<input type="hidden" name="hs_code_id" id="hs_code_id_'+itemid+'" value=" '+ items.hs_code_id +' " />' +
                             '<input type="hidden" name="hs_code" value="' + items.hs_code +'" id="hs_code_'+itemid+'" />' +
                             '<td><input type="text" class="form-control" name="item_name" id="item_name_'+itemid+'" value="' + items.item_name + '" readonly/></td>' +
@@ -220,7 +220,7 @@
                             '<td><input type="text" class="form-control sd_bdt" name="sd_bdt" value="0.00" id="sd_bdt_'+ itemid +'" /></td>' +
                             '<td><input type="text" class="form-control vatable_value" name="vatable_value" value="0.00" id="vatable_value_'+itemid+'" /></td>' +
                             "<td>" +
-                                '<select name="vat_type[]" id="vat_type_'+itemid+'" class="form-control vat_type">'+
+                                '<select name="vat_type" id="vat_type_'+itemid+'" class="form-control vat_type">'+
                                     '<option  value="1" data-vds = "0" data-category ="1" data-vat="15">Standard Rate(15%)</option>'+
                                     '<option  value="2" data-vds = "0" data-category ="2" data-vat="0">Zero Rate(0%)</option>'+
                                     '<option  value="3" data-vds = "0" data-category ="2" data-vat="0">Exempted</option>'+
@@ -242,13 +242,13 @@
                             '</td>' +
                             '<td><input type="text" class="form-control vat_bdt" name="vat_bdt" value="0.00" id="vat_bdt_'+itemid+'" readonly/></td>' +
                             "<td>" +
-                                '<select name="" id="vds_" class="form-control">'+
+                                '<select name="vds" id="vds_" class="form-control">'+
                                     '<option value="1" >Yes</option>'+
                                     '<option value="0" >No</option>'+
                                 '</select>'+
                             "</td>" +
                             "<td>" +
-                                '<select name="rebate[]" id="rebate_" class="form-control">'+
+                                '<select name="rebate" id="rebate_" class="form-control">'+
                                     '<option value="1">Yes</option>'+
                                     '<option value="0">No</option>'+
                                     '<option value="2">Zero/Exmptd/Turn/unreg</option>'+
