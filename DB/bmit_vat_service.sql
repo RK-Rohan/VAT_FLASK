@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 12, 2022 at 03:03 PM
+-- Generation Time: Oct 29, 2022 at 02:45 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.28
 
@@ -36,7 +36,7 @@ CREATE TABLE `alembic_version` (
 --
 
 INSERT INTO `alembic_version` (`version_num`) VALUES
-('46d8e1fd13d2');
+('1b3cd6d6d6ea');
 
 -- --------------------------------------------------------
 
@@ -11515,10 +11515,89 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`id`, `item_name`, `item_type`, `hs_code`, `hs_code_id`, `calculate_year`, `unit_id`, `stock_status`, `status`) VALUES
-(1, 'Laptop Service', '1', '43', '43', NULL, '1', NULL, NULL),
-(2, 'Laptop Service', '1', '<wtforms.form.Meta object at 0x000001B67C3D7D00>', '75', NULL, '1', NULL, NULL),
-(3, 'Laptop Service', '1', '3', '3', NULL, '1', NULL, NULL),
-(4, 'Computer Service', '2', '151', '151', NULL, '3', NULL, NULL);
+(1, 'Laptop Service', '1', '10975', '10975', NULL, '3', NULL, NULL),
+(2, 'Mobile Service', '1', '11020', '11020', NULL, '3', NULL, NULL),
+(3, 'Computer Service', '1', '08012110', '840', NULL, '3', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase`
+--
+
+CREATE TABLE `purchase` (
+  `id` int(11) NOT NULL,
+  `p_invoice_no` varchar(100) DEFAULT NULL,
+  `purchase_type` int(11) DEFAULT NULL,
+  `lc_date` date DEFAULT NULL,
+  `lc_no` varchar(100) DEFAULT NULL,
+  `challan_date` date DEFAULT NULL,
+  `total_vds` decimal(10,2) DEFAULT NULL,
+  `grand_total` decimal(10,2) DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT NULL,
+  `total_tax` decimal(10,2) DEFAULT NULL,
+  `vendor_invoice` varchar(255) DEFAULT NULL,
+  `custom_house` varchar(255) DEFAULT NULL,
+  `country_origin` varchar(255) DEFAULT NULL,
+  `boe_item_no` int(11) DEFAULT NULL,
+  `data_source` varchar(155) DEFAULT NULL,
+  `cpc_code_id` varchar(255) DEFAULT NULL,
+  `entry_date` datetime DEFAULT NULL,
+  `notes` varchar(200) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `purchase`
+--
+
+INSERT INTO `purchase` (`id`, `p_invoice_no`, `purchase_type`, `lc_date`, `lc_no`, `challan_date`, `total_vds`, `grand_total`, `supplier_id`, `total_tax`, `vendor_invoice`, `custom_house`, `country_origin`, `boe_item_no`, `data_source`, `cpc_code_id`, `entry_date`, `notes`, `user_id`) VALUES
+(1, NULL, 3, NULL, NULL, '2022-10-29', NULL, NULL, 2, NULL, '1001', NULL, NULL, NULL, NULL, NULL, '2022-10-29 18:35:00', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_line`
+--
+
+CREATE TABLE `purchase_line` (
+  `id` int(11) NOT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `hs_code_id` int(11) DEFAULT NULL,
+  `purchase_id` int(11) DEFAULT NULL,
+  `qty` float DEFAULT NULL,
+  `rate` double DEFAULT NULL,
+  `rate_value` double DEFAULT NULL,
+  `vatable_value` double DEFAULT NULL,
+  `vat_percent` double DEFAULT NULL,
+  `vat_amount` double DEFAULT NULL,
+  `cd_percent` double DEFAULT NULL,
+  `cd_amount` double DEFAULT NULL,
+  `sd_percent` double DEFAULT NULL,
+  `sd_amount` double DEFAULT NULL,
+  `rd_percent` double DEFAULT NULL,
+  `rd_amount` double DEFAULT NULL,
+  `at_amount` double DEFAULT NULL,
+  `ait_amount` double DEFAULT NULL,
+  `tti_percent` double DEFAULT NULL,
+  `tti_amount` double DEFAULT NULL,
+  `vat_type` varchar(100) DEFAULT NULL,
+  `vds` varchar(100) DEFAULT NULL,
+  `rebate` varchar(100) DEFAULT NULL,
+  `purchase_date` date DEFAULT NULL,
+  `entry_date` datetime DEFAULT NULL,
+  `sub_total` double DEFAULT NULL,
+  `grand_total` double DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `purchase_line`
+--
+
+INSERT INTO `purchase_line` (`id`, `item_id`, `hs_code_id`, `purchase_id`, `qty`, `rate`, `rate_value`, `vatable_value`, `vat_percent`, `vat_amount`, `cd_percent`, `cd_amount`, `sd_percent`, `sd_amount`, `rd_percent`, `rd_amount`, `at_amount`, `ait_amount`, `tti_percent`, `tti_amount`, `vat_type`, `vds`, `rebate`, `purchase_date`, `entry_date`, `sub_total`, `grand_total`) VALUES
+(1, 3, 840, 1, 10, 10, 100, 120, 15, 18, NULL, NULL, 20, 20, NULL, NULL, NULL, NULL, NULL, NULL, '1', '0', '0', '2022-10-29', '2022-10-29 18:35:00', 138, NULL),
+(2, 1, 10975, 1, 20, 20, 400, 400, 7.5, 30, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, '5', '1', '1', '2022-10-29', '2022-10-29 18:35:00', 430, NULL),
+(3, 2, 11020, 1, 30, 30, 900, 900, 2.4, 21.6, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, '5', '1', '1', '2022-10-29', '2022-10-29 18:35:00', 921.6, NULL);
 
 -- --------------------------------------------------------
 
@@ -11543,7 +11622,8 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`id`, `supplier_name`, `email_address`, `phone_number`, `country_id`, `supplier_type`, `supplier_address`, `supplier_bin`, `supplier_tin`) VALUES
-(1, 'Test Supplier', 'supplier1@gmail.com', '+8801850145577', '18', '1', 'Dhaka', '6845684535445', '1526148741215');
+(1, 'Test Supplier', 'supplier1@gmail.com', '+8801850145577', '18', '1', 'Dhaka', '6845684535445', '1526148741215'),
+(2, 'SQ Cable', 'bmit@gmail.com', '+8801850145577', '18', '1', 'Banani', '6845684535445', '1526148741215');
 
 -- --------------------------------------------------------
 
@@ -11563,9 +11643,14 @@ CREATE TABLE `units` (
 
 INSERT INTO `units` (`id`, `unit_name`, `short_name`) VALUES
 (1, 'Kilogram', 'KG'),
-(2, 'Milometer', 'MM'),
+(2, 'Millimeter ', 'MM'),
 (3, 'Service', 'Service'),
-(4, 'Box', 'Box');
+(4, 'Box', 'Box'),
+(5, 'Pieces', 'Pcs'),
+(6, 'test1', 'test1'),
+(7, 'test1', 'test1'),
+(8, 'test2', 'test2'),
+(9, 'Gross', 'Gross');
 
 -- --------------------------------------------------------
 
@@ -11633,6 +11718,18 @@ ALTER TABLE `items`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `purchase`
+--
+ALTER TABLE `purchase`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `purchase_line`
+--
+ALTER TABLE `purchase_line`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `suppliers`
 --
 ALTER TABLE `suppliers`
@@ -11684,19 +11781,31 @@ ALTER TABLE `hs_code`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `purchase`
+--
+ALTER TABLE `purchase`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `purchase_line`
+--
+ALTER TABLE `purchase_line`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `units`
 --
 ALTER TABLE `units`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `users`
