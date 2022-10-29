@@ -27,6 +27,7 @@ class PurchaseForm(FlaskForm):
     boe_item_no = IntegerField('boe_item_no')
     notes = TextAreaField('notes')
     user_id = IntegerField('user_id')
+    allpurchase = StringField('allpurchase')
 
 
 class PurchaseLine(FlaskForm):

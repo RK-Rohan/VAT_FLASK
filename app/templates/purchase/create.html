@@ -111,19 +111,19 @@
                                                                 <tr class="tableInfo" style="">
                                                                    <td align="right"><strong>Total Vat(BDT)</strong></td>
                                                                    <td align="left">
-                                                                      <input type="text" class="form-control" name="total_vat" id="total_vat" readonly>
+                                                                      <input type="text" class="form-control total_vat" name="total_vat" id="total_vat" readonly>
                                                                    </td>
                                                                 </tr>
                                                                 <tr class="tableInfo" style="">
                                                                    <td align="right"><strong>Total SD(BDT)</strong></td>
                                                                    <td align="left">
-                                                                      <input type="text" class="form-control" name="total_sd" id="total_sd" readonly>
+                                                                      <input type="text" class="form-control total_sd" name="total_sd" id="total_sd" readonly>
                                                                    </td>
                                                                 </tr>
                                                                 <tr class="tableInfo" style="">
                                                                    <td align="right"><strong>Grand Total(BDT)</strong></td>
                                                                    <td align="left">
-                                                                      <input type="text" name="grand_total" class="form-control" id="grand_total" readonly>
+                                                                      <input type="text" name="grand_total" class="form-control grand_total" id="grand_total" value="0.00" readonly>
                                                                       <p style="color:#990000;"></p>
                                                                    </td>
                                                                 </tr>
@@ -138,6 +138,7 @@
 
                                                 <div class="col-sm-12 mb-2">
                                                     <div class="form-group">
+                                                        <input type="hidden" name="allpurchase" id="allpurchase">
                                                         <center>
                                                             <button type="submit" name="purchase_store" id="purchase_store" class="btn btn-primary">Submit</button>
                                                             <a type="button" class="btn btn-warning">Cancel</a>
@@ -210,8 +211,8 @@
                     $.map(data1, function (items, i) {
                         $('#table_input').append(
                             "<tr class='purchase_data'><input type='hidden' name='items_id' id='item_id' value='" + itemid + "' />" +
-                            '<input type="hidden" name="hs_code_id" id="hs_code_id_'+itemid+'" value=" '+ items.hs_code_id +' " />' +
-                            '<input type="hidden" name="hs_code" value="' + items.hs_code +'" id="hs_code_'+itemid+'" />' +
+                            '<input type="hidden" class="hs_code_id" name="hs_code_id" id="hs_code_id_'+itemid+'" value="'+ items.hs_code_id +' " />' +
+                            '<input type="hidden" class="hs_code" name="hs_code" value="' + items.hs_code +'" id="hs_code_'+itemid+'" />' +
                             '<td><input type="text" class="form-control" name="item_name" id="item_name_'+itemid+'" value="' + items.item_name + '" readonly/></td>' +
                             '<td><input type="text" class="form-control qty" id="qty_'+itemid+'" value="0" name="quantity" /></td>' +
                             '<td><input type="text" class="form-control rate" name="rate" value="0.00" id="rate_'+itemid+'" /></td>' +
@@ -242,13 +243,13 @@
                             '</td>' +
                             '<td><input type="text" class="form-control vat_bdt" name="vat_bdt" value="0.00" id="vat_bdt_'+itemid+'" readonly/></td>' +
                             "<td>" +
-                                '<select name="vds" id="vds_" class="form-control">'+
+                                '<select name="vds" id="vds_" class="form-control vds">'+
                                     '<option value="1" >Yes</option>'+
                                     '<option value="0" >No</option>'+
                                 '</select>'+
                             "</td>" +
                             "<td>" +
-                                '<select name="rebate" id="rebate_" class="form-control">'+
+                                '<select name="rebate" id="rebate_" class="form-control rebate">'+
                                     '<option value="1">Yes</option>'+
                                     '<option value="0">No</option>'+
                                     '<option value="2">Zero/Exmptd/Turn/unreg</option>'+
@@ -351,14 +352,56 @@
 
        $("#purchase_store").on("click", function() {
 
+           var i=0;
+           let itemArray = new Array();
+
            $('.purchase_data').each(function () {
                let row = $(this).closest('tr');
                let items_id =+row.find('#item_id').val();
+               let hs_code_id =+row.find('.hs_code_id').val();
+               let hs_code =+row.find('.hs_code').val();
                let quantity =+row.find('.qty').val();
                let rate =+row.find('.rate').val();
                let rate_value =+row.find('.rate_value').val();
-               alert(quantity)
+               let sd_percent =+row.find('.sd_percent').val();
+               let sd_bdt =+row.find('.sd_bdt').val();
+               let vatable_value =+row.find('.vatable_value').val();
+               let vat_type =+row.find('.vat_type').val();
+               // let vat_percent =+row.find('.vat_percent').val();
+               // let vat_cal_other =+row.find('.vat_cal_other').val();
+               let vat_bdt =+row.find('.vat_bdt').val();
+               let vds =+row.find('.vds').val();
+               let rebate =+row.find('.rebate').val();
+               let sub_amount =+row.find('.sub_amount').val();
+
+               if (vat_type == '5') {
+                   vat =+row.find('.vat_cal_other').val();
+               } else {
+                   vat =+row.find('.vat_percent').val();
+               }
+
+               var items={
+                   "item_id": items_id,
+                   "hs_code_id": hs_code_id,
+                   "qty": quantity,
+                   "rate": rate,
+                   "rate_value": rate_value,
+                   "sd_percent": sd_percent,
+                   "sd_amount": sd_bdt,
+                   "vatable_value": vatable_value,
+                   "vat_type": vat_type,
+                   "vat_percent": vat,
+                   "vat_amount": vat_bdt,
+                   "vds": vds,
+                   "rebate": rebate,
+                   "sub_total": sub_amount,
+               }
+
+           itemArray[i]=items;
+           $('#allpurchase').val(JSON.stringify(itemArray));
+           i++;
            });
+
        });
 
     });
