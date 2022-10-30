@@ -61,4 +61,7 @@ def create_app():
     from purchase import purchase as purchase_blueprint
     app.register_blueprint(purchase_blueprint)
 
+    from sales import sales as sales_blueprint
+    app.register_blueprint(sales_blueprint)
+
     return app

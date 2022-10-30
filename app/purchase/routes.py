@@ -1,5 +1,5 @@
 from flask import render_template, request, flash, redirect, url_for, json
-from flask_login import LoginManager, login_required
+from flask_login import LoginManager, login_required, current_user
 
 from purchase import purchase
 from app import db
@@ -48,7 +48,10 @@ def purchase_store():
             entry_date=form.entry_date.data,
             challan_date=form.challan_date.data,
             purchase_type='3',
-            vendor_invoice=form.challan_no.data
+            vendor_invoice=form.challan_no.data,
+            grand_total=form.grand_total.data,
+            total_tax=request.form['total_vat'],
+            user_id=current_user.get_id()
         )
 
         db.session.add(data)
