@@ -1,4 +1,4 @@
-from app import db
+from app import db, ma
 from sqlalchemy import Column
 from sqlalchemy.dialects.mysql import DATE, DATETIME, FLOAT, DOUBLE
 from sqlalchemy_serializer import SerializerMixin
@@ -26,6 +26,14 @@ class Purchase(db.Model, SerializerMixin):
     entry_date = Column(DATETIME)
     notes = db.Column(db.String(200))
     user_id = db.Column(db.Integer)
+
+
+class PurchaseSchema(ma.Schema):
+    class Meta:
+        fields = (
+            "id", "p_invoice_no", "challan_date", "supplier_id", "total_vds", "total_tax", "grand_total",
+            "entry_date", "user_id"
+        )
 
 
 class Purchase_line(db.Model):

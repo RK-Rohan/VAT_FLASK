@@ -55,7 +55,8 @@
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-shopping-cart"></i></span><span
                             class="pcoded-mtext">Purchase</span></a>
                     <ul class="pcoded-submenu {% if 'settings' in segment %} active {% endif %}">
-                        <li {% if request.path == '/purchase/' %}class="active"{% endif %}><a href="{{ url_for('purchase.purchase_page') }}" class="" >Service Purchase</a></li>
+                        <li {% if request.path =='/purchase/' %}class="active"{% endif %}><a href="{{ url_for('purchase.purchase_page') }}" class="" >Service Purchase</a></li>
+                        <li {% if request.path =='/issue_vds/' %}class="active"{% endif %}><a href="{{ url_for('issue_vds.issue_vds_page') }}" class="" >Issue VDS</a></li>
                     </ul>
                 </li>
                 <li class="nav-item pcoded-menu-caption">
@@ -66,9 +67,7 @@
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-trending-up"></i></span><span
                             class="pcoded-mtext">Sales</span></a>
                     <ul class="pcoded-submenu {% if 'settings' in segment %} active {% endif %}">
-                        <li {% if request.path == '/company/edit/' %}class="active"{% endif %}><a href="{{ url_for('company.company_update') }}" class="" >Company</a></li>
-                        <li {% if request.path == '/units/' %}class="active"{% endif %}><a href="{{ url_for('units.units_page') }}" class="">Units</a></li>
-                        <li {% if request.path == '/employees/' %}class="active"{% endif %}><a href="{{ url_for('auth.employees_page') }}" class="">Employees</a></li>
+                        <li {% if request.path =='/sales/' %}class="active"{% endif %}><a href="{{ url_for('sales.sales_page') }}" class="" >Service Sales</a></li>
                     </ul>
                 </li>
                 <li class="nav-item pcoded-menu-caption">

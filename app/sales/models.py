@@ -1,12 +1,9 @@
-from app import db
+from app import db, ma
 from sqlalchemy import Column
 from sqlalchemy.dialects.mysql import DATE, DATETIME, FLOAT, DOUBLE
-from sqlalchemy_serializer import SerializerMixin
 
 
-class Sales(db.Model, SerializerMixin):
-    serialize_only = ('non_sqlalchemy_field', 'id')
-    serialize_rules = ()
+class Sales(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer)
     sale_center_id = db.Column(db.Integer)
@@ -16,7 +13,7 @@ class Sales(db.Model, SerializerMixin):
     vehicle_info = db.Column(db.String(100))
     destination = db.Column(db.String(100))
     sales_challan = db.Column(db.String(100))
-    challan_date = Column(DATETIME)
+    entry_date = Column(DATETIME)
     sales_type = db.Column(db.Integer)
     trans_type = db.Column(db.Integer)
     total_discount = db.Column(db.DECIMAL(10, 2))
@@ -25,6 +22,14 @@ class Sales(db.Model, SerializerMixin):
     grand_total = db.Column(db.DECIMAL(10, 2))
     notes = db.Column(db.String(200))
     user_id = db.Column(db.Integer)
+
+
+class SalesSchema(ma.Schema):
+    class Meta:
+        fields = (
+            "id", "sales_invoice", "sale_date", "customer_id", "total_sd", "total_vat", "grand_total",
+            "entry_date", "user_id"
+        )
 
 
 class SalesLine(db.Model):

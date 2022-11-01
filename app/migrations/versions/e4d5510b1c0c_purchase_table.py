@@ -1,8 +1,8 @@
-"""purchase_tabel
+"""purchase_table
 
-Revision ID: 1b3cd6d6d6ea
+Revision ID: e4d5510b1c0c
 Revises: 46d8e1fd13d2
-Create Date: 2022-10-24 17:05:43.080134
+Create Date: 2022-10-30 14:28:18.027589
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '1b3cd6d6d6ea'
+revision = 'e4d5510b1c0c'
 down_revision = '46d8e1fd13d2'
 branch_labels = None
 depends_on = None

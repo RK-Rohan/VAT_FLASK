@@ -1,13 +1,13 @@
-from flask import render_template, request, flash, redirect, url_for, json
+from flask import render_template, request, flash, redirect, url_for, json, jsonify
 from flask_login import LoginManager, login_required, current_user
 
 from purchase import purchase
 from app import db
-from purchase.models import Purchase, Purchase_line
-from purchase.forms import PurchaseForm, PurchaseLine
+from purchase.models import Purchase, Purchase_line, PurchaseSchema
+from purchase.forms import PurchaseForm
 
 from suppliers.models import Suppliers
-from items.models import Items, ItemSchema
+from items.models import Items
 
 login_manager = LoginManager()
 
@@ -42,9 +42,15 @@ def purchase_create():
 @purchase.route('/purchase/store/', methods=['GET', 'POST'])
 def purchase_store():
     form = PurchaseForm(request.form)
+    invoice_no = '1001'
     if 'purchase_store' in request.form:
+        query = db.session.execute("SELECT `p_invoice_no` FROM `purchase` ORDER BY `id` DESC LIMIT 1")
+        for result in query:
+            invoice_no = int(result.p_invoice_no) + 1
+
         data = Purchase(
             supplier_id=form.supplier_id.data,
+            p_invoice_no=invoice_no,
             entry_date=form.entry_date.data,
             challan_date=form.challan_date.data,
             purchase_type='3',
@@ -76,30 +82,48 @@ def purchase_store():
             db.session.add_all(purchase_line)
             db.session.commit()
 
-        # data_line = [
-        #     Purchase_line(
-        #         item_id=request.form['items_id'],
-        #         hs_code_id=request.form['hs_code_id'],
-        #         purchase_id=data.id,
-        #         qty=request.form['quantity'],
-        #         rate=request.form['rate'],
-        #         rate_value=request.form['rate_value'],
-        #         sd_percent=request.form['sd_percent'],
-        #         sd_amount=request.form['sd_bdt'],
-        #         vatable_value=request.form['vatable_value'],
-        #         vat_type=request.form['vat_type'],
-        #         vat_percent=request.form['vat_percent'],
-        #         vat_amount=request.form['vat_bdt'],
-        #         vds=request.form['vds'],
-        #         rebate=request.form['rebate'],
-        #         sub_total=request.form['sub_amount'],
-        #         grand_total=request.form['grand_total'],
-        #         entry_date=form.entry_date.data,
-        #         purchase_date=form.challan_date.data)
-        #     ]
-        # db.session.add_all(data_line)
-        # db.session.commit()
-
     flash("Purchase Store Successfully")
 
     return redirect(url_for('purchase.purchase_page'))
+
+
+@purchase.route('/api/purchase/supplier/<supplier_id>/', methods=['GET', 'POST'])
+def purchase_by_supplier_id(supplier_id):
+    purchase_list = Purchase.query.join(Purchase_line, Purchase.id == Purchase_line.purchase_id)\
+        .add_columns\
+        (
+            Purchase.id,
+            Purchase.supplier_id,
+            Purchase.p_invoice_no,
+            Purchase.challan_date,
+            Purchase.total_vds,
+            Purchase.total_tax,
+            Purchase.grand_total,
+            Purchase.entry_date,
+            Purchase.user_id
+        ).filter(Purchase.supplier_id == supplier_id)
+    print(purchase_list)
+    purchase_schema = PurchaseSchema()
+    output = purchase_schema.dump(purchase_list, many=True)
+    return jsonify(output)\
+
+
+
+@purchase.route('/api/purchase/', methods=['GET', 'POST'])
+def purchase_all():
+    purchase_list = Purchase.query.all()
+    print(purchase_list)
+    purchase_schema = PurchaseSchema()
+    output = purchase_schema.dump(purchase_list, many=True)
+    return jsonify(output)\
+
+
+
+@purchase.route('/api/purchase/<id>/', methods=['GET', 'POST'])
+def purchase_by_id(id):
+    purchase_list = Purchase.query.get(id)
+    print(purchase_list)
+    purchase_schema = PurchaseSchema()
+    output = purchase_schema.dump(purchase_list)
+    return jsonify(output)
+

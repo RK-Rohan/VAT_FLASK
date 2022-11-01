@@ -1,0 +1,331 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Receive VDS {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <style>
+        table, th, td {
+          border: 1px solid #dee2e6;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+        <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <form role="form" method="POST" action="{{ url_for('issue_vds.issue_vds_store') }}" role="form" id="vds_form">
+                                            {{ form.csrf_token }}
+                                        <div class="card-header">
+                                            <h5>Add Receive VDS</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="row">
+
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="customer_id">Customer </label>
+                                                    {{ form.customer_id(title="Select Customer", class="form-control") }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="sales_invoice">Sales Invoice</label>
+                                                        {{ form.sales_invoice(class="form-control") }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="entry_date">Entry Date </label>
+                                                        {{ form.entry_date(class="form-control") }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="vds_certificate_no">VDS Certificate No </label>
+                                                        {{ form.vds_certificate_no(class="form-control") }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="receive_date">Receive Date </label>
+                                                        {{ form.receive_date(class="form-control") }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="card-block table-border-style">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover vds_table" id="vds_table">
+                                                                <thead class="thead-light">
+                                                                <tr>
+                                                                    <th style='width:220px'>Invoice No</th>
+                                                                    <th style='width:150px'>Challan Date</th>
+                                                                    <th style='width:150px'>Amount</th>
+                                                                    <th style='width:150px'>Vat Amount</th>
+                                                                    <th style='width:150px'>Deducted Vat</th>
+                                                                    <th style='width:150px'>Receive Amount</th>
+                                                                    <th style='width:150px'>Account Code</th>
+                                                                    <th style='width:150px'>Bank Challan serial</th>
+                                                                    <th style='width:150px'>Bank Name</th>
+                                                                    <th style='width:150px'>Branch Name</th>
+                                                                    <th> Action </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody id="table_input">
+
+                                                                </tbody>
+                                                            </table>
+                                                            <table class="table table-bordered" id="table_footer">
+                                                                <tbody>
+                                                                <tr class="tableInfo" style="">
+                                                                   <td align="right" width="70%"><strong></strong></td>
+                                                                </tr>
+                                                                <tr class="tableInfo" style="">
+                                                                   <td align="right"><strong>Total Amount(BDT)</strong></td>
+                                                                   <td align="left">
+                                                                      <input type="text" class="form-control total_vat" name="total_amount" id="total_amount" readonly>
+                                                                   </td>
+                                                                </tr>
+                                                                <tr class="tableInfo" style="">
+                                                                   <td align="right"><strong>Total Vat(BDT)</strong></td>
+                                                                   <td align="left">
+                                                                      <input type="text" class="form-control total_vat" name="total_vat" id="total_vat" readonly>
+                                                                   </td>
+                                                                </tr>
+                                                                <tr class="tableInfo" style="">
+                                                                   <td align="right"><strong>Total VDS(BDT)</strong></td>
+                                                                   <td align="left">
+                                                                      <input type="text" class="form-control total_vds" name="total_vds" id="total_vds" readonly>
+                                                                   </td>
+                                                                </tr>
+                                                                <tr class="tableInfo" style="">
+                                                                   <td align="right"><strong>Total Receive(BDT)</strong></td>
+                                                                   <td align="left">
+                                                                      <input type="text" name="total_payment" class="form-control total_payment" id="total_payment" value="0.00" readonly>
+                                                                      <p style="color:#990000;"></p>
+                                                                   </td>
+                                                                </tr>
+                                                             </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="issue_vds_line" id="issue_vds_line">
+                                                        <center>
+                                                            <button type="submit" name="vds_store" id="vds_store" class="btn btn-primary">Submit</button>
+                                                            <a type="button" class="btn btn-warning">Cancel</a>
+                                                        </center>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </form>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script src="{{ url_for('static', filename='assets/js/bootstrap-select.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
+    $('#customer_id').selectpicker();
+
+    $('#customer_id').on('change', '', function (e) {
+        let customer_id = $(this).val();
+        let csrf_token = "{{ csrf_token() }}";
+           $.ajax({
+               url: "/api/sales/customers/"+customer_id+"/",
+               headers: {
+                   "X-CSRFToken": csrf_token,
+               },
+               type: "GET",
+               dataType: "json",
+               success: function(data) {
+                   $('select[name="purchase_invoice"]').empty();
+                   $('select[name="purchase_invoice"]').append( '<option value="">Select Invoice</option>');
+                   $.each(data,function(key, value){
+                       $('select[name="sales_invoice"]').append(
+                           '<option value="'+value['id']+'">'+ value['sales_invoice'] +'</option>'
+                       );
+                   });
+               }
+           })
+    });
+
+    $('#purchase_invoice').on('change', '', function (e) {
+        let purchase_id = $(this).val();
+        let csrf_token = "{{ csrf_token() }}";
+           $.ajax({
+               url: "/api/purchase/"+purchase_id+"/",
+               headers: {
+                   "X-CSRFToken": csrf_token,
+               },
+               type: "GET",
+               dataType: "json",
+               success: function(data) {
+                   $('#table_input').empty();
+                   let id = data.id
+                   $('#table_input').append(
+                       '<tr class="vds_data">' +
+                       '<td>' +
+                            '<input type="text" class="form-control invoice_no" id="invoice_no_'+id+'" name="invoice_no" value="' + data.p_invoice_no + '" readonly/>' +
+                            '<input type="hidden" class="form-control supplier_id" name="supplier_id" value="' + data.supplier_id + '" readonly/>' +
+                       '</td>' +
+                       '<td>' +
+                            '<input type="text" class="form-control inv_date" name="inv_date" value="' + data.challan_date + '" readonly/></td>' +
+                       '<td>' +
+                            '<input type="text" class="form-control inv_amount" id="inv_amount_'+id+'" name="inv_amount" value="' + data.grand_total + '" readonly/></td>' +
+                       '<td>' +
+                            '<input type="text" class="form-control vat_amount" id="vat_amount_'+id+'" name="vat_amount" value="' + data.total_tax + '" readonly/></td>' +
+                       '<td>' +
+                            '<input type="text" class="form-control vds_amount" id="vds_amount_'+id+'" name="vds_amount" value="' + data.total_tax + '" readonly/></td>' +
+                       '<td>' +
+                            '<input type="text" class="form-control received_amount" id="received_amount_'+id+'" name="received_amount" /></td>' +
+                       '<td>' +
+                            '<input type="text" class="form-control account_code" name="account_code" /></td>' +
+                       '<td>' +
+                            '<input type="text" class="form-control deposit_serial" name="deposit_serial" /></td>' +
+                       '<td>' +
+                            '<input type="text" class="form-control bank_name" name="bank_name" id="bank_name" /></td>' +
+                       '<td>' +
+                            '<input type="text" class="form-control branch_name" name="branch_name" /></td>' +
+                       '<td>' +
+                            '<button type="button" class="btn btn-outline-danger delete">' +
+                                '<span><i class="fa-solid fa-xmark"></i></span>' +
+                            '</button>' +
+                       '</td>' +
+                       '</tr>'
+                   );
+                   totalAmount();
+                   totalVDS()
+                   totalVat();
+                   $( ".payment_amount" ).on('keyup change click',function() {
+                        totalPayment()
+                   });
+               }
+           })
+    });
+
+
+
+    // Remove Item Row
+   $('#vds_table').on('click', '.delete', function(){
+       var row_id = $(this).attr("id");
+       $(this).closest('tr').remove();
+   });
+
+
+   function totalAmount(){
+      var Total = 0;
+      $("table.vds_table").find('.inv_amount').each(function () {
+         Total += +$(this).val();
+      });
+      $("#total_amount").val(Total.toFixed(2));
+   }
+   function totalVat(){
+      var Total = 0;
+      $("table.vds_table").find('.vat_amount').each(function () {
+         Total += +$(this).val();
+      });
+      $("#total_vat").val(Total.toFixed(2));
+   }
+   function totalVDS(){
+      var Total = 0;
+      $("table.vds_table").find('.vds_amount').each(function () {
+         Total += +$(this).val();
+      });
+      $("#total_vds").val(Total.toFixed(2));
+   }
+   function totalPayment(){
+      var Total = 0;
+      $("table.vds_table").find('.payment_amount').each(function () {
+         Total += +$(this).val();
+      });
+      $("#total_payment").val(Total.toFixed(2));
+   }
+
+    // Json VDS Data
+      $("#vds_store").on("click", function() {
+
+       var i=0;
+       let vdsArray = new Array();
+
+       $('.vds_data').each(function () {
+           let row = $(this).closest('tr');
+           let invoice_no =+row.find('.invoice_no').val();
+           let inv_date = $('.inv_date').val();
+           let supplier_id = $('.supplier_id').val();
+           let inv_amount =+row.find('.inv_amount').val();
+           let vat_amount =+row.find('.vat_amount').val();
+           let vds_amount =+row.find('.vds_amount').val();
+           let payment_amount =+row.find('.payment_amount').val();
+           let deposit_date = $('.deposit_date').val();
+           let account_code =+row.find('.account_code').val();
+           let deposit_serial =+row.find('.deposit_serial').val();
+           let bank_name = $('.bank_name').val();
+           let branch_name = $('.branch_name').val();
+
+           var vds={
+               "invoice_no": invoice_no,
+               "supplier_id": supplier_id,
+               "inv_date": inv_date,
+               "inv_amount": inv_amount,
+               "vat_amount": vat_amount,
+               "vds_amount": vds_amount,
+               "payment_amount": payment_amount,
+               "deposit_date": deposit_date,
+               "account_code": account_code,
+               "deposit_serial": deposit_serial,
+               "bank_name": bank_name,
+               "branch_name": branch_name,
+           }
+
+       vdsArray[i]=vds;
+       $('#issue_vds_line').val(JSON.stringify(vdsArray));
+       i++;
+       });
+
+    });
+
+
+
+    });
+</script>
+{% endblock javascripts %}

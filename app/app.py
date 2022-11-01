@@ -64,4 +64,11 @@ def create_app():
     from sales import sales as sales_blueprint
     app.register_blueprint(sales_blueprint)
 
+    from issue_vds import issue_vds as issue_vds_blueprint
+    app.register_blueprint(issue_vds_blueprint)
+
+    from receive_vds import receive_vds as receive_vds_blueprint
+    app.register_blueprint(receive_vds_blueprint)
+
+
     return app
