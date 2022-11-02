@@ -70,5 +70,8 @@ def create_app():
     from receive_vds import receive_vds as receive_vds_blueprint
     app.register_blueprint(receive_vds_blueprint)
 
+    from reports import reports as reports_blueprint
+    app.register_blueprint(reports_blueprint)
+
 
     return app

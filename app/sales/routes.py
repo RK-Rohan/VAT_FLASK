@@ -1,6 +1,10 @@
 from flask import render_template, request, flash, redirect, url_for, json, jsonify
 from flask_login import LoginManager, login_required, current_user
 
+import re
+
+from datetime import date, datetime
+
 from app import db
 from sales import sales
 from sales.models import Sales, SalesLine, SalesSchema
@@ -47,11 +51,25 @@ def sales_create():
 @sales.route('/sales/store/', methods=['GET', 'POST'])
 def sales_store():
     form = SalesForm(request.form)
+    sales_invoice = 'INV1001'
     if 'sales_store' in request.form:
+        query = db.session.execute("SELECT `sales_invoice` FROM `sales` ORDER BY `id` DESC LIMIT 1")
+        for result in query:
+            # sales_invoice = int(result.sales_invoice) + 1
+
+            # c_date = datetime.now()
+            # date_int = c_date.strftime("%Y") + c_date.strftime("%m") + c_date.strftime("%d")
+
+            sales_invoice = result.sales_invoice
+
+            sales_invoice = re.sub(r'[0-9]+$',
+                                   lambda x: f"{str(int(x.group()) + 1).zfill(len(x.group()))}", sales_invoice)
 
         data = Sales(
             customer_id=form.customer_id.data,
             sale_date=form.sale_date.data,
+            entry_date=datetime.now(),
+            sales_invoice=sales_invoice,
             vehicle_info=form.vehicle_info.data,
             destination=form.destination.data,
             sales_type='3',

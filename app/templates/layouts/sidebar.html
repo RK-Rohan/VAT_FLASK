@@ -68,6 +68,7 @@
                             class="pcoded-mtext">Sales</span></a>
                     <ul class="pcoded-submenu {% if 'settings' in segment %} active {% endif %}">
                         <li {% if request.path =='/sales/' %}class="active"{% endif %}><a href="{{ url_for('sales.sales_page') }}" class="" >Service Sales</a></li>
+                        <li {% if request.path =='/receive_vds/' %}class="active"{% endif %}><a href="{{ url_for('receive_vds.receive_vds_page') }}" class="" >Receive VDS</a></li>
                     </ul>
                 </li>
                 <li class="nav-item pcoded-menu-caption">
