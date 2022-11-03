@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>মূসক ৬.৬</title>
+   </head>
+   <body>
+      <br>
+      <br>
+      <br>
+      <div>
+      <div>
+         <div align="right">
+            <form>
+               <input type="button" name="print" class="btn btn-primary m-4" value="Print" onClick="print4()" id="prt" >
+            </form>
+         </div>
+         <div>
+            {%for company in company_data %}
+            <p style="text-align:right;margin-right:10px"><span style="border:1px solid black;">মূসক ৬.৬</span> </p>
+            <p style="text-align:center">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</p>
+            <p style="text-align:center">জাতীয় রাজস্ব বোর্ড</p>
+            <br>
+            <p style="text-align:center"><b>উৎসে কর কর্তন সনদপত্র</b> </p>
+            <p style="text-align:center">[বিধি ৪০ এর উপ-বিধি  (১) এর দফা (চ) দ্রষ্টব্য]</p>
+            <p style="text-align:center">উৎসে কর কর্তনকারী সত্তার নাম :{{company.company_name}}</p>
+            <p style="text-align:center">উৎসে কর কর্তনকারী সত্তার ঠিকানা :{{company.address}}</p>
+            {%endfor%}
+
+            <table width="100%">
+               {% for vds in vds_table %}
+               <tr>
+                  <td width="70%">উৎসে কর কর্তনকারী সত্তার বিআইএন (প্রযোজ্য ক্ষেত্রে ): </td>
+                  <td width="30%"></td>
+               </tr>
+               <tr>
+                  <td>উৎসে কর কর্তন সনদপত্র নং: {{vds.vds_no}}</td>
+                  <td>জারির  তারিখ : {{vds.entry_date}}</td>
+               </tr>
+               {%endfor%}
+            </table>
+
+            <br><br>
+            <p style="">এই মর্মে প্রত্যয়ন করা যাইতেছে যে , আইনের ধারা ৪৯ অনুযায়ী উৎসে কর কর্তনযোগ্য
+               সরবরাহ হইতে প্রযোজ্য মূল্য সংযোজন কর বাবদ উৎসে কর কর্তন করা হইল । কর্তনকৃত  মূল্য সংযোজন কর্মের অর্থ বুক ট্রান্সফার/ট্রেজারি চালান/দাখিলপত্রে বৃদ্ধিকারী সমন্বয়ের
+               মাধ্যমে সরকারী কোষাগারে প্রদান করা হইয়াছে । কপি এতদসঙ্গে
+               সংযুক্ত করা হইল (প্রযোজ্য ক্ষেত্রে) ।
+            </p>
+            <br><br><br><br>
+            <table width="100%"  style="border: 1px solid black; border-collapse: collapse;">
+               <tr>
+                  <td rowspan="2" style="border: 1px solid #000;vertical-align: text-top;text-align:center;">ক্রমিক নং</td>
+                  <td colspan="2" style="border: 1px solid #000;vertical-align: text-top;text-align:center;">সরবরাহকারীর </td>
+                  <td colspan="2"style="border: 1px solid #000;vertical-align: text-top;text-align:center;">সংশ্লিষ্ট কর চালানপত্র</td>
+                  <td rowspan="2" style="border: 1px solid #000;vertical-align: text-top;text-align:center;">মোট সরবরাহ মূল্য<sup>১</sup> <br> (টাকা)</td>
+                  <td rowspan="2" style="border: 1px solid #000;vertical-align: text-top;text-align:center;">মূসকের পরিমাণ <br>(টাকা)</td>
+                  <td rowspan="2" style="border: 1px solid #000;vertical-align: text-top;text-align:center;"> উৎসে কর্তনকৃত <br> মূসকের পরিমাণ <br>(টাকা)</td>
+               </tr>
+               <tr>
+                  <td style="border: 1px solid #000;vertical-align: text-top;text-align:center;">নাম </td>
+                  <td style="border: 1px solid #000;vertical-align: text-top;text-align:center;">বিআইএন</td>
+                  <td style="border: 1px solid #000;vertical-align: text-top;text-align:center;"> নম্বর </td>
+                  <td style="border: 1px solid #000;vertical-align: text-top;text-align:center;">ইস্যুর তারিখ</td>
+               </tr>
+               <tr>
+                  <td style="border: 1px solid #000;text-align:center">(১)</td>
+                  <td style="border: 1px solid #000;text-align:center">(২)</td>
+                  <td style="border: 1px solid #000;text-align:center">(৩)</td>
+                  <td style="border: 1px solid #000;text-align:center">(৪)</td>
+                  <td style="border: 1px solid #000;text-align:center">(৫)</td>
+                  <td style="border: 1px solid #000;text-align:center">(৬)</td>
+                  <td style="border: 1px solid #000;text-align:center">(৭)</td>
+                  <td style="border: 1px solid #000;text-align:center">(৮)</td>
+               </tr>
+{% for data in vds_data %}
+               <tr>
+                  <td style="border: 1px solid black;height:40px;text-align:center">{{loop.index}}</td>
+                  <td style="border: 1px solid black;">{{data.supplier_name}}</td>
+                  <td style="border: 1px solid black;">{{data.supplier_bin}} </td>
+                  <td style="border: 1px solid black;">{{data.invoice_no}}</td>
+                  <td style="border: 1px solid black;">{{data.inv_date}}</td>
+                  <td style="border: 1px solid black;">{{data.inv_amount}}</td>
+                  <td style="border: 1px solid black;">{{data.vat_amount}}</td>
+                  <td style="border: 1px solid black;">{{data.vds_amount}}</td>
+               </tr>
+{%endfor%}
+            </table>
+            <p><strong>ক্ষমতাপ্রাপ্ত কর্মকর্তার-</strong></p>
+            <p><strong>স্বাক্ষর:....</strong></p>
+            <p><strong>নাম:{{ current_user.first_name }} {{ current_user.last_name }}</strong></p>
+         </div>
+      </div>
+      <script>
+         function print4(){
+               document.getElementById("prt").style.display = "none";
+               window.print();
+               }
+      </script>
+   </body>
+</html>

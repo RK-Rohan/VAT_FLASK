@@ -1,19 +1,21 @@
-from flask import render_template, request, flash, redirect, url_for, json, jsonify
+from flask import render_template
 from flask_login import LoginManager, login_required, current_user
 
-import re
+from sqlalchemy import text
 
-from datetime import date, datetime
 
 from app import db
 from reports import reports
 from company.models import Company
 from sales.models import Sales, SalesLine, SalesSchema
-from sales.forms import SalesForm
+from purchase.models import Purchase, Purchase_line
 
 from customers.models import Customers
+from suppliers.models import Suppliers
 from items.models import Items
 from units.models import Units
+
+from issue_vds.models import IssueVds, IssueVdsLine
 
 login_manager = LoginManager()
 
@@ -22,30 +24,21 @@ login_manager = LoginManager()
 @login_required
 def reports_63(sale_id):
     company_data = Company.query.all()
-        # SELECT sales.id, DATE_FORMAT(sales.`entry_date`, '%d-%m-%Y') DATEONLY,
-        # DATE_FORMAT(sales.`entry_date`, '%H:%i:%s') TIMEONLY,
-        # customers.customer_name, customers.customer_bin, sales.sales_invoice, sales.destination
-        # FROM `sales`
-        # JOIN customers ON customers.id = sales.customer_id
-        # WHERE sales.id IN %(sale_id)
-        # customers = db.session.execute(sql, param)
 
-    customers = Sales.query.join(Customers, Customers.id == Sales.customer_id)\
-        .add_columns\
-        (
-            Sales.id,
-            Sales.entry_date,
-            Sales.sales_invoice,
-            Sales.destination,
-            Customers.customer_name,
-            Customers.customer_bin,
-        ).filter(Sales.id == sale_id)
+    t = text("SELECT sales.id, DATE_FORMAT(sales.`entry_date`, '%d-%m-%Y')DATEONLY, "
+             "DATE_FORMAT(sales.`entry_date`, '%H:%i:%s') TIMEONLY, "
+             "customers.customer_name, customers.customer_bin, sales.sales_invoice, sales.destination "
+             "FROM `sales` "
+             "JOIN customers ON customers.id = sales.customer_id "
+             "WHERE sales.id = :id")
 
-    sales_data = Sales.query.join(Customers, Customers.id == Sales.customer_id)\
+    customers = db.session.execute(t, {'id': sale_id})
+
+    sales_data = Sales.query.join(Customers, Customers.id == Sales.customer_id) \
         .join(SalesLine, Sales.id == SalesLine.sales_id) \
         .join(Items, Items.id == SalesLine.item_id) \
         .join(Units, Units.id == Items.unit_id) \
-        .add_columns\
+        .add_columns \
         (
             Sales.id,
             Items.item_name,
@@ -58,17 +51,10 @@ def reports_63(sale_id):
             SalesLine.vat_amount,
             SalesLine.vat_amount,
             SalesLine.sub_total
-        ).filter(Sales.id == sale_id)
+        ) \
+        .filter(Sales.id == sale_id)
 
-    footer = Sales.query.filter(Sales.id == sale_id)
-
-    print(sales_data)
-
-    # footer = db.session.execute(
-    #     "SELECT sales.total_sd, sales.total_vat, sales.grand_total "
-    #     "FROM `sales` "
-    #     "WHERE sales.id IN %(sale_id)s"
-    # )
+    totals = Sales.query.filter(Sales.id == sale_id)
 
     # sales_data = db.session.execute(
     #     "SELECT sales.id, items.item_name, units.unit_name, "
@@ -84,101 +70,39 @@ def reports_63(sale_id):
     #     "WHERE sales.id IN %(sale_id)s"
     # )
 
-    return render_template('reports/reports_63.html', company_data=company_data, customers=customers, sales_data=sales_data, footer=footer)
+    return render_template('reports/reports_63.html', company_data=company_data, customers=customers,
+                           sales_data=sales_data, totals=totals)
 
 
-# @sales.route('/sales/create/', methods=['GET', 'POST'])
-# def sales_create():
-#     form = SalesForm(request.form)
-#     form.customer_id.choices = [(customers.id, customers.customer_name) for customers in Customers.query.all()]
-#
-#     if request.method == "GET":
-#         result = Items.query.all()
-#         # result = db.session.execute(
-#         #     "SELECT items.item_name "
-#         #     "FROM `items` "
-#         # )
-#     return render_template('sales/create.html', form=form, items=result)
-#
-#     flash("Sales Store Successfully")
-#
-#     return redirect(url_for('sales.sales_page'))
+@reports.route('/reports/66/<vds_id>')
+@login_required
+def reports_66(vds_id):
+    company_data = Company.query.all()
+    vds_table = IssueVds.query.filter(IssueVds.id == vds_id)
+
+    vds_data = IssueVds.query.join(Suppliers, Suppliers.id == IssueVds.supplier_id) \
+        .join(IssueVdsLine, IssueVds.id == IssueVdsLine.vds_id) \
+        .join(Purchase, Purchase.p_invoice_no == IssueVdsLine.invoice_no) \
+        .add_columns \
+        (
+            IssueVds.id,
+            Suppliers.supplier_name,
+            Suppliers.supplier_bin,
+            IssueVdsLine.invoice_no,
+            IssueVdsLine.inv_date,
+            IssueVdsLine.inv_amount,
+            IssueVdsLine.vat_amount,
+            IssueVdsLine.vds_amount,
+        ) \
+        .filter(Sales.id == vds_id)
+
+    return render_template('reports/reports_66.html', company_data=company_data, vds_table=vds_table, vds_data=vds_data)
 
 
-# @sales.route('/sales/store/', methods=['GET', 'POST'])
-# def sales_store():
-#     form = SalesForm(request.form)
-#     sales_invoice = 'INV1001'
-#     if 'sales_store' in request.form:
-#         query = db.session.execute("SELECT `sales_invoice` FROM `sales` ORDER BY `id` DESC LIMIT 1")
-#         for result in query:
-#             # sales_invoice = int(result.sales_invoice) + 1
-#
-#             # c_date = datetime.now()
-#             # date_int = c_date.strftime("%Y") + c_date.strftime("%m") + c_date.strftime("%d")
-#
-#             sales_invoice = result.sales_invoice
-#
-#             sales_invoice = re.sub(r'[0-9]+$',
-#                                    lambda x: f"{str(int(x.group()) + 1).zfill(len(x.group()))}", sales_invoice)
-#
-#         data = Sales(
-#             customer_id=form.customer_id.data,
-#             sale_date=form.sale_date.data,
-#             entry_date=datetime.now(),
-#             sales_invoice=sales_invoice,
-#             vehicle_info=form.vehicle_info.data,
-#             destination=form.destination.data,
-#             sales_type='3',
-#             # total_discount=form.grand_total.data,
-#             total_sd=form.total_sd.data,
-#             total_vat=form.total_vat.data,
-#             grand_total=form.grand_total.data,
-#             user_id=current_user.get_id()
-#         )
-#         db.session.add(data)
-#         db.session.commit()
-#
-#         data_line = form.sales_line.data
-#         line_data = json.loads(data_line)
-#
-#         sales_id = {"sales_id": data.id}
-#         sales_date = {"sales_date": request.form['sale_date']}
-#         # entry_date = {"entry_date": request.form['entry_date']}
-#         for i in range(len(line_data)):
-#             line_data[i]["sales_id"] = sales_id["sales_id"]
-#             line_data[i]["sales_date"] = sales_date["sales_date"]
-#             # line_data[i]["entry_date"] = entry_date["entry_date"]
-#
-#         # print(line_data)
-#
-#         for row in line_data:
-#             print(row)
-#             sales_line = [SalesLine(**row)]
-#             db.session.add_all(sales_line)
-#             db.session.commit()
-#
-#     flash("Sales Store Successfully")
-#
-#     return redirect(url_for('sales.sales_page'))
-#
-#
-# @sales.route('/api/sales/customers/<customer_id>/', methods=['GET', 'POST'])
-# def sales_by_customer_id(customer_id):
-#     sales_list = Sales.query.join(SalesLine, Sales.id == SalesLine.sales_id)\
-#         .add_columns\
-#         (
-#             Sales.id,
-#             Sales.customer_id,
-#             Sales.sales_invoice,
-#             Sales.sale_date,
-#             Sales.total_sd,
-#             Sales.total_vat,
-#             Sales.grand_total,
-#             Sales.entry_date,
-#             Sales.user_id
-#         ).filter(Sales.customer_id == customer_id)
-#     print(sales_list)
-#     sales_schema = SalesSchema()
-#     output = sales_schema.dump(sales_list, many=True)
-#     return jsonify(output)\
+@reports.route('/reports/91/')
+@login_required
+def reports_91():
+    company_data = Company.query.all()
+    # vds_table = IssueVds.query.filter(IssueVds.id == vds_id)
+
+    return render_template('reports/reports_91.html', company_data=company_data)

@@ -79,9 +79,9 @@
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-text"></i></span><span
                             class="pcoded-mtext">Reports</span></a>
                     <ul class="pcoded-submenu {% if 'settings' in segment %} active {% endif %}">
-                        <li {% if request.path == '/company/edit/' %}class="active"{% endif %}><a href="{{ url_for('company.company_update') }}" class="" >Company</a></li>
-                        <li {% if request.path == '/units/' %}class="active"{% endif %}><a href="{{ url_for('units.units_page') }}" class="">Units</a></li>
-                        <li {% if request.path == '/employees/' %}class="active"{% endif %}><a href="{{ url_for('auth.employees_page') }}" class="">Employees</a></li>
+                        <li {% if request.path =='/reports/91/' %}class="active"{% endif %}>
+                            <a href="{{ url_for('reports.reports_91') }}" target="_blank" class="" >Mushak 9.1</a>
+                        </li>
                     </ul>
                 </li>
 
