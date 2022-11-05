@@ -156,15 +156,17 @@
                      <td  width="10%"style="border: 1px solid black;"> VAT (c)</td>
                      <td  width="10%"style="border: 1px solid black;"></td>
                   </tr>
+                   {% for s2 in s_2 %}
                   <tr>
                      <td rowspan="2"style="border: 1px solid black;"> Zero Rated Goods/Service</td>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;"> Direct Export</td>
                      <td style="border: 1px solid black;"> 1</td>
-                     <td style="border: 1px solid black;"> <?php echo $salesZeroVatDerectAmount; ?></td>
-                     <td style="border: 1px solid black;"><?php echo  $salesZeroVatDerectSd; ?> </td>
-                     <td style="border: 1px solid black;"><?php echo $salesZeroVatDerectVat; ?></td>
+                     <td style="border: 1px solid black;"> {{ s2.vatable_value }}</td>
+                     <td style="border: 1px solid black;">{{ s2.sd_amount }}</td>
+                     <td style="border: 1px solid black;">{{ s2.vat_amount }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note1?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                   {% endfor %}
                   <tr>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Deemed Export</td>
                      <td style="border: 1px solid black;">2</td>
@@ -173,22 +175,26 @@
                      <td style="border: 1px solid black;"><?php echo $salesZeroVatInderectVat; ?></td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note2?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                  {% for s3 in s_3 %}
                   <tr>
                      <td colspan="2" style="border: 1px solid black;">Exempted Goods/Service</td>
                      <td style="border: 1px solid black;"> 3</td>
-                     <td style="border: 1px solid black;"> <?php echo $get_detactAllAmount; ?></td>
-                     <td style="border: 1px solid black;"><?php echo $get_detactAllSd; ?></td>
-                     <td style="border: 1px solid black;"> <?php echo $get_detactAllVat ; ?></td>
+                     <td style="border: 1px solid black;">{{ s3.vatable_value }}</td>
+                     <td style="border: 1px solid black;">{{ s3.sd_amount }}</td>
+                     <td style="border: 1px solid black;">{{ s3.vat_amount }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note3?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                  {% endfor %}
+                  {% for s1 in s_1 %}
                   <tr>
                      <td colspan="2" style="border: 1px solid black;">Standard Rated Goods/Service</td>
                      <td style="border: 1px solid black;"> 4</td>
-                     <td style="border: 1px solid black;"> <?php echo $sales15VatAmount; ?></td>
-                     <td style="border: 1px solid black;"><?php echo  $sales15VatSd; ?> </td>
-                     <td style="border: 1px solid black;"><?php echo $sales15VatVat; ?></td>
+                     <td style="border: 1px solid black;">{{ s1.vatable_value }}</td>
+                     <td style="border: 1px solid black;">{{ s1.sd_amount }}</td>
+                     <td style="border: 1px solid black;">{{ s1.vat_amount }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note4?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                  {% endfor %}
                   <tr>
                      <td colspan="2" style="border: 1px solid black;">Goods Based on MRP</td>
                      <td style="border: 1px solid black;"> 5</td>
@@ -249,16 +255,18 @@
                      <td  width="23%"style="border: 1px solid black;">VAT (b)</td>
                      <td  width=""style="border: 1px solid black;"></td>
                   </tr>
+                  {% for t2 in t_2 %}
                   <tr>
                      <td rowspan="2"style="border: 1px solid black;">Zero Rated Goods/Service</td>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Local Purchase</td>
                      <td style="border: 1px solid black;">10</td>
-                     <td style="border: 1px solid black;"><?php echo $purVatZeroLAmount;?> </td>
+                     <td style="border: 1px solid black;">{{ t2.vatable_value }}</td>
                      <td style="border: 1px solid black;"></td>
                      <td style="border: 1px solid black;">
                         <a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note10?month=<?php echo $date;?>">Sub-form</a>
                      </td>
                   </tr>
+                  {% endfor %}
                   <tr>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Import</td>
                      <td style="border: 1px solid black;">11</td>
@@ -266,14 +274,16 @@
                      <td style="border: 1px solid black;"></td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note11?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                  {% for t3 in t_3 %}
                   <tr>
                      <td rowspan="2"style="border: 1px solid black;">Exempted Goods/Service</td>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;"> Local Purchase</td>
                      <td style="border: 1px solid black;">12</td>
-                     <td style="border: 1px solid black;"><?php echo $purVatZeroDedFAmount;?></td>
+                     <td style="border: 1px solid black;">{{ t3.vatable_value }}</td>
                      <td style="border: 1px solid black;"></td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note12?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                  {% endfor %}
                   <tr>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Import</td>
                      <td style="border: 1px solid black;">13</td>
@@ -281,14 +291,16 @@
                      <td style="border: 1px solid black;"></td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note13?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                  {% for t1 in t_1 %}
                   <tr>
                      <td rowspan="2"style="border: 1px solid black;">Standard Rated Goods/Service</td>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Local Purchase</td>
                      <td style="border: 1px solid black;">14</td>
-                     <td style="border: 1px solid black;"><?php echo $data_purchaseRularLAmount;?></td>
-                     <td style="border: 1px solid black;"><?php echo $data_purchaseRularLVat;?></td>
+                     <td style="border: 1px solid black;">{{ t1.vatable_value }}</td>
+                     <td style="border: 1px solid black;">{{ t1.vat_amount }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank" href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note14?month=<?php echo $date;?>" >Sub-form</a></td>
                   </tr>
+                  {% endfor %}
                   <tr>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;"> Import</td>
                      <td style="border: 1px solid black;">15</td>
@@ -296,14 +308,16 @@
                      <td style="border: 1px solid black;"><?php echo $purchaseRularFVat;?></td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note15?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                  {% for t5 in t_5 %}
                   <tr>
                      <td rowspan="2"style="border: 1px solid black;">Goods/Service Other Than Standard Rate </td>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Local Purchase</td>
                      <td style="border: 1px solid black;">16</td>
-                     <td style="border: 1px solid black;"><?php echo $purchaseRularExIdalLAmount;?></td>
-                     <td style="border: 1px solid black;"><?php echo $purchaseRularExIdalLVat;?></td>
+                     <td style="border: 1px solid black;">{{ t5.vatable_value }}</td>
+                     <td style="border: 1px solid black;">{{ t5.vat_amount }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note16?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                  {% endfor %}
                   <tr>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;"> Import</td>
                      <td style="border: 1px solid black;">17</td>
@@ -311,14 +325,16 @@
                      <td style="border: 1px solid black;"><?php echo $purchaseRularExIdalFVat;?></td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note17?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                  {% for t4 in t_4 %}
                   <tr>
                      <td style="border: 1px solid black;">Goods/Service Based on Specific Vat</td>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Local Purchase</td>
                      <td style="border: 1px solid black;">18</td>
-                     <td style="border: 1px solid black;"><?php echo $purchaseRularfiexedAmount;?></td>
-                     <td style="border: 1px solid black;"><?php echo $purchaseRularfiexedVat;?></td>
+                     <td style="border: 1px solid black;">{%- if t4.vatable_value -%} {{ t4.vatable_value }} {% else %} 0 {% endif %}</td>
+                     <td style="border: 1px solid black;">{%- if t4.vat_amount -%}{{ t4.vat_amount }} {% endif %}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note18?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
+                  {% endfor %}
                   <tr>
                      <td rowspan="2"style="border: 1px solid black;">Goods/Service Not Admissible For Credit(Local Purchase)</td>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;"> From TurnoverTax Units</td>

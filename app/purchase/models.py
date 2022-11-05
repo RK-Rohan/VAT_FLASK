@@ -36,7 +36,7 @@ class PurchaseSchema(ma.Schema):
         )
 
 
-class Purchase_line(db.Model):
+class PurchaseLine(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item_id = db.Column(db.Integer)
     hs_code_id = db.Column(db.Integer)

@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_required, current_user
 
 from purchase import purchase
 from app import db
-from purchase.models import Purchase, Purchase_line, PurchaseSchema
+from purchase.models import Purchase, PurchaseLine, PurchaseSchema
 from purchase.forms import PurchaseForm
 
 from suppliers.models import Suppliers
@@ -78,7 +78,7 @@ def purchase_store():
 
         for row in line_data:
             print(row)
-            purchase_line = [Purchase_line(**row)]
+            purchase_line = [PurchaseLine(**row)]
             db.session.add_all(purchase_line)
             db.session.commit()
 
@@ -89,7 +89,7 @@ def purchase_store():
 
 @purchase.route('/api/purchase/supplier/<supplier_id>/', methods=['GET', 'POST'])
 def purchase_by_supplier_id(supplier_id):
-    purchase_list = Purchase.query.join(Purchase_line, Purchase.id == Purchase_line.purchase_id)\
+    purchase_list = Purchase.query.join(PurchaseLine, Purchase.id == PurchaseLine.purchase_id)\
         .add_columns\
         (
             Purchase.id,

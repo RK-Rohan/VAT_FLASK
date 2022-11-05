@@ -1,14 +1,17 @@
-from flask import render_template
+from flask import render_template, request
 from flask_login import LoginManager, login_required, current_user
 
-from sqlalchemy import text
+from sqlalchemy import text, func
 
+import datetime
+from dateutil import relativedelta
 
 from app import db
 from reports import reports
+from reports.forms import ReportForm
 from company.models import Company
 from sales.models import Sales, SalesLine, SalesSchema
-from purchase.models import Purchase, Purchase_line
+from purchase.models import Purchase, PurchaseLine
 
 from customers.models import Customers
 from suppliers.models import Suppliers
@@ -102,7 +105,106 @@ def reports_66(vds_id):
 @reports.route('/reports/91/')
 @login_required
 def reports_91():
-    company_data = Company.query.all()
-    # vds_table = IssueVds.query.filter(IssueVds.id == vds_id)
+    form = ReportForm(request.form)
+    return render_template('reports/index_91.html', form=form)
 
-    return render_template('reports/reports_91.html', company_data=company_data)
+
+@reports.route('/reports/91/', methods=['GET', 'POST'])
+@login_required
+def reports_91_by_date():
+    date = request.form['date']
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    company_data = Company.query.all()
+    t1 = text(
+        "SELECT SUM(purchase_line.`vatable_value`) AS vatable_value, SUM(purchase_line.`vat_amount`) AS vat_amount "
+        "FROM purchase "
+        "JOIN purchase_line ON purchase.id = purchase_line.purchase_id "
+        "WHERE purchase_line.vat_type = 1 "
+        "AND purchase_line.purchase_date between :start_date AND :end_date")
+    t_1 = db.session.execute(t1, {'start_date': start_date, 'end_date': end_date})
+
+    t5 = text(
+        "SELECT SUM(purchase_line.`vatable_value`) AS vatable_value, SUM(purchase_line.`vat_amount`) AS vat_amount "
+        "FROM purchase "
+        "JOIN purchase_line ON purchase.id = purchase_line.purchase_id "
+        "WHERE purchase_line.vat_type = 5 "
+        "AND purchase_line.purchase_date between :start_date AND :end_date ")
+    t_5 = db.session.execute(t5, {'start_date': start_date, 'end_date': end_date})
+
+    t2 = text(
+        "SELECT SUM(purchase_line.`vatable_value`) AS vatable_value "
+        "FROM purchase "
+        "JOIN purchase_line ON purchase.id = purchase_line.purchase_id "
+        "WHERE purchase_line.vat_type = 2 "
+        "AND purchase_line.purchase_date between :start_date AND :end_date ")
+    t_2 = db.session.execute(t2, {'start_date': start_date, 'end_date': end_date})
+
+    t3 = text(
+        "SELECT SUM(purchase_line.`vatable_value`) AS vatable_value "
+        "FROM purchase "
+        "JOIN purchase_line ON purchase.id = purchase_line.purchase_id "
+        "WHERE purchase_line.vat_type = 3 "
+        "AND purchase_line.purchase_date between :start_date AND :end_date ")
+    t_3 = db.session.execute(t3, {'start_date': start_date, 'end_date': end_date})
+
+    t4 = text(
+        "SELECT SUM(purchase_line.`vatable_value`) AS vatable_value, SUM(purchase_line.`vat_amount`) AS vat_amount "
+        "FROM purchase "
+        "JOIN purchase_line ON purchase.id = purchase_line.purchase_id "
+        "WHERE purchase_line.vat_type = 4 "
+        "AND purchase_line.purchase_date between :start_date AND :end_date ")
+    t_4 = db.session.execute(t4, {'start_date': start_date, 'end_date': end_date})
+
+    s1 = text(
+        "SELECT SUM(sales_line.`vatable_value`) AS vatable_value, SUM(sales_line.`vat_amount`) AS vat_amount, "
+        "SUM(sales_line.`sd_amount`) AS sd_amount "
+        "FROM sales "
+        "JOIN sales_line ON sales.id = sales_line.sales_id "
+        "WHERE sales_line.vat_type = 1 "
+        "AND sales_line.sales_date between :start_date AND :end_date ")
+    s_1 = db.session.execute(s1, {'start_date': start_date, 'end_date': end_date})
+
+    s2 = text(
+        "SELECT SUM(sales_line.`vatable_value`) AS vatable_value, SUM(sales_line.`vat_amount`) AS vat_amount, "
+        "SUM(sales_line.`sd_amount`) AS sd_amount "
+        "FROM sales "
+        "JOIN sales_line ON sales.id = sales_line.sales_id "
+        "WHERE sales_line.vat_type = 2 "
+        "AND sales_line.sales_date between :start_date AND :end_date ")
+    s_2 = db.session.execute(s2, {'start_date': start_date, 'end_date': end_date})
+
+    s3 = text(
+        "SELECT SUM(sales_line.`vatable_value`) AS vatable_value, SUM(sales_line.`vat_amount`) AS vat_amount, "
+        "SUM(sales_line.`sd_amount`) AS sd_amount "
+        "FROM sales "
+        "JOIN sales_line ON sales.id = sales_line.sales_id "
+        "WHERE sales_line.vat_type = 3 "
+        "AND sales_line.sales_date between :start_date AND :end_date ")
+    s_3 = db.session.execute(s3, {'start_date': start_date, 'end_date': end_date})
+
+    s4 = text(
+        "SELECT SUM(sales_line.`vatable_value`) AS vatable_value, SUM(sales_line.`vat_amount`) AS vat_amount, "
+        "SUM(sales_line.`sd_amount`) AS sd_amount "
+        "FROM sales "
+        "JOIN sales_line ON sales.id = sales_line.sales_id "
+        "WHERE sales_line.vat_type = 4 "
+        "AND sales_line.sales_date between :start_date AND :end_date ")
+    s_4 = db.session.execute(s4, {'start_date': start_date, 'end_date': end_date})
+
+    s5 = text(
+        "SELECT SUM(sales_line.`vatable_value`) AS vatable_value, SUM(sales_line.`vat_amount`) AS vat_amount, "
+        "SUM(sales_line.`sd_amount`) AS sd_amount "
+        "FROM sales "
+        "JOIN sales_line ON sales.id = sales_line.sales_id "
+        "WHERE sales_line.vat_type = 5 "
+        "AND sales_line.sales_date between :start_date AND :end_date ")
+    s_5 = db.session.execute(s5, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/reports_91.html', company_data=company_data,
+                           t_1=t_1, t_2=t_2, t_3=t_3, t_4=t_4, t_5=t_5,
+                           s_1=s_1, s_2=s_2, s_3=s_3, s_4=s_4, s_5=s_5,
+                           )
