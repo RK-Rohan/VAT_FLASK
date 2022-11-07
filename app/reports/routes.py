@@ -42,7 +42,7 @@ def reports_63(sale_id):
         .join(Items, Items.id == SalesLine.item_id) \
         .join(Units, Units.id == Items.unit_id) \
         .add_columns \
-        (
+            (
             Sales.id,
             Items.item_name,
             Units.unit_name,
@@ -87,7 +87,7 @@ def reports_66(vds_id):
         .join(IssueVdsLine, IssueVds.id == IssueVdsLine.vds_id) \
         .join(Purchase, Purchase.p_invoice_no == IssueVdsLine.invoice_no) \
         .add_columns \
-        (
+            (
             IssueVds.id,
             Suppliers.supplier_name,
             Suppliers.supplier_bin,
@@ -204,7 +204,49 @@ def reports_91_by_date():
         "AND sales_line.sales_date between :start_date AND :end_date ")
     s_5 = db.session.execute(s5, {'start_date': start_date, 'end_date': end_date})
 
+    ivds = text(
+        "SELECT SUM(`vds_amount`) AS vds_amount FROM `issue_vds_line` "
+        "WHERE issue_vds_line.entry_date between :start_date AND :end_date ")
+    i_vds = db.session.execute(ivds, {'start_date': start_date, 'end_date': end_date})
+
+    rvds = text(
+        "SELECT SUM(`vds_amount`) AS vds_amount FROM `receive_vds_line` "
+        "WHERE receive_vds_line.entry_date between :start_date AND :end_date ")
+    r_vds = db.session.execute(rvds, {'start_date': start_date, 'end_date': end_date})
+
+    sot = text(
+        "SELECT SUM(`vatable_value`) AS t_vatable_value, "
+        "SUM(`sd_amount`) AS t_sd_amount, "
+        "SUM(`vat_amount`) AS t_vat_amount "
+        "FROM `sales_line` "
+        "JOIN sales ON sales.id = sales_line.sales_id "
+        "WHERE sales.entry_date between :start_date AND :end_date ")
+    s_o_t = db.session.execute(sot, {'start_date': start_date, 'end_date': end_date})
+
+    pit = text(
+        "SELECT SUM(`vatable_value`) AS t_vatable_value, "
+        "SUM(`vat_amount`) AS t_vat_amount "
+        "FROM `purchase_line` "
+        "JOIN purchase ON purchase.id = purchase_line.purchase_id "
+        "WHERE purchase.entry_date between :start_date AND :end_date ")
+    p_i_t = db.session.execute(pit, {'start_date': start_date, 'end_date': end_date})
+
+    ntc = text(
+        "SELECT (SELECT SUM(sales_line.`vat_amount`) FROM sales_line WHERE sales_line.sales_date between :start_date AND :end_date) AS C9, "
+        "(SELECT SUM(purchase_line.`vat_amount`) FROM purchase_line WHERE purchase_line.purchase_date between :start_date AND :end_date) AS B23, "
+        "(SELECT SUM(issue_vds_line.vds_amount) FROM issue_vds_line WHERE issue_vds_line.entry_date between :start_date AND :end_date) AS A28 ,"
+        "(SELECT SUM(receive_vds_line.vds_amount) FROM receive_vds_line WHERE receive_vds_line.entry_date between :start_date AND :end_date) AS A33 "
+        "FROM `purchase_line`, sales_line, issue_vds_line, receive_vds_line LIMIT 1"
+    )
+    n_t_c = db.session.execute(ntc, {'start_date': start_date, 'end_date': end_date})
+
+    for ntc in n_t_c:
+        value_34 = (ntc.C9 - ntc.B23) + (ntc.A28 - ntc.A33)
+        value_35 = value_34-(52+56)
+
     return render_template('reports/reports_91.html', company_data=company_data,
                            t_1=t_1, t_2=t_2, t_3=t_3, t_4=t_4, t_5=t_5,
                            s_1=s_1, s_2=s_2, s_3=s_3, s_4=s_4, s_5=s_5,
+                           i_vds=i_vds, r_vds=r_vds,
+                           s_o_t=s_o_t, p_i_t=p_i_t, value_34=value_34, value_35=value_35
                            )

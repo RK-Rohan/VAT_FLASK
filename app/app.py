@@ -73,5 +73,8 @@ def create_app():
     from reports import reports as reports_blueprint
     app.register_blueprint(reports_blueprint)
 
+    from treasury_chalan import treasury_chalan as treasury_chalan_blueprint
+    app.register_blueprint(treasury_chalan_blueprint)
+
 
     return app

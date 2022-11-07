@@ -42,7 +42,7 @@ def receive_vds_store():
             vds_no=vds_no,
             customer_id=form.customer_id.data,
             vds_type='3',
-            entry_date=date.today(),
+            entry_date=request.form['entry_date'],
             vds_certificate_no=form.vds_certificate_no.data,
             total_amount=form.total_amount.data,
             total_vat=form.total_vat.data,
@@ -60,7 +60,7 @@ def receive_vds_store():
         line_data = json.loads(data_line)
 
         vds_id = {"vds_id": data.id}
-        entry_date = {"entry_date": date.today()}
+        entry_date = {"entry_date": data.entry_date}
         for i in range(len(line_data)):
             line_data[i]["vds_id"] = vds_id["vds_id"]
             line_data[i]["entry_date"] = entry_date["entry_date"]

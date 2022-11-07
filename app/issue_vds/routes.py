@@ -42,7 +42,7 @@ def issue_vds_store():
             vds_no=vds_no,
             supplier_id=form.supplier_id.data,
             vds_type='3',
-            entry_date=date.today(),
+            entry_date=request.form['entry_date'],
             total_amount=form.total_amount.data,
             total_vat=form.total_vat.data,
             total_vds=form.total_vds.data,
@@ -58,8 +58,10 @@ def issue_vds_store():
         line_data = json.loads(data_line)
 
         vds_id = {"vds_id": data.id}
+        entry_date = {"entry_date": data.entry_date}
         for i in range(len(line_data)):
             line_data[i]["vds_id"] = vds_id["vds_id"]
+            line_data[i]["entry_date"] = entry_date["entry_date"]
 
         # print(line_data)
 
