@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Treasury Chalan {% endblock %}
+{% block title %} Debit Note {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -19,8 +19,8 @@
                                     <div class="col-xl-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5>Treasury Chalan </h5>
-                                                <a href="{{ url_for('treasury_chalan.treasury_chalan_create') }}" class="btn btn-success float-right">New Chalan</a>
+                                                <h5>Debit Note </h5>
+                                                <a href="{{ url_for('debit_note.debit_note_create') }}" class="btn btn-success float-right">Add Debit Note</a>
                                             </div>
                                             <div class="card-block table-border-style">
                                                 <div class="table-responsive">
@@ -28,22 +28,26 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
-                                                                <th>Chalan No</th>
-                                                                <th>Account Code</th>
-                                                                <th>Amount</th>
-                                                                <th>Date</th>
-                                                                <th>Type</th>
+                                                                <th>Debit Invoice</th>
+                                                                <th>Issue Date</th>
+                                                                <th>Total Amount</th>
+                                                                <th>Total VAT</th>
+                                                                <th>Total SD</th>
+                                                                <th>Mushak</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                        {% for row in treasury_chalan %}
+                                                        {% for row in issue_vds %}
                                                             <tr>
                                                                 <th>{{loop.index}}</th>
-                                                                <td>{{row.t_chalan_no}}</td>
-                                                                <td>{{row.t_account_code}}</td>
-                                                                <td>{{row.t_amount}}</td>
-                                                                <td>{{row.t_date}}</td>
-                                                                <td>{{row.t_type}}</td>
+                                                                <td>{{row.debit_note_no}}</td>
+                                                                <td>{{ row.dn_issue_date }}</td>
+                                                                <td>{{row.total_amount}}</td>
+                                                                <td>{{row.total_vat}}</td>
+                                                                <td>{{row.total_sd}}</td>
+                                                                <td>
+                                                                    <a href="/reports/66/{{row.id}}" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-print">-Mushak-6.6</i></a>
+                                                                </td>
                                                             </tr>
 
 

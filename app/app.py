@@ -76,5 +76,16 @@ def create_app():
     from treasury_chalan import treasury_chalan as treasury_chalan_blueprint
     app.register_blueprint(treasury_chalan_blueprint)
 
+    from payable_91 import payable_91 as payable_91_blueprint
+    app.register_blueprint(payable_91_blueprint)
+
+    from payable_voucher import payable_voucher as payable_voucher_blueprint
+    app.register_blueprint(payable_voucher_blueprint)
+
+    from receivable_voucher import receivable_voucher as receivable_voucher_blueprint
+    app.register_blueprint(receivable_voucher_blueprint)
+
+    from debit_note import debit_note as debit_note_blueprint
+    app.register_blueprint(debit_note_blueprint)
 
     return app

@@ -1,9 +1,10 @@
 from flask import render_template, request, flash, redirect, url_for, json, jsonify
 from flask_login import LoginManager, login_required, current_user
+from sqlalchemy import text
 
 from purchase import purchase
 from app import db
-from purchase.models import Purchase, PurchaseLine, PurchaseSchema
+from purchase.models import Purchase, PurchaseLine, PurchaseSchema, PurchaseLineSchema
 from purchase.forms import PurchaseForm
 
 from suppliers.models import Suppliers
@@ -95,6 +96,7 @@ def purchase_by_supplier_id(supplier_id):
             Purchase.id,
             Purchase.supplier_id,
             Purchase.p_invoice_no,
+            Purchase.vendor_invoice,
             Purchase.challan_date,
             Purchase.total_vds,
             Purchase.total_tax,
@@ -125,5 +127,19 @@ def purchase_by_id(id):
     print(purchase_list)
     purchase_schema = PurchaseSchema()
     output = purchase_schema.dump(purchase_list)
+    return jsonify(output)
+
+
+@purchase.route('/api/purchase_line/<purchase_id>/', methods=['GET', 'POST'])
+def purchase_line_by_id(purchase_id):
+    t = text(
+        "SELECT p.grand_total, i.item_name, Pl.* "
+        "FROM purchase_line AS Pl, purchase AS p, items AS i "
+        "WHERE p.id = Pl.purchase_id AND i.id = Pl.item_id AND p.id = :purchase_id"
+        )
+    purchase_list = db.session.execute(t, {'purchase_id': purchase_id})
+    print(purchase_list)
+    purchase_schema = PurchaseLineSchema()
+    output = purchase_schema.dump(purchase_list, many=True)
     return jsonify(output)
 

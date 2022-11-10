@@ -57,6 +57,7 @@
                     <ul class="pcoded-submenu {% if 'settings' in segment %} active {% endif %}">
                         <li {% if request.path =='/purchase/' %}class="active"{% endif %}><a href="{{ url_for('purchase.purchase_page') }}" class="" >Service Purchase</a></li>
                         <li {% if request.path =='/issue_vds/' %}class="active"{% endif %}><a href="{{ url_for('issue_vds.issue_vds_page') }}" class="" >Issue VDS</a></li>
+                        <li {% if request.path =='/debit_note/' %}class="active"{% endif %}><a href="{{ url_for('debit_note.debit_note_page') }}" class="" >Debit Note</a></li>
                     </ul>
                 </li>
                 <li class="nav-item pcoded-menu-caption">
@@ -81,6 +82,18 @@
                     <ul class="pcoded-submenu {% if 'settings' in segment %} active {% endif %}">
                         <li {% if request.path =='/reports/91/' %}class="active"{% endif %}>
                             <a href="{{ url_for('reports.reports_91') }}" target="_blank" class="" >Mushak 9.1</a>
+                        </li>
+                        <li {% if request.path =='/treasury_chalan/' %}class="active"{% endif %}>
+                            <a href="{{ url_for('treasury_chalan.treasury_chalan_page') }}" class="" >Treasury Chalan</a>
+                        </li>
+                        <li {% if request.path =='/payable_91/' %}class="active"{% endif %}>
+                            <a href="{{ url_for('payable_91.payable_91_page') }}" class="" >Payable 9.1</a>
+                        </li>
+                        <li {% if request.path =='/payable_voucher/' %}class="active"{% endif %}>
+                            <a href="{{ url_for('payable_voucher.payable_voucher_page') }}" class="" >Payable Voucher</a>
+                        </li>
+                        <li {% if request.path =='/receivable_voucher/' %}class="active"{% endif %}>
+                            <a href="{{ url_for('receivable_voucher.receivable_voucher_page') }}" class="" >Receivable Voucher</a>
                         </li>
                     </ul>
                 </li>

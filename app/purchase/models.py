@@ -31,7 +31,7 @@ class Purchase(db.Model, SerializerMixin):
 class PurchaseSchema(ma.Schema):
     class Meta:
         fields = (
-            "id", "p_invoice_no", "challan_date", "supplier_id", "total_vds", "total_tax", "grand_total",
+            "id", "p_invoice_no", "vendor_invoice", "challan_date", "supplier_id", "total_vds", "total_tax", "grand_total",
             "entry_date", "user_id"
         )
 
@@ -64,6 +64,13 @@ class PurchaseLine(db.Model):
     entry_date = Column(DATETIME)
     sub_total = db.Column(db.DECIMAL(10, 2))
     grand_total = db.Column(db.DECIMAL(10, 2))
+
+
+class PurchaseLineSchema(ma.Schema):
+    class Meta:
+        fields = (
+            "purchase_id", "item_id", "item_name", "qty", "rate", "rate_value", "vat_percent", "vat_amount", "sd_amount"
+        )
 
 
 

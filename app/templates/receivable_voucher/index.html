@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Treasury Chalan {% endblock %}
+{% block title %} Receivable Voucher {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -19,8 +19,8 @@
                                     <div class="col-xl-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5>Treasury Chalan </h5>
-                                                <a href="{{ url_for('treasury_chalan.treasury_chalan_create') }}" class="btn btn-success float-right">New Chalan</a>
+                                                <h5>Receivable Voucher</h5>
+                                                <a href="{{ url_for('receivable_voucher.receivable_voucher_create') }}" class="btn btn-success float-right">New Receivable Voucher</a>
                                             </div>
                                             <div class="card-block table-border-style">
                                                 <div class="table-responsive">
@@ -28,22 +28,22 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
-                                                                <th>Chalan No</th>
-                                                                <th>Account Code</th>
+                                                                <th>Receivable Description</th>
+                                                                <th>Chalan Date</th>
+                                                                <th>Execution Date</th>
                                                                 <th>Amount</th>
-                                                                <th>Date</th>
-                                                                <th>Type</th>
+                                                                <th>VAT Amount</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                        {% for row in treasury_chalan %}
+                                                        {% for row in receivable_voucher %}
                                                             <tr>
                                                                 <th>{{loop.index}}</th>
-                                                                <td>{{row.t_chalan_no}}</td>
-                                                                <td>{{row.t_account_code}}</td>
-                                                                <td>{{row.t_amount}}</td>
-                                                                <td>{{row.t_date}}</td>
-                                                                <td>{{row.t_type}}</td>
+                                                                <td>{{row.receivable_desc}}</td>
+                                                                <td>{{row.chalan_date}}</td>
+                                                                <td>{{row.execute_date}}</td>
+                                                                <td>{{row.receivable_amount}}</td>
+                                                                <td>{{row.vat_amount}}</td>
                                                             </tr>
 
 

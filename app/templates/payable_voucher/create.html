@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Dashboard {% endblock %}
+{% block title %} Payable Voucher {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
@@ -27,65 +27,54 @@
                                 <div class="col-sm-12">
 
                                     <div class="card">
-                                        <form role="form" method="POST" action="{{ url_for('treasury_chalan.treasury_chalan_store') }}" role="form" id="treasury_chalan_form">
+                                        <form role="form" method="POST" action="{{ url_for('payable_voucher.payable_voucher_store') }}" role="form" id="payable_voucher_form">
                                             {{ form.csrf_token }}
                                         <div class="card-header">
-                                            <h5>Add New Treasury Chalan</h5>
+                                            <h5>Add New Payable Voucher</h5>
                                         </div>
                                         <div class="card-block">
                                             <div class="form-group row">
-                                                 <label class="col-sm-2 col-form-label">Type</label>
+                                                 <label class="col-sm-2 col-form-label">Payable Description:</label>
                                                  <div class="col-sm-6">
-                                                     {{ form.t_type(class="form-control") }}
+                                                     {{ form.payable_desc(class="form-control") }}
                                                  </div>
                                             </div>
                                             <div class="form-group row">
                                                  <label class="col-sm-2 col-form-label">Chalan No :</label>
                                                  <div class="col-sm-6">
-                                                     {{ form.t_chalan_no(class="form-control") }}
+                                                     {{ form.chalan_no(class="form-control") }}
                                                  </div>
                                             </div>
                                             <div class="form-group row">
-                                                 <label class="col-sm-2 col-form-label">Account Code :</label>
+                                                 <label class="col-sm-2 col-form-label">Chalan Date :</label>
                                                  <div class="col-sm-6">
-                                                     {{ form.t_account_code(class="form-control") }}
+                                                     {{ form.chalan_date(class="form-control") }}
                                                  </div>
                                             </div>
                                             <div class="form-group row">
-                                                 <label class="col-sm-2 col-form-label">Bank Name :</label>
-                                                 <div class="col-sm-6">
-                                                     {{ form.t_bank(class="form-control") }}
-                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                 <label class="col-sm-2 col-form-label">Branch Name:</label>
-                                                 <div class="col-sm-6">
-                                                     {{ form.t_branch(class="form-control") }}
-                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                 <label class="col-sm-2 col-form-label">Amount :</label>
-                                                 <div class="col-sm-6">
-                                                     {{ form.t_amount(class="form-control") }}
-                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                 <label class="col-sm-2 col-form-label">Chalan Date:</label>
-                                                 <div class="col-sm-6">
-                                                     {{ form.t_date(class="form-control") }}
-                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                 <label class="col-sm-2 col-form-label">Execution Date :</label>
+                                                 <label class="col-sm-2 col-form-label">Execution Date:</label>
                                                  <div class="col-sm-6">
                                                      {{ form.execute_date(class="form-control") }}
                                                  </div>
                                             </div>
                                             <div class="form-group row">
+                                                 <label class="col-sm-2 col-form-label">Amount :</label>
+                                                 <div class="col-sm-6">
+                                                     {{ form.payable_amount(class="form-control") }}
+                                                 </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                 <label class="col-sm-2 col-form-label">Vat Amount :</label>
+                                                 <div class="col-sm-6">
+                                                     {{ form.vat_amount(class="form-control") }}
+                                                 </div>
+                                            </div>
+
+                                            <div class="form-group row">
                                                 <label class="col-sm-2"></label>
                                                 <div class="col-sm-10">
-                                                    <button type="submit" name="treasury_store" class="btn btn-primary m-b-0">Submit</button>
-                                                    <a href="/treasury_chalan/" class="btn btn-danger m-b-0 text-white">Cancel</a>
+                                                    <button type="submit" name="payable_voucher_store" class="btn btn-primary m-b-0">Submit</button>
+                                                    <a href="/payable_voucher/" class="btn btn-danger m-b-0 text-white">Cancel</a>
                                                 </div>
                                             </div>
                                         </div>
