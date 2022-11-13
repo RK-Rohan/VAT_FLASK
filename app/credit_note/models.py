@@ -3,13 +3,13 @@ from sqlalchemy import Column
 from sqlalchemy.dialects.mysql import DATE, DATETIME, FLOAT, DOUBLE
 
 
-class DebitNote(db.Model):
+class CreditNote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    debit_note_no = db.Column(db.String(100))
-    debit_note_type = db.Column(db.Integer)
-    dn_issue_date = Column(DATE)
-    purchase_id = db.Column(db.Integer)
-    supplier_id = db.Column(db.Integer)
+    credit_note_no = db.Column(db.String(100))
+    credit_note_type = db.Column(db.Integer)
+    cn_issue_date = Column(DATE)
+    sales_id = db.Column(db.Integer)
+    customer_id = db.Column(db.Integer)
     vehicle_info = db.Column(db.String(100))
     total_amount = db.Column(db.DECIMAL(10, 2))
     total_vat = db.Column(db.DECIMAL(10, 2))
@@ -19,9 +19,9 @@ class DebitNote(db.Model):
     user_id = db.Column(db.Integer)
 
 
-class DebitNoteLine(db.Model):
+class CreditNoteLine(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    debit_note_id = db.Column(db.Integer)
+    credit_note_id = db.Column(db.Integer)
     item_id = db.Column(db.Integer)
     qty = db.Column(db.Integer)
     rate = db.Column(db.DECIMAL(10, 2))

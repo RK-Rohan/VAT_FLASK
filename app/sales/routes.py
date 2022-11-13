@@ -1,5 +1,6 @@
 from flask import render_template, request, flash, redirect, url_for, json, jsonify
 from flask_login import LoginManager, login_required, current_user
+from sqlalchemy import text
 
 import re
 
@@ -137,13 +138,15 @@ def sales_by_id(id):
     return jsonify(output)
 
 
-# @purchase.route('/api/purchase/', methods=['GET', 'POST'])
-# def purchase_all():
-#     purchase_list = Purchase.query.all()
-#     print(purchase_list)
-#     purchase_schema = PurchaseSchema()
-#     output = purchase_schema.dump(purchase_list, many=True)
-#     return jsonify(output)\
-#
-#
-#
+@sales.route('/api/sales_line/<sale_id>/', methods=['GET', 'POST'])
+def purchase_line_by_id(sale_id):
+    t = text(
+        "SELECT p.grand_total, i.item_name, Pl.* "
+        "FROM sales_line AS Pl, sales AS p, items AS i "
+        "WHERE p.id = Pl.sales_id AND i.id = Pl.item_id AND p.id = :sale_id "
+        )
+    sales_list = db.session.execute(t, {'sale_id': sale_id})
+    print(sales_list)
+    sales_schema = SalesLineSchema()
+    output = sales_schema.dump(sales_list, many=True)
+    return jsonify(output)

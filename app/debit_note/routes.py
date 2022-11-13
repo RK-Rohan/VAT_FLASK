@@ -1,6 +1,6 @@
 from flask import render_template, request, flash, redirect, url_for, json
 from flask_login import LoginManager, login_required, current_user
-from datetime import date
+from datetime import date, datetime
 
 from debit_note import debit_note
 from app import db
@@ -29,48 +29,50 @@ def debit_note_create():
     return render_template('debit_note/create.html', form=form)
 
 
-# @issue_vds.route('/issue_vds/store/', methods=['GET', 'POST'])
-# def issue_vds_store():
-#     form = IssueVdsForm(request.form)
-#     vds_no = '1001'
-#     if 'vds_store' in request.form:
-#         query = db.session.execute("SELECT `vds_no` FROM `issue_vds` ORDER BY `id` DESC LIMIT 1")
-#         for result in query:
-#             vds_no = int(result.vds_no) + 1
-#
-#         data = IssueVds(
-#             vds_no=vds_no,
-#             supplier_id=form.supplier_id.data,
-#             vds_type='3',
-#             entry_date=request.form['entry_date'],
-#             total_amount=form.total_amount.data,
-#             total_vat=form.total_vat.data,
-#             total_vds=form.total_vds.data,
-#             total_payment=form.total_payment.data,
-#             user_id=current_user.get_id()
-#         )
-#
-#         db.session.add(data)
-#         db.session.commit()
-#
-#         data_line = form.issue_vds_line.data
-#         print(data_line)
-#         line_data = json.loads(data_line)
-#
-#         vds_id = {"vds_id": data.id}
-#         entry_date = {"entry_date": data.entry_date}
-#         for i in range(len(line_data)):
-#             line_data[i]["vds_id"] = vds_id["vds_id"]
-#             line_data[i]["entry_date"] = entry_date["entry_date"]
-#
-#         # print(line_data)
-#
-#         for row in line_data:
-#             print(row)
-#             vds_line = [IssueVdsLine(**row)]
-#             db.session.add_all(vds_line)
-#             db.session.commit()
-#
-#     flash("VDS Issue Successfully")
-#
-#     return redirect(url_for('issue_vds.issue_vds_page'))
+@debit_note.route('/debit_note/store/', methods=['GET', 'POST'])
+def debit_note_store():
+    form = DebitNoteForm(request.form)
+    debit_note_no = '1001'
+    if 'debit_note_store' in request.form:
+        query = db.session.execute("SELECT `debit_note_no` FROM `debit_note` ORDER BY `id` DESC LIMIT 1")
+        for result in query:
+            debit_note_no = int(result.debit_note_no) + 1
+
+        data = DebitNote(
+            debit_note_no=debit_note_no,
+            purchase_id=form.purchase_id.data,
+            supplier_id=form.supplier_id.data,
+            vehicle_info=form.vehicle_info.data,
+            debit_note_type='3',
+            dn_issue_date=request.form['dn_issue_date'],
+            total_amount=request.form['total_amount'],
+            total_vat=request.form['total_vat'],
+            total_sd=request.form['total_sd'],
+            created_at=datetime.now(),
+            user_id=current_user.get_id()
+        )
+
+        db.session.add(data)
+        db.session.commit()
+
+        data_line = form.debit_note_line.data
+        print(data_line)
+        line_data = json.loads(data_line)
+
+        debit_note_id = {"debit_note_id": data.id}
+        entry_date = {"entry_date": data.dn_issue_date}
+        for i in range(len(line_data)):
+            line_data[i]["debit_note_id"] = debit_note_id["debit_note_id"]
+            line_data[i]["entry_date"] = entry_date["entry_date"]
+
+        # print(line_data)
+
+        for row in line_data:
+            print(row)
+            debit_note_line = [DebitNoteLine(**row)]
+            db.session.add_all(debit_note_line)
+            db.session.commit()
+
+    flash("Debit Note Issue Successfully")
+
+    return redirect(url_for('debit_note.debit_note_page'))

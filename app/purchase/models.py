@@ -69,7 +69,8 @@ class PurchaseLine(db.Model):
 class PurchaseLineSchema(ma.Schema):
     class Meta:
         fields = (
-            "purchase_id", "item_id", "item_name", "qty", "rate", "rate_value", "vat_percent", "vat_amount", "sd_amount"
+            "id", "purchase_id", "item_id", "item_name", "qty", "rate", "rate_value",
+            "vat_percent", "vat_amount", "sd_amount", "sd_percent"
         )
 
 

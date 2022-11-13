@@ -102,6 +102,31 @@ def reports_66(vds_id):
     return render_template('reports/reports_66.html', company_data=company_data, vds_table=vds_table, vds_data=vds_data)
 
 
+@reports.route('/reports/68/<debit_note_id>')
+@login_required
+def reports_68(debit_note_id):
+    header_data = text("SELECT debit_note.*,company.*, suppliers.*, "
+                       "DATE_FORMAT(debit_note.dn_issue_date, '%d-%m-%Y') DATEONLY ,"
+                       "DATE_FORMAT(debit_note.dn_issue_date, '%H:%i:%s') TIMEONLY "
+                       "FROM `debit_note`,company, suppliers "
+                       "WHERE debit_note.`id`= :debit_note_id LIMIT 1 ")
+    header = db.session.execute(header_data, {'debit_note_id': debit_note_id})
+
+    t1 = text(
+        "SELECT dbi.*, db.debit_note_no, db.note, db.vehicle_info, "
+        "DATE_FORMAT(db.dn_issue_date, '%d-%m-%Y') DATEONLY, "
+        "DATE_FORMAT(db.dn_issue_date, '%H:%i:%s') TIMEONLY, "
+        "s.supplier_name,  s.supplier_bin, s.supplier_address, "
+        "p.vendor_invoice, p.challan_date "
+        "FROM debit_note_line AS dbi, debit_note AS db, suppliers AS s, purchase AS p "
+        "WHERE dbi.debit_note_id = db.id AND db.supplier_id = s.id AND db.purchase_id = p.id "
+        "AND db.debit_note_type = 3 AND db.id = :debit_note_id")
+
+    t_1 = db.session.execute(t1, {'debit_note_id': debit_note_id})
+
+    return render_template('reports/reports_68.html', header=header, t_1=t_1)
+
+
 @reports.route('/reports/91/')
 @login_required
 def reports_91():

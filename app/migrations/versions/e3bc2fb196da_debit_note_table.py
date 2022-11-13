@@ -1,8 +1,8 @@
 """debit_note_table
 
-Revision ID: 9283c9a1012b
+Revision ID: e3bc2fb196da
 Revises: 19d047013dbb
-Create Date: 2022-11-10 11:51:49.917375
+Create Date: 2022-11-13 15:19:52.752840
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '9283c9a1012b'
+revision = 'e3bc2fb196da'
 down_revision = '19d047013dbb'
 branch_labels = None
 depends_on = None
@@ -50,7 +50,6 @@ def upgrade():
     sa.Column('return_sd', sa.DECIMAL(precision=10, scale=2), nullable=True),
     sa.Column('entry_date', sa.DATE(), nullable=True),
     sa.Column('created_at', mysql.DATETIME(), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

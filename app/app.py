@@ -88,4 +88,7 @@ def create_app():
     from debit_note import debit_note as debit_note_blueprint
     app.register_blueprint(debit_note_blueprint)
 
+    from credit_note import credit_note as credit_note_blueprint
+    app.register_blueprint(credit_note_blueprint)
+
     return app

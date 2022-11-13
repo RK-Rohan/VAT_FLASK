@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Debit Note {% endblock %}
+{% block title %} Credit Note {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
@@ -29,28 +29,28 @@
                                         <form role="form" method="POST" action="{{ url_for('debit_note.debit_note_store') }}" role="form" id="debit_note_form">
                                             {{ form.csrf_token }}
                                         <div class="card-header">
-                                            <h5>Add Debit Note</h5>
+                                            <h5>Add Credit Note</h5>
                                         </div>
                                         <div class="card-block">
                                             <div class="row">
 
                                                 <div class="col-sm-2 mb-2">
                                                     <div class="form-group">
-                                                        <label for="supplier_id">Supplier </label>
-                                                    {{ form.supplier_id(title="Select Supplier", class="form-control") }}
+                                                        <label for="customer_id">Supplier </label>
+                                                    {{ form.customer_id(title="Select Customer", class="form-control") }}
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-2 mb-2">
                                                     <div class="form-group">
-                                                        <label for="purchase_id">Chalan No :</label>
-                                                        {{ form.purchase_id(class="form-control") }}
+                                                        <label for="sales_id">Chalan No :</label>
+                                                        {{ form.sales_id(class="form-control") }}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-2 mb-2">
                                                     <div class="form-group">
-                                                        <label for="dn_issue_date">Entry Date </label>
-                                                        {{ form.dn_issue_date(class="form-control") }}
+                                                        <label for="cn_issue_date">Entry Date </label>
+                                                        {{ form.cn_issue_date(class="form-control") }}
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-2 mb-2">
@@ -154,35 +154,35 @@
     <script src="{{ url_for('static', filename='assets/js/bootstrap-select.min.js') }}"></script>
 <script>
     $(document).ready(function() {
-    $('#supplier_id').selectpicker();
+    $('#customer_id').selectpicker();
 
-    $('#supplier_id').on('change', '', function (e) {
-        let supplier_id = $(this).val();
+    $('#customer_id').on('change', '', function (e) {
+        let customer_id = $(this).val();
         let csrf_token = "{{ csrf_token() }}";
            $.ajax({
-               url: "/api/purchase/supplier/"+supplier_id+"/",
+               url: "/api/sales/customers/"+customer_id+"/",
                headers: {
                    "X-CSRFToken": csrf_token,
                },
                type: "GET",
                dataType: "json",
                success: function(data) {
-                   $('select[name="purchase_id"]').empty();
-                   $('select[name="purchase_id"]').append( '<option value="">Select Chalan</option>');
+                   $('select[name="sales_id"]').empty();
+                   $('select[name="sales_id"]').append( '<option value="">Select Chalan</option>');
                    $.each(data,function(key, value){
-                       $('select[name="purchase_id"]').append(
-                           '<option value="'+value['id']+'">'+ value['vendor_invoice'] +'</option>'
+                       $('select[name="sales_id"]').append(
+                           '<option value="'+value['id']+'">'+ value['sales_invoice'] +'</option>'
                        );
                    });
                }
            })
     });
 
-    $('#purchase_id').on('change', '', function (e) {
-        let purchase_id = $(this).val();
+    $('#sales_id').on('change', '', function (e) {
+        let sales_id = $(this).val();
         let csrf_token = "{{ csrf_token() }}";
            $.ajax({
-               url: "/api/purchase_line/"+purchase_id+"/",
+               url: "/api/purchase_line/"+sales_id+"/",
                headers: {
                    "X-CSRFToken": csrf_token,
                },

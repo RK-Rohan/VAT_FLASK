@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Debit Note {% endblock %}
+{% block title %} Credit Note {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -19,8 +19,8 @@
                                     <div class="col-xl-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5>Debit Note </h5>
-                                                <a href="{{ url_for('debit_note.debit_note_create') }}" class="btn btn-success float-right">Add Debit Note</a>
+                                                <h5>Credit Note </h5>
+                                                <a href="{{ url_for('credit_note.credit_note_create') }}" class="btn btn-success float-right">Add Credit Note</a>
                                             </div>
                                             <div class="card-block table-border-style">
                                                 <div class="table-responsive">
@@ -28,7 +28,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
-                                                                <th>Debit Invoice</th>
+                                                                <th>Credit Invoice</th>
                                                                 <th>Issue Date</th>
                                                                 <th>Total Amount</th>
                                                                 <th>Total VAT</th>
@@ -37,11 +37,11 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                        {% for row in debit_note %}
+                                                        {% for row in credit_note %}
                                                             <tr>
                                                                 <th>{{loop.index}}</th>
-                                                                <td>{{row.debit_note_no}}</td>
-                                                                <td>{{ row.dn_issue_date }}</td>
+                                                                <td>{{row.credit_note_no}}</td>
+                                                                <td>{{ row.cn_issue_date }}</td>
                                                                 <td>{{row.total_amount}}</td>
                                                                 <td>{{row.total_vat}}</td>
                                                                 <td>{{row.total_sd}}</td>
