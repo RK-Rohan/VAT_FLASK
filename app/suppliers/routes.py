@@ -1,8 +1,8 @@
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, jsonify
 from flask_login import LoginManager, login_required
 from suppliers import suppliers
 from app import db
-from suppliers.models import Suppliers
+from suppliers.models import Suppliers, SuppliersSchema
 from suppliers.forms import SupplierForm
 from company.models import Country
 
@@ -63,3 +63,12 @@ def suppliers_update():
         flash("Supplier Updated Successfully")
 
         return redirect(url_for('suppliers.suppliers_page'))
+
+
+@suppliers.route('/api/suppliers/<id>/', methods=['GET', 'POST'])
+def supplier_by_id(id):
+    supplier_list = Suppliers.query.get(id)
+    print(supplier_list)
+    suppliers_schema = SuppliersSchema()
+    output = suppliers_schema.dump(supplier_list)
+    return jsonify(output)

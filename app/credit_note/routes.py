@@ -29,50 +29,50 @@ def credit_note_create():
     return render_template('credit_note/create.html', form=form)
 
 
-# @debit_note.route('/debit_note/store/', methods=['GET', 'POST'])
-# def debit_note_store():
-#     form = CreditNoteForm(request.form)
-#     debit_note_no = '1001'
-#     if 'debit_note_store' in request.form:
-#         query = db.session.execute("SELECT `debit_note_no` FROM `debit_note` ORDER BY `id` DESC LIMIT 1")
-#         for result in query:
-#             debit_note_no = int(result.debit_note_no) + 1
-#
-#         data = DebitNote(
-#             debit_note_no=debit_note_no,
-#             purchase_id=form.purchase_id.data,
-#             supplier_id=form.supplier_id.data,
-#             vehicle_info=form.vehicle_info.data,
-#             debit_note_type='3',
-#             dn_issue_date=request.form['dn_issue_date'],
-#             total_amount=request.form['total_amount'],
-#             total_vat=request.form['total_vat'],
-#             total_sd=request.form['total_sd'],
-#             created_at=datetime.now(),
-#             user_id=current_user.get_id()
-#         )
-#
-#         db.session.add(data)
-#         db.session.commit()
-#
-#         data_line = form.debit_note_line.data
-#         print(data_line)
-#         line_data = json.loads(data_line)
-#
-#         debit_note_id = {"debit_note_id": data.id}
-#         entry_date = {"entry_date": data.dn_issue_date}
-#         for i in range(len(line_data)):
-#             line_data[i]["debit_note_id"] = debit_note_id["debit_note_id"]
-#             line_data[i]["entry_date"] = entry_date["entry_date"]
-#
-#         # print(line_data)
-#
-#         for row in line_data:
-#             print(row)
-#             debit_note_line = [DebitNoteLine(**row)]
-#             db.session.add_all(debit_note_line)
-#             db.session.commit()
-#
-#     flash("Debit Note Issue Successfully")
-#
-#     return redirect(url_for('debit_note.debit_note_page'))
+@credit_note.route('/credit_note/store/', methods=['GET', 'POST'])
+def credit_note_store():
+    form = CreditNoteForm(request.form)
+    credit_note_no = '1001'
+    if 'credit_note_store' in request.form:
+        query = db.session.execute("SELECT `credit_note_no` FROM `credit_note` ORDER BY `id` DESC LIMIT 1")
+        for result in query:
+            credit_note_no = int(result.credit_note_no) + 1
+
+        data = CreditNote(
+            credit_note_no=credit_note_no,
+            sales_id=form.sales_id.data,
+            customer_id=form.customer_id.data,
+            vehicle_info=form.vehicle_info.data,
+            credit_note_type='3',
+            cn_issue_date=request.form['cn_issue_date'],
+            total_amount=request.form['total_amount'],
+            total_vat=request.form['total_vat'],
+            total_sd=request.form['total_sd'],
+            created_at=datetime.now(),
+            user_id=current_user.get_id()
+        )
+
+        db.session.add(data)
+        db.session.commit()
+
+        data_line = form.credit_note_line.data
+        print(data_line)
+        line_data = json.loads(data_line)
+
+        credit_note_id = {"credit_note_id": data.id}
+        entry_date = {"entry_date": data.cn_issue_date}
+        for i in range(len(line_data)):
+            line_data[i]["credit_note_id"] = credit_note_id["credit_note_id"]
+            line_data[i]["entry_date"] = entry_date["entry_date"]
+
+        # print(line_data)
+
+        for row in line_data:
+            print(row)
+            credit_note_line = [CreditNoteLine(**row)]
+            db.session.add_all(credit_note_line)
+            db.session.commit()
+
+    flash("Credit Note Issue Successfully")
+
+    return redirect(url_for('credit_note.credit_note_page'))

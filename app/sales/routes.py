@@ -8,7 +8,7 @@ from datetime import date, datetime
 
 from app import db
 from sales import sales
-from sales.models import Sales, SalesLine, SalesSchema
+from sales.models import Sales, SalesLine, SalesSchema, SalesLineSchema
 from sales.forms import SalesForm
 
 from customers.models import Customers

@@ -44,6 +44,7 @@
                                                     <div class="form-group">
                                                         <label for="supplier_address">Supplier Address</label>
                                                         {{ form.supplier_address(class="form-control") }}
+
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-2 mb-2">
@@ -174,6 +175,22 @@
 <script>
     $(document).ready(function() {
         $('select').selectpicker();
+
+            $('#supplier_id').on('change', '', function (e) {
+                let supplier_id = $(this).val();
+                let csrf_token = "{{ csrf_token() }}";
+                   $.ajax({
+                       url: "/api/suppliers/"+supplier_id+"/",
+                       headers: {
+                           "X-CSRFToken": csrf_token,
+                       },
+                       type: "GET",
+                       dataType: "json",
+                       success: function(data) {
+                           $("#supplier_address").val(data['supplier_address']);
+                       }
+                   })
+            });
 
         // Autocomplete Item Name
         $( "#item_search" ).autocomplete({

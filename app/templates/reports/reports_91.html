@@ -320,8 +320,8 @@
                      <td rowspan="2"style="border: 1px solid black;">Goods/Service Other Than Standard Rate </td>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Local Purchase</td>
                      <td style="border: 1px solid black;">16</td>
-                     <td style="border: 1px solid black;">{{ t5.vatable_value }}</td>
-                     <td style="border: 1px solid black;">{{ t5.vat_amount }}</td>
+                     <td style="border: 1px solid black;">{%- if t5.vatable_value -%} {{ t5.vatable_value }} {% else %} 0 {% endif %}</td>
+                     <td style="border: 1px solid black;">{%- if t5.vat_amount -%} {{ t5.vat_amount }} {% else %} 0 {% endif %}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note16?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
                   {% endfor %}
@@ -338,7 +338,7 @@
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Local Purchase</td>
                      <td style="border: 1px solid black;">18</td>
                      <td style="border: 1px solid black;">{%- if t4.vatable_value -%} {{ t4.vatable_value }} {% else %} 0 {% endif %}</td>
-                     <td style="border: 1px solid black;">{%- if t4.vat_amount -%}{{ t4.vat_amount }} {% endif %}</td>
+                     <td style="border: 1px solid black;">{%- if t4.vat_amount -%}{{ t4.vat_amount }} {% else %} 0 {% endif %}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note18?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
                   {% endfor %}
@@ -375,15 +375,15 @@
                         <a class="btn btn-info"target="_blank" href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note22?month=<?php echo $date;?>">Sub-form</a>
                      </td>
                   </tr>
-                  {% for pit in p_i_t %}
+
                   <tr>
                      <td colspan="2" style="border: 1px solid black;">Total Input Tax Credit</td>
                      <td style="border: 1px solid black;">23</td>
-                     <td style="border: 1px solid black;">{{ pit.t_vatable_value }}</td>
-                     <td style="border: 1px solid black;">{{ pit.t_vat_amount }}</td>
+                     <td style="border: 1px solid black;">{{ col_23a }}</td>
+                     <td style="border: 1px solid black;">{{ col_23b }}</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
-                  {% endfor %}
+
                </table>
             </div>
          </div>
@@ -404,11 +404,11 @@
                      <td  width="46%"style="border: 1px solid black;"> Vat Amount</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
-                  {% for ivds in i_vds %}
+
                   <tr>
                      <td style="border: 1px solid black;"> Due to VAT Deducted at Source by the Supply Receiver</td>
                      <td style="border: 1px solid black;"> 24</td>
-                     <td style="border: 1px solid black;">{{ ivds.vds_amount}}</td>
+                     <td style="border: 1px solid black;">{{ col_a24 }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank" href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note24?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
 
@@ -421,7 +421,7 @@
                   <tr>
                      <td style="border: 1px solid black;"> Issues of Debit Note</td>
                      <td style="border: 1px solid black;"> 26</td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note26,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_a26 }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note26?month=<?php echo $date;?>">Table</a></td>
                   </tr>
                   <tr>
@@ -435,10 +435,10 @@
                   <tr>
                      <td style="border: 1px solid black;">Total Increasing Adjustment</td>
                      <td style="border: 1px solid black;"> 28</td>
-                     <td style="border: 1px solid black;">{{ ivds.vds_amount}}</td>
+                     <td style="border: 1px solid black;">{{ col_a28 }}</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
-                  {% endfor %}
+
                </table>
             </div>
          </div>
@@ -459,11 +459,11 @@
                      <td width="46%"style="border: 1px solid black;"> Vat Amount</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
-                  {% for rvds in r_vds %}
+
                   <tr>
                      <td style="border: 1px solid black;"> Due To VAT Deducted at source from the supplies delivered</td>
                      <td style="border: 1px solid black;"> 29</td>
-                     <td style="border: 1px solid black;">{{ rvds.vds_amount }}</td>
+                     <td style="border: 1px solid black;">{{ col_a29 }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note29?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
 
@@ -476,7 +476,7 @@
                   <tr>
                      <td style="border: 1px solid black;">Issuance of credit note</td>
                      <td style="border: 1px solid black;">31</td>
-                     <td style="border: 1px solid black;"><?php  echo number_format($note31,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_a31 }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note31?month=<?php echo $date;?>">Table</a></td>
                   </tr>
                   <tr>
@@ -491,10 +491,10 @@
                   <tr>
                      <td style="border: 1px solid black;"> Total Decreasing Adjustment</td>
                      <td style="border: 1px solid black;">33</td>
-                     <td style="border: 1px solid black;">{{ rvds.vds_amount }}</td>
+                     <td style="border: 1px solid black;">{{ col_a33 }}</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
-                  {% endfor %}
+
                </table>
             </div>
          </div>
@@ -516,7 +516,7 @@
                   <tr>
                      <td style="border: 1px solid black;">Net Payble VAT for the TAX Period(section-45)[9c-23b+28-33]</td>
                      <td style="border: 1px solid black;">34</td>
-                     <td style="border: 1px solid black;">{{ value_34 }}</td>
+                     <td style="border: 1px solid black;">{{ col_34 }}</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
 

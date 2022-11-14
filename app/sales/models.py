@@ -54,5 +54,11 @@ class SalesLine(db.Model):
     sub_total = db.Column(db.DECIMAL(10, 2))
 
 
+class SalesLineSchema(ma.Schema):
+    class Meta:
+        fields = (
+            "id", "sales_id", "item_id", "item_name", "qty", "rate", "rate_value",
+            "vat_percent", "vat_amount", "sd_amount", "sd_percent"
+        )
 
 

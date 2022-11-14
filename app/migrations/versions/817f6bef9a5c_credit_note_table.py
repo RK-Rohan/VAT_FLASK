@@ -1,8 +1,8 @@
 """credit_note_table
 
-Revision ID: 1866aae42dfc
+Revision ID: 817f6bef9a5c
 Revises: e3bc2fb196da
-Create Date: 2022-11-13 18:31:33.417301
+Create Date: 2022-11-14 12:49:38.601478
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '1866aae42dfc'
+revision = '817f6bef9a5c'
 down_revision = 'e3bc2fb196da'
 branch_labels = None
 depends_on = None
@@ -40,10 +40,10 @@ def upgrade():
     sa.Column('item_id', sa.Integer(), nullable=True),
     sa.Column('qty', sa.Integer(), nullable=True),
     sa.Column('rate', sa.DECIMAL(precision=10, scale=2), nullable=True),
-    sa.Column('p_amount', sa.DECIMAL(precision=10, scale=2), nullable=True),
-    sa.Column('p_vat_percent', sa.DECIMAL(precision=10, scale=2), nullable=True),
-    sa.Column('p_vat_amount', sa.DECIMAL(precision=10, scale=2), nullable=True),
-    sa.Column('p_sd', sa.DECIMAL(precision=10, scale=2), nullable=True),
+    sa.Column('s_amount', sa.DECIMAL(precision=10, scale=2), nullable=True),
+    sa.Column('s_vat_percent', sa.DECIMAL(precision=10, scale=2), nullable=True),
+    sa.Column('s_vat_amount', sa.DECIMAL(precision=10, scale=2), nullable=True),
+    sa.Column('s_sd', sa.DECIMAL(precision=10, scale=2), nullable=True),
     sa.Column('return_qty', sa.Integer(), nullable=True),
     sa.Column('return_amount', sa.DECIMAL(precision=10, scale=2), nullable=True),
     sa.Column('return_vat', sa.DECIMAL(precision=10, scale=2), nullable=True),

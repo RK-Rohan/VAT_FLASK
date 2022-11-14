@@ -1,9 +1,9 @@
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, jsonify
 from flask_login import LoginManager, login_required
 
 from customers import customers
 from app import db
-from customers.models import Customers
+from customers.models import Customers, CustomersSchema
 from customers.forms import CustomersForm
 from company.models import Country
 
@@ -69,3 +69,12 @@ def customers_update():
         flash("Customers Updated Successfully")
 
         return redirect(url_for('customers.customers_page'))
+
+
+@customers.route('/api/customers/<id>/', methods=['GET', 'POST'])
+def customers_by_id(id):
+    customers_list = Customers.query.get(id)
+    print(customers_list)
+    customers_schema = CustomersSchema()
+    output = customers_schema.dump(customers_list)
+    return jsonify(output)

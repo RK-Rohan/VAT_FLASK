@@ -235,8 +235,9 @@
                            let vat_percent=$('#vat_percent_'+id).val();
 
                            let return_amount=parseFloat(rate)*return_qty;
-                           let return_vat = parseFloat(return_amount)*vat_percent/100;
-                           let sd_amount=parseFloat(return_amount)*sd_percent/100;
+                           let sd_amount=return_amount*sd_percent/100;
+                           let vatable_value=return_amount+sd_amount;
+                           let return_vat = vatable_value*vat_percent/100;
 
 
                             $('#return_amount_'+id).val(return_amount.toFixed(2));

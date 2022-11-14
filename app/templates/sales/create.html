@@ -178,6 +178,22 @@
     $(document).ready(function() {
         $('select').selectpicker();
 
+        $('#customer_id').on('change', '', function (e) {
+            let customer_id = $(this).val();
+            let csrf_token = "{{ csrf_token() }}";
+               $.ajax({
+                   url: "/api/customers/"+customer_id+"/",
+                   headers: {
+                       "X-CSRFToken": csrf_token,
+                   },
+                   type: "GET",
+                   dataType: "json",
+                   success: function(data) {
+                       $("#customer_address").val(data['customer_address']);
+                   }
+               })
+        });
+
         // Autocomplete Item Name
         $( "#item_search" ).autocomplete({
             minChars: 1,

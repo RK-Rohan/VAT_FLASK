@@ -1,5 +1,6 @@
 from flask import render_template, request
 from flask_login import LoginManager, login_required, current_user
+from decimal import Decimal
 
 from sqlalchemy import text, func
 
@@ -114,8 +115,6 @@ def reports_68(debit_note_id):
 
     t1 = text(
         "SELECT dbi.*, db.debit_note_no, db.note, db.vehicle_info, "
-        "DATE_FORMAT(db.dn_issue_date, '%d-%m-%Y') DATEONLY, "
-        "DATE_FORMAT(db.dn_issue_date, '%H:%i:%s') TIMEONLY, "
         "s.supplier_name,  s.supplier_bin, s.supplier_address, "
         "p.vendor_invoice, p.challan_date "
         "FROM debit_note_line AS dbi, debit_note AS db, suppliers AS s, purchase AS p "
@@ -125,6 +124,29 @@ def reports_68(debit_note_id):
     t_1 = db.session.execute(t1, {'debit_note_id': debit_note_id})
 
     return render_template('reports/reports_68.html', header=header, t_1=t_1)
+
+
+@reports.route('/reports/67/<credit_note_id>')
+@login_required
+def reports_67(credit_note_id):
+    header_data = text("SELECT credit_note.*,company.*, customers.*, "
+                       "DATE_FORMAT(credit_note.cn_issue_date, '%d-%m-%Y') DATEONLY ,"
+                       "DATE_FORMAT(credit_note.cn_issue_date, '%H:%i:%s') TIMEONLY "
+                       "FROM `credit_note`,company, customers "
+                       "WHERE credit_note.`id`= :credit_note_id LIMIT 1 ")
+    header = db.session.execute(header_data, {'credit_note_id': credit_note_id})
+
+    t1 = text(
+        "SELECT cnl.*, cn.credit_note_no, cn.note, cn.vehicle_info, "
+        "c.customer_name,  c.customer_bin, c.customer_address, "
+        "s.sales_invoice, s.sale_date "
+        "FROM credit_note_line AS cnl, credit_note AS cn, customers AS c, sales AS s "
+        "WHERE cnl.credit_note_id = cn.id AND cn.customer_id = c.id AND cn.sales_id = s.id "
+        "AND cn.credit_note_type = 3 AND cn.id = :credit_note_id")
+
+    t_1 = db.session.execute(t1, {'credit_note_id': credit_note_id})
+
+    return render_template('reports/reports_67.html', header=header, t_1=t_1)
 
 
 @reports.route('/reports/91/')
@@ -229,16 +251,6 @@ def reports_91_by_date():
         "AND sales_line.sales_date between :start_date AND :end_date ")
     s_5 = db.session.execute(s5, {'start_date': start_date, 'end_date': end_date})
 
-    ivds = text(
-        "SELECT SUM(`vds_amount`) AS vds_amount FROM `issue_vds_line` "
-        "WHERE issue_vds_line.entry_date between :start_date AND :end_date ")
-    i_vds = db.session.execute(ivds, {'start_date': start_date, 'end_date': end_date})
-
-    rvds = text(
-        "SELECT SUM(`vds_amount`) AS vds_amount FROM `receive_vds_line` "
-        "WHERE receive_vds_line.entry_date between :start_date AND :end_date ")
-    r_vds = db.session.execute(rvds, {'start_date': start_date, 'end_date': end_date})
-
     sot = text(
         "SELECT SUM(`vatable_value`) AS t_vatable_value, "
         "SUM(`sd_amount`) AS t_sd_amount, "
@@ -256,22 +268,43 @@ def reports_91_by_date():
         "WHERE purchase.entry_date between :start_date AND :end_date ")
     p_i_t = db.session.execute(pit, {'start_date': start_date, 'end_date': end_date})
 
+    for col_23ab in p_i_t:
+        col_23a = col_23ab.t_vatable_value
+        col_23b = col_23ab.t_vat_amount
+
     ntc = text(
-        "SELECT (SELECT SUM(sales_line.`vat_amount`) FROM sales_line WHERE sales_line.sales_date between :start_date AND :end_date) AS C9, "
-        "(SELECT SUM(purchase_line.`vat_amount`) FROM purchase_line WHERE purchase_line.purchase_date between :start_date AND :end_date) AS B23, "
-        "(SELECT SUM(issue_vds_line.vds_amount) FROM issue_vds_line WHERE issue_vds_line.entry_date between :start_date AND :end_date) AS A28 ,"
-        "(SELECT SUM(receive_vds_line.vds_amount) FROM receive_vds_line WHERE receive_vds_line.entry_date between :start_date AND :end_date) AS A33 "
-        "FROM `purchase_line`, sales_line, issue_vds_line, receive_vds_line LIMIT 1"
+        "SELECT (SELECT SUM(sales_line.`vat_amount`) FROM sales_line "
+        "WHERE sales_line.sales_date between :start_date AND :end_date) AS C9, "
+        "(SELECT SUM(purchase_line.`vat_amount`) FROM purchase_line "
+        "WHERE purchase_line.purchase_date between :start_date AND :end_date) AS B23, "
+        "(SELECT SUM(issue_vds_line.vds_amount) FROM issue_vds_line "
+        "WHERE issue_vds_line.entry_date between :start_date AND :end_date) AS A24 ,"        
+        "(SELECT SUM(receive_vds_line.vds_amount) FROM receive_vds_line "
+        "WHERE receive_vds_line.entry_date between :start_date AND :end_date) AS A29 ,"      
+        "(SELECT SUM(debit_note_line.return_amount) FROM debit_note_line "
+        "WHERE debit_note_line.entry_date between :start_date AND :end_date) AS A26, "        
+        "(SELECT SUM(credit_note_line.return_amount) FROM credit_note_line "
+        "WHERE credit_note_line.entry_date between :start_date AND :end_date) AS A31 "
+        "FROM `purchase_line`, sales_line, issue_vds_line, receive_vds_line, debit_note_line LIMIT 1"
     )
     n_t_c = db.session.execute(ntc, {'start_date': start_date, 'end_date': end_date})
 
     for ntc in n_t_c:
-        value_34 = (ntc.C9 - ntc.B23) + (ntc.A28 - ntc.A33)
-        value_35 = value_34-(52+56)
+        col_9c = Decimal(ntc.C9)
+        col_b23 = Decimal(ntc.B23)
+        col_a24 = Decimal(ntc.A24)
+        col_a26 = Decimal(ntc.A26)
+        col_a28 = col_a24+col_a26
+        col_a29 = Decimal(ntc.A29)
+        col_a31 = Decimal(ntc.A31)
+        col_a33 = col_a29+col_a31
+        col_34 = col_9c-col_b23+col_a28-col_a33
 
     return render_template('reports/reports_91.html', company_data=company_data,
                            t_1=t_1, t_2=t_2, t_3=t_3, t_4=t_4, t_5=t_5,
                            s_1=s_1, s_2=s_2, s_3=s_3, s_4=s_4, s_5=s_5,
-                           i_vds=i_vds, r_vds=r_vds,
-                           s_o_t=s_o_t, p_i_t=p_i_t, value_34=value_34, value_35=value_35
+                           s_o_t=s_o_t, col_9c=col_9c, col_23a=col_23a, col_23b=col_23b,
+                           col_a24=col_a24, col_a26=col_a26,
+                           col_a28=col_a28, col_a29=col_a29, col_a31=col_a31,
+                           col_a33=col_a33, col_34=col_34
                            )

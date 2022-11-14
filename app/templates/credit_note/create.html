@@ -26,7 +26,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="card">
-                                        <form role="form" method="POST" action="{{ url_for('debit_note.debit_note_store') }}" role="form" id="debit_note_form">
+                                        <form role="form" method="POST" action="{{ url_for('credit_note.credit_note_store') }}" role="form" id="credit_note_form">
                                             {{ form.csrf_token }}
                                         <div class="card-header">
                                             <h5>Add Credit Note</h5>
@@ -63,7 +63,7 @@
                                                 <div class="col-md-12">
                                                     <div class="card-block table-border-style">
                                                         <div class="table-responsive">
-                                                            <table class="table table-hover debit_note_table" id="debit_note_table">
+                                                            <table class="table table-hover credit_note_table" id="credit_note_table">
                                                                 <thead class="thead-light">
                                                                 <tr>
                                                                     <th style='width:220px'>Item Name</th>
@@ -119,9 +119,9 @@
 
                                                 <div class="col-sm-12 mb-2">
                                                     <div class="form-group">
-                                                        <input type="hidden" name="debit_note_line" id="debit_note_line">
+                                                        <input type="hidden" name="credit_note_line" id="credit_note_line">
                                                         <center>
-                                                            <button type="submit" name="debit_note_store" id="debit_note_store" class="btn btn-primary">Submit</button>
+                                                            <button type="submit" name="credit_note_store" id="credit_note_store" class="btn btn-primary">Submit</button>
                                                             <a type="button" class="btn btn-warning">Cancel</a>
                                                         </center>
 
@@ -182,7 +182,7 @@
         let sales_id = $(this).val();
         let csrf_token = "{{ csrf_token() }}";
            $.ajax({
-               url: "/api/purchase_line/"+sales_id+"/",
+               url: "/api/sales_line/"+sales_id+"/",
                headers: {
                    "X-CSRFToken": csrf_token,
                },
@@ -194,10 +194,10 @@
                    $.each(data,function(key, value){
                        let id = value.id
                        $('#table_input').append(
-                       '<tr class="debit_data">' +
+                       '<tr class="credit_data">' +
                        '<td>' +
                             '<input type="text" class="form-control item_name" id="item_name_'+id+'" name="item_name" value="' + value.item_name + '" readonly/>' +
-                            '<input type="hidden" class="form-control purchase_id" name="purchase_id" value="' + value.purchase_id + '" readonly/>' +
+                            '<input type="hidden" class="form-control sales_id" name="sales_id" value="' + value.sales_id + '" readonly/>' +
                             '<input type="hidden" class="form-control item_id" name="item_id" value="' + value.id + '" readonly/>' +
                        '</td>' +
                        '<td>' +
@@ -235,8 +235,9 @@
                            let vat_percent=$('#vat_percent_'+id).val();
 
                            let return_amount=parseFloat(rate)*return_qty;
-                           let return_vat = parseFloat(return_amount)*vat_percent/100;
-                           let sd_amount=parseFloat(return_amount)*sd_percent/100;
+                           let sd_amount=return_amount*sd_percent/100;
+                           let vatable_value=return_amount+sd_amount;
+                           let return_vat = vatable_value*vat_percent/100;
 
 
                             $('#return_amount_'+id).val(return_amount.toFixed(2));
@@ -255,7 +256,7 @@
 
 
     // Remove Item Row
-   $('#debit_note_table').on('click', '.delete', function(){
+   $('#credit_note_table').on('click', '.delete', function(){
        var row_id = $(this).attr("id");
        $(this).closest('tr').remove();
        totalAmount();
@@ -266,21 +267,21 @@
 
    function totalAmount(){
       var Total = 0;
-      $("table.debit_note_table").find('.return_amount').each(function () {
+      $("table.credit_note_table").find('.return_amount').each(function () {
          Total += +$(this).val();
       });
       $("#total_amount").val(Total.toFixed(2));
    }
    function totalVat(){
       var Total = 0;
-      $("table.debit_note_table").find('.return_vat').each(function () {
+      $("table.credit_note_table").find('.return_vat').each(function () {
          Total += +$(this).val();
       });
       $("#total_vat").val(Total.toFixed(2));
    }
    function totalSD(){
       var Total = 0;
-      $("table.debit_note_table").find('.return_sd').each(function () {
+      $("table.credit_note_table").find('.return_sd').each(function () {
          Total += +$(this).val();
       });
       $("#total_sd").val(Total.toFixed(2));
@@ -288,19 +289,19 @@
 
 
     // Json VDS Data
-      $("#debit_note_store").on("click", function() {
+      $("#credit_note_store").on("click", function() {
            let i=0;
            let itemArray = new Array();
 
-          $('.debit_data').each(function() {
+          $('.credit_data').each(function() {
               let row = $(this).closest('tr');
               let item_id =+row.find('.item_id').val();
               let qty =+row.find('.qty').val();
               let rate =+row.find('.rate').val();
-              let p_amount =+row.find('.rate_value').val();
-              let p_vat_percent =+row.find('.vat_percent').val();
-              let p_vat_amount =+row.find('.vat_amount').val();
-              let p_sd =+row.find('.sd_amount').val();
+              let s_amount =+row.find('.rate_value').val();
+              let s_vat_percent =+row.find('.vat_percent').val();
+              let s_vat_amount =+row.find('.vat_amount').val();
+              let s_sd =+row.find('.sd_amount').val();
               let return_qty =+row.find('.return_qty').val();
               let return_amount =+row.find('.return_amount').val();
               let return_vat =+row.find('.return_vat').val();
@@ -310,17 +311,17 @@
                    "item_id": item_id,
                    "qty": qty,
                    "rate": rate,
-                   "p_amount": p_amount,
-                   "p_vat_percent": p_vat_percent,
-                   "p_vat_amount": p_vat_amount,
-                   "p_sd": p_sd,
+                   "s_amount": s_amount,
+                   "s_vat_percent": s_vat_percent,
+                   "s_vat_amount": s_vat_amount,
+                   "s_sd": s_sd,
                    "return_qty": return_qty,
                    "return_amount": return_amount,
                    "return_vat": return_vat,
                    "return_sd": return_sd
               }
               itemArray[i]=line;
-              $('#debit_note_line').val(JSON.stringify(itemArray));
+              $('#credit_note_line').val(JSON.stringify(itemArray));
               i++;
           });
 

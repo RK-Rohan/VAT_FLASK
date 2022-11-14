@@ -1,4 +1,4 @@
-from app import db
+from app import db, ma
 
 
 class Customers(db.Model):
@@ -14,3 +14,11 @@ class Customers(db.Model):
     shipping_country = db.Column(db.String(100))
     customer_bin = db.Column(db.String(100))
     customer_tin = db.Column(db.String(100))
+
+
+class CustomersSchema(ma.Schema):
+    class Meta:
+        fields = (
+            "id", "customer_name", "email_address", "country_id", "phone_number", "customer_address", "customer_bin",
+            "customer_tin"
+        )
