@@ -514,26 +514,26 @@
                   </tr>
 
                   <tr>
-                     <td style="border: 1px solid black;">Net Payble VAT for the TAX Period(section-45)[9c-23b+28-33]</td>
+                     <td style="border: 1px solid black;">Net Payable VAT for the TAX Period(section-45)[9c-23b+28-33]</td>
                      <td style="border: 1px solid black;">34</td>
                      <td style="border: 1px solid black;">{{ col_34 }}</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
 
                   <tr>
-                     <td style="border: 1px solid black;">Net Payble VAT for the TAX Period After Adjustment With Closing Balance of Form 18.6[34-(52+56)]</td>
+                     <td style="border: 1px solid black;">Net Payable VAT for the TAX Period After Adjustment With Closing Balance of Form 18.6[34-(52+56)]</td>
                      <td style="border: 1px solid black;"> 35</td>
                      <td style="border: 1px solid black;">{{ value_35 }}</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
                   <tr>
-                     <td style="border: 1px solid black;">Net Payble Spplementary Duty for the TAX Period(Before Adjustment With Clossing Balance[(9b+38)-(39+40)])</td>
+                     <td style="border: 1px solid black;">Net Payable supplementary Duty for the TAX Period(Before Adjustment With Closing Balance[(9b+38)-(39+40)])</td>
                      <td style="border: 1px solid black;">36</td>
                      <td style="border: 1px solid black;"><?php  echo $note36;?></td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
                   <tr>
-                     <td style="border: 1px solid black;">Net Payble Spplementary Duty for the TAX Period After Adjusted With Closing Balance and Balance of Form 18.6[36-(53+57)] </td>
+                     <td style="border: 1px solid black;">Net Payable supplementary Duty for the TAX Period After Adjusted With Closing Balance and Balance of Form 18.6[36-(53+57)] </td>
                      <td style="border: 1px solid black;">37</td>
                      <td style="border: 1px solid black;"><?php $note37= ($note36) - ( $note53 +  $note56); echo $note37;?></td>
                      <td style="border: 1px solid black;"></td>
@@ -560,14 +560,14 @@
                   <tr>
                      <td style="border: 1px solid black;">Interest on Overdue VAT(Based on note 35)</td>
                      <td style="border: 1px solid black;">41</td>
-                     <td style="border: 1px solid black;"><?php  echo number_format($note41,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_41 }}</td>
                      <td style="border: 1px solid black;"><a href="#"></a></td>
                   </tr>
 
                   <tr>
                      <td style="border: 1px solid black;">Interest on Overdue SD(Based on note 37)</td>
                      <td style="border: 1px solid black;">42</td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note42,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_42 }}</td>
                      <td style="border: 1px solid black;"><a href="#"></a></td>
                   </tr>
 
@@ -575,7 +575,7 @@
                   <tr>
                      <td style="border: 1px solid black;">Fine/Penulty for Non -Submission of Return </td>
                      <td style="border: 1px solid black;">43</td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note43,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_43 }}</td>
                      <td style="border: 1px solid black;"><a href="#"></a></td>
                   </tr>
 
@@ -583,42 +583,42 @@
                   <tr>
                      <td style="border: 1px solid black;">Other Fine/Penulty/Interest</td>
                      <td style="border: 1px solid black;">44</td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note44,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_44 }}</td>
                      <td style="border: 1px solid black;"><a href="#"></a></td>
                   </tr>
 
                   <tr>
                      <td style="border: 1px solid black;">Payble Exise Duty</td>
                      <td style="border: 1px solid black;">45</td>
-                     <td style="border: 1px solid black;"><?php  echo number_format($note45,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_45 }}</td>
                      <td style="border: 1px solid black;"><a href="#"></a></td>
                   </tr>
 
                   <tr>
                      <td style="border: 1px solid black;">Payble Development Surcharge</td>
                      <td style="border: 1px solid black;">46</td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note46,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_46 }}</td>
                      <td style="border: 1px solid black;"><a href="#"></a></td>
                   </tr>
 
                   <tr>
                      <td style="border: 1px solid black;">Payble ICT Development Surcharge</td>
                      <td style="border: 1px solid black;">47</td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note47,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_47 }}</td>
                      <td style="border: 1px solid black;"><a href="#"></a></td>
                   </tr>
 
                   <tr>
                      <td style="border: 1px solid black;">Payble Health Care Surcharge</td>
                      <td style="border: 1px solid black;">48</td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note48,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_48 }}</td>
                      <td style="border: 1px solid black;"><a href="#"></a></td>
                   </tr>
 
                   <tr>
                      <td style="border: 1px solid black;">Payble Environmental Protection Surcharge</td>
                      <td style="border: 1px solid black;">49</td>
-                     <td style="border: 1px solid black;"><?php echo number_format( $note49,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_49 }}</td>
                      <td style="border: 1px solid black;"><a href="#"></a></td>
                   </tr>
                   <tr>
@@ -633,18 +633,21 @@
                      <td style="border: 1px solid black;"><?php $note51 = $note37+$note42; echo $note51;?></td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
+                  {% for op in opening_balance %}
                   <tr>
                      <td style="border: 1px solid black;">Closing Balance of Last TAX Period(VAT)</td>
                      <td style="border: 1px solid black;">52</td>
-                     <td style="border: 1px solid black;"><?php echo $note52; //$note52= $opening_balance_91->opening_vat; ?></td>
+                     <td style="border: 1px solid black;">{{ op.opening_vat }}</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
+
                   <tr>
                      <td style="border: 1px solid black;">Closing Balance of Last TAX Period(SD)</td>
                      <td style="border: 1px solid black;">53</td>
-                     <td style="border: 1px solid black;"><?php  echo $note53;//$$note53= $opening_balance_91->opening_sd; ?></td>
+                     <td style="border: 1px solid black;">{{ op.opening_sd }}</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
+                  {% endfor %}
                </table>
             </div>
          </div>
@@ -699,116 +702,60 @@
                      <td width="23%"style="border: 1px solid black;">Amount</td>
                      <td style="border: 1px solid black;"></td>
                   </tr>
-                  <?php
-                     $deposite_vat=0;
-                     if(!empty($vatdeposite)) {
-                         foreach($vatdeposite as $value){
-                             $deposite_vat += $value->t_amount;
-                     }
-                     }
-                     $note58=$deposite_vat;
-                     ?>
+
                   <tr>
                      <td style="border: 1px solid black;">VAT Deposit for the Current Tax Period</td>
                      <td style="border: 1px solid black;">58</td>
-                     <td style="border: 1px solid black;"><?php  if(!empty($vatdeposite)) {echo $vatdeposite[0]->t_account_code;}?></td>
-                     <td style="border: 1px solid black;"><?php echo number_format( $note58,2);?></td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note58?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;">{{ col_58a }}</td>
+                     <td style="border: 1px solid black;">{{ col_58b }}</td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note58?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
-                  <?php
-                     $deposite_sd=0;
-                     if(!empty($sddeposite)) {
-                         foreach($sddeposite as $value){
-                             $deposite_sd += $value->t_amount;
-                     }
-                     }
-                     $note59=$deposite_sd;
-                     ?>
+
                   <tr>
                      <td style="border: 1px solid black;">SD Deposit for the Current Tax Period</td>
                      <td style="border: 1px solid black;">59</td>
-                     <td style="border: 1px solid black;"><?php  if(!empty($sddeposite )) {echo $sddeposite[0]->t_account_code;}?></td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note59,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_59a }}</td>
+                     <td style="border: 1px solid black;">{{ col_59b }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note59?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
-                  <?php
-                     $exise=0;
-                     if(!empty($exisedeposite)){
-                         foreach($exisedeposite as $value){
-                             $exise += $value->t_amount;
-                     }
-                     }
-                     $note60=$exise;
-                     ?>
+
                   <tr>
                      <td style="border: 1px solid black;"> Exise Duty</td>
                      <td style="border: 1px solid black;">60</td>
-                     <td style="border: 1px solid black;"><?php  if(!empty($exisedeposite)) {echo $exisedeposite[0]->t_account_code;}?></td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note60,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_60a }}</td>
+                     <td style="border: 1px solid black;">{{ col_60b }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note60?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
-                  <?php
-                     $development=0;
-                     if(!empty($developmentdeposite)){
-                         foreach($developmentdeposite as $value){
-                             $development += $value->t_amount;
-                     }
-                     }
-                     $note61=$development;
-                     ?>
+
                   <tr>
                      <td style="border: 1px solid black;"> Developement Surcharge</td>
                      <td style="border: 1px solid black;">61</td>
-                     <td style="border: 1px solid black;"><?php  if(!empty($developmentdeposite)) {echo $developmentdeposite[0]->t_account_code;}?></td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note61,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_61a }}</td>
+                     <td style="border: 1px solid black;">{{ col_61b }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note61?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
-                  <?php
-                     $ict=0;
-                     if(!empty($ictdeposite)){
-                         foreach($ictdeposite as $value){
-                             $ict += $value->t_amount;
-                     }
-                     }
-                     $note62=$ict;
-                     ?>
+
                   <tr>
                      <td style="border: 1px solid black;"> ICT Developement Surcharge </td>
                      <td style="border: 1px solid black;">62</td>
-                     <td style="border: 1px solid black;"><?php  if(!empty($ictdeposite)) {echo $ictdeposite[0]->t_account_code;}?></td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note62,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_62a }}</td>
+                     <td style="border: 1px solid black;">{{ col_62b }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note62?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
-                  <?php
-                     $health=0;
-                     if(!empty($healthdeposite)){
-                         foreach($healthdeposite as $value){
-                             $health += $value->t_amount;
-                     }
-                     }
-                     $note63=$health;
-                     ?>
+
                   <tr>
                      <td style="border: 1px solid black;"> Health Care Surcharge </td>
                      <td style="border: 1px solid black;">63</td>
-                     <td style="border: 1px solid black;"><?php  if(!empty($healthdeposite)) {echo $healthdeposite[0]->t_account_code;}?></td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note63,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_63a }}</td>
+                     <td style="border: 1px solid black;">{{ col_63b }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note63?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
-                  <?php
-                     $environmental=0;
-                     if(!empty($environmentaldeposite)){
-                         foreach($environmentaldeposite as $value){
-                             $environmental += $value->t_amount;
-                     }
-                     }
-                     $note63=$environmental;
-                     ?>
+
                   <tr>
                      <td style="border: 1px solid black;">Environmental Protection Surcharge</td>
                      <td style="border: 1px solid black;">64</td>
-                     <td style="border: 1px solid black;"><?php  if(!empty($environmentaldeposite)) {echo $environmentaldeposite[0]->t_account_code;}?></td>
-                     <td style="border: 1px solid black;"><?php echo number_format($note63,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_64a }}</td>
+                     <td style="border: 1px solid black;">{{ col_64b }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note64?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
                </table>

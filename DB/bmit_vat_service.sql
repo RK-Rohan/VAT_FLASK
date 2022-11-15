@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 01, 2022 at 01:27 PM
+-- Generation Time: Nov 15, 2022 at 07:13 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.28
 
@@ -36,7 +36,7 @@ CREATE TABLE `alembic_version` (
 --
 
 INSERT INTO `alembic_version` (`version_num`) VALUES
-('90237fe8bc53');
+('f09afac9eda4');
 
 -- --------------------------------------------------------
 
@@ -344,6 +344,68 @@ INSERT INTO `countries` (`id`, `shortname`, `country_name`, `country_code`) VALU
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `credit_note`
+--
+
+CREATE TABLE `credit_note` (
+  `id` int(11) NOT NULL,
+  `credit_note_no` varchar(100) DEFAULT NULL,
+  `credit_note_type` int(11) DEFAULT NULL,
+  `cn_issue_date` date DEFAULT NULL,
+  `sales_id` int(11) DEFAULT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `vehicle_info` varchar(100) DEFAULT NULL,
+  `total_amount` decimal(10,2) DEFAULT NULL,
+  `total_vat` decimal(10,2) DEFAULT NULL,
+  `total_sd` decimal(10,2) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `credit_note`
+--
+
+INSERT INTO `credit_note` (`id`, `credit_note_no`, `credit_note_type`, `cn_issue_date`, `sales_id`, `customer_id`, `vehicle_info`, `total_amount`, `total_vat`, `total_sd`, `note`, `created_at`, `user_id`) VALUES
+(1, '1001', 3, '2022-11-14', 1, 1, 'Pickup', '1070.00', '176.70', '108.00', NULL, '2022-11-14 17:09:41', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `credit_note_line`
+--
+
+CREATE TABLE `credit_note_line` (
+  `id` int(11) NOT NULL,
+  `credit_note_id` int(11) DEFAULT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `qty` int(11) DEFAULT NULL,
+  `rate` decimal(10,2) DEFAULT NULL,
+  `s_amount` decimal(10,2) DEFAULT NULL,
+  `s_vat_percent` decimal(10,2) DEFAULT NULL,
+  `s_vat_amount` decimal(10,2) DEFAULT NULL,
+  `s_sd` decimal(10,2) DEFAULT NULL,
+  `return_qty` int(11) DEFAULT NULL,
+  `return_amount` decimal(10,2) DEFAULT NULL,
+  `return_vat` decimal(10,2) DEFAULT NULL,
+  `return_sd` decimal(10,2) DEFAULT NULL,
+  `entry_date` date DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `credit_note_line`
+--
+
+INSERT INTO `credit_note_line` (`id`, `credit_note_id`, `item_id`, `qty`, `rate`, `s_amount`, `s_vat_percent`, `s_vat_amount`, `s_sd`, `return_qty`, `return_amount`, `return_vat`, `return_sd`, `entry_date`, `created_at`) VALUES
+(1, 1, 1, 5, '550.00', '2750.00', '15.00', '412.50', '0.00', 1, '550.00', '82.50', '0.00', '2022-11-14', NULL),
+(2, 1, 2, 5, '300.00', '1500.00', '15.00', '281.25', '375.00', 1, '300.00', '56.25', '75.00', '2022-11-14', NULL),
+(3, 1, 3, 5, '220.00', '1100.00', '15.00', '189.75', '165.00', 1, '220.00', '37.95', '33.00', '2022-11-14', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `customers`
 --
 
@@ -366,7 +428,71 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id`, `customer_name`, `email_address`, `phone_number`, `country_id`, `customer_type`, `customer_address`, `shipping_address`, `shipping_country`, `customer_bin`, `customer_tin`) VALUES
-(1, 'Test Customer 1', 'testcustomer1@gmail.com', '01710336617', '18', '1', 'Nikunju', 'Nikunju', '18', '25414132554122', '78546745675467');
+(1, 'Test Customer 1', 'testcustomer1@gmail.com', '01710336617', '18', '1', 'Nikunju', 'Nikunju', '18', '25414132554122', '78546745675467'),
+(2, 'Test Customer 2', 'testcustomer2@gmail.com', '01710336618', '18', '1', 'Mirpur', 'Mirpur', '18', '2541413254129', '7854674567655'),
+(3, 'Test Customer 3', 'testcustomer3@gmail.com', '01710336619', '18', '1', 'Banani', 'Banani', '18', '987654321', '123456789');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `debit_note`
+--
+
+CREATE TABLE `debit_note` (
+  `id` int(11) NOT NULL,
+  `debit_note_no` varchar(100) DEFAULT NULL,
+  `debit_note_type` int(11) DEFAULT NULL,
+  `dn_issue_date` date DEFAULT NULL,
+  `purchase_id` int(11) DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT NULL,
+  `vehicle_info` varchar(100) DEFAULT NULL,
+  `total_amount` decimal(10,2) DEFAULT NULL,
+  `total_vat` decimal(10,2) DEFAULT NULL,
+  `total_sd` decimal(10,2) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `debit_note`
+--
+
+INSERT INTO `debit_note` (`id`, `debit_note_no`, `debit_note_type`, `dn_issue_date`, `purchase_id`, `supplier_id`, `vehicle_info`, `total_amount`, `total_vat`, `total_sd`, `note`, `created_at`, `user_id`) VALUES
+(1, '1001', 3, '2022-11-14', 1, 1, 'Pickup', '4750.00', '172.50', '462.50', NULL, '2022-11-14 16:58:47', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `debit_note_line`
+--
+
+CREATE TABLE `debit_note_line` (
+  `id` int(11) NOT NULL,
+  `debit_note_id` int(11) DEFAULT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `qty` int(11) DEFAULT NULL,
+  `rate` decimal(10,2) DEFAULT NULL,
+  `p_amount` decimal(10,2) DEFAULT NULL,
+  `p_vat_percent` decimal(10,2) DEFAULT NULL,
+  `p_vat_amount` decimal(10,2) DEFAULT NULL,
+  `p_sd` decimal(10,2) DEFAULT NULL,
+  `return_qty` int(11) DEFAULT NULL,
+  `return_amount` decimal(10,2) DEFAULT NULL,
+  `return_vat` decimal(10,2) DEFAULT NULL,
+  `return_sd` decimal(10,2) DEFAULT NULL,
+  `entry_date` date DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `debit_note_line`
+--
+
+INSERT INTO `debit_note_line` (`id`, `debit_note_id`, `item_id`, `qty`, `rate`, `p_amount`, `p_vat_percent`, `p_vat_amount`, `p_sd`, `return_qty`, `return_amount`, `return_vat`, `return_sd`, `entry_date`, `created_at`) VALUES
+(1, 1, 1, 10, '500.00', '5000.00', '0.00', '0.00', '0.00', 5, '2500.00', '0.00', '0.00', '2022-11-14', NULL),
+(2, 1, 2, 50, '250.00', '12500.00', '0.00', '0.00', '3125.00', 5, '1250.00', '0.00', '312.50', '2022-11-14', NULL),
+(3, 1, 3, 25, '200.00', '5000.00', '15.00', '862.50', '750.00', 5, '1000.00', '172.50', '150.00', '2022-11-14', NULL);
 
 -- --------------------------------------------------------
 
@@ -11516,7 +11642,7 @@ CREATE TABLE `issue_vds` (
 --
 
 INSERT INTO `issue_vds` (`id`, `vds_no`, `vds_type`, `entry_date`, `supplier_id`, `total_amount`, `total_vat`, `total_vds`, `total_payment`, `user_id`) VALUES
-(1, '1001', 3, '2022-11-01', 2, '115.00', '15.00', '15.00', '15.00', 2);
+(1, '1001', 3, '2022-11-14', 1, '27237.50', '862.50', '862.50', '862.50', 2);
 
 -- --------------------------------------------------------
 
@@ -11529,11 +11655,11 @@ CREATE TABLE `issue_vds_line` (
   `vds_id` int(11) DEFAULT NULL,
   `supplier_id` int(11) DEFAULT NULL,
   `invoice_no` varchar(100) DEFAULT NULL,
-  `inv_amount` double DEFAULT NULL,
+  `inv_amount` decimal(10,2) DEFAULT NULL,
   `inv_date` date DEFAULT NULL,
-  `vat_amount` double DEFAULT NULL,
-  `vds_amount` double DEFAULT NULL,
-  `payment_amount` double DEFAULT NULL,
+  `vat_amount` decimal(10,2) DEFAULT NULL,
+  `vds_amount` decimal(10,2) DEFAULT NULL,
+  `payment_amount` decimal(10,2) DEFAULT NULL,
   `branch_name` varchar(50) DEFAULT NULL,
   `bank_name` varchar(50) DEFAULT NULL,
   `account_code` varchar(50) DEFAULT NULL,
@@ -11547,7 +11673,7 @@ CREATE TABLE `issue_vds_line` (
 --
 
 INSERT INTO `issue_vds_line` (`id`, `vds_id`, `supplier_id`, `invoice_no`, `inv_amount`, `inv_date`, `vat_amount`, `vds_amount`, `payment_amount`, `branch_name`, `bank_name`, `account_code`, `deposit_serial`, `deposit_date`, `entry_date`) VALUES
-(1, 1, 2, '1001', 115, '2022-10-31', 15, 15, 15, 'Nikunju', 'DBBL', '56548525', '87445145', '2022-11-01', NULL);
+(1, 1, 1, '1001', '27237.50', '2022-11-14', '862.50', '862.50', '862.50', 'Nikunju', 'DBBL', '56548525', '87445145', '2022-11-14', '2022-11-14');
 
 -- --------------------------------------------------------
 
@@ -11572,9 +11698,65 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`id`, `item_name`, `item_type`, `hs_code`, `hs_code_id`, `calculate_year`, `unit_id`, `stock_status`, `status`) VALUES
-(1, 'Laptop Service', '1', '10975', '10975', NULL, '3', NULL, NULL),
-(2, 'Mobile Service', '1', '11020', '11020', NULL, '3', NULL, NULL),
-(3, 'Computer Service', '1', '08012110', '840', NULL, '3', NULL, NULL);
+(1, 'Computer Service', '1', '10975', '10975', NULL, '5', NULL, NULL),
+(2, 'Satellite Television Subscribers', '1', '10965', '10965', NULL, '3', NULL, NULL),
+(3, 'Sim Card Replacement', '1', '10963', '10963', NULL, '3', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `opening_balance`
+--
+
+CREATE TABLE `opening_balance` (
+  `id` int(11) NOT NULL,
+  `opening_vat` decimal(10,2) DEFAULT NULL,
+  `opening_sd` decimal(10,2) DEFAULT NULL,
+  `closing_date` date DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `opening_balance`
+--
+
+INSERT INTO `opening_balance` (`id`, `opening_vat`, `opening_sd`, `closing_date`, `created_at`) VALUES
+(1, '0.00', '0.00', '2022-10-01', '2022-10-01 11:45:59');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payable_mushak`
+--
+
+CREATE TABLE `payable_mushak` (
+  `id` int(11) NOT NULL,
+  `pay_type` int(11) DEFAULT NULL,
+  `pay_date` date DEFAULT NULL,
+  `pay_amount` decimal(10,2) DEFAULT NULL,
+  `business_type` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payable_voucher`
+--
+
+CREATE TABLE `payable_voucher` (
+  `id` int(11) NOT NULL,
+  `payable_desc` varchar(100) DEFAULT NULL,
+  `chalan_no` varchar(100) DEFAULT NULL,
+  `payable_amount` decimal(10,2) DEFAULT NULL,
+  `vat_amount` decimal(10,2) DEFAULT NULL,
+  `chalan_date` date DEFAULT NULL,
+  `execute_date` date DEFAULT NULL,
+  `business_type` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -11609,9 +11791,7 @@ CREATE TABLE `purchase` (
 --
 
 INSERT INTO `purchase` (`id`, `p_invoice_no`, `purchase_type`, `lc_date`, `lc_no`, `challan_date`, `total_vds`, `grand_total`, `supplier_id`, `total_tax`, `vendor_invoice`, `custom_house`, `country_origin`, `boe_item_no`, `data_source`, `cpc_code_id`, `entry_date`, `notes`, `user_id`) VALUES
-(1, '1001', 3, NULL, NULL, '2022-10-31', NULL, '115.00', 2, '15.00', '1002', NULL, NULL, NULL, NULL, NULL, '2022-10-31 18:05:00', NULL, 2),
-(2, '1002', 3, NULL, NULL, '2022-10-31', NULL, '1505.50', 1, '85.50', '1002', NULL, NULL, NULL, NULL, NULL, '2022-10-30 18:34:00', NULL, 2),
-(3, '1003', 3, NULL, NULL, '2022-10-31', NULL, '1651.10', 2, '71.10', '1003', NULL, NULL, NULL, NULL, NULL, '2022-10-31 18:35:00', NULL, 2);
+(1, '1001', 3, NULL, NULL, '2022-11-14', NULL, '27237.50', 1, '862.50', 'CH1001', NULL, NULL, NULL, NULL, NULL, '2022-11-14 16:54:00', NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -11654,13 +11834,28 @@ CREATE TABLE `purchase_line` (
 --
 
 INSERT INTO `purchase_line` (`id`, `item_id`, `hs_code_id`, `purchase_id`, `qty`, `rate`, `rate_value`, `vatable_value`, `vat_percent`, `vat_amount`, `cd_percent`, `cd_amount`, `sd_percent`, `sd_amount`, `rd_percent`, `rd_amount`, `at_amount`, `ait_amount`, `tti_percent`, `tti_amount`, `vat_type`, `vds`, `rebate`, `purchase_date`, `entry_date`, `sub_total`, `grand_total`) VALUES
-(1, 2, 11020, 1, 10, 10, 100, 100, 15, 15, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, '1', '1', '1', '2022-10-31', '2022-10-31 18:05:00', 115, NULL),
-(2, 3, 840, 2, 10, 10, 100, 120, 15, 18, NULL, NULL, 20, 20, NULL, NULL, NULL, NULL, NULL, NULL, '1', '1', '1', '2022-10-31', '2022-10-30 18:34:00', 138, NULL),
-(3, 2, 11020, 2, 20, 20, 400, 400, 0, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2', '1', '1', '2022-10-31', '2022-10-30 18:34:00', 400, NULL),
-(4, 1, 10975, 2, 30, 30, 900, 900, 7.5, 67.5, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, '5', '1', '1', '2022-10-31', '2022-10-30 18:34:00', 967.5, NULL),
-(5, 1, 10975, 3, 10, 10, 100, 100, 7.5, 7.5, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, '5', '1', '1', '2022-10-31', '2022-10-31 18:35:00', 107.5, NULL),
-(6, 2, 11020, 3, 20, 20, 400, 400, 2.4, 9.6, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, '5', '1', '1', '2022-10-31', '2022-10-31 18:35:00', 409.6, NULL),
-(7, 3, 840, 3, 30, 30, 900, 1080, 5, 54, NULL, NULL, 20, 180, NULL, NULL, NULL, NULL, NULL, NULL, '5', '1', '1', '2022-10-31', '2022-10-31 18:35:00', 1134, NULL);
+(1, 1, 10975, 1, 10, 500, 5000, 5000, 0, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2', '0', '1', '2022-11-14', '2022-11-14 16:54:00', 5000, NULL),
+(2, 2, 10965, 1, 50, 250, 12500, 15625, 0, 0, NULL, NULL, 25, 3125, NULL, NULL, NULL, NULL, NULL, NULL, '3', '0', '1', '2022-11-14', '2022-11-14 16:54:00', 15625, NULL),
+(3, 3, 10963, 1, 25, 200, 5000, 5750, 15, 862.5, NULL, NULL, 15, 750, NULL, NULL, NULL, NULL, NULL, NULL, '1', '1', '1', '2022-11-14', '2022-11-14 16:54:00', 6612.5, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `receivable_voucher`
+--
+
+CREATE TABLE `receivable_voucher` (
+  `id` int(11) NOT NULL,
+  `receivable_desc` varchar(100) DEFAULT NULL,
+  `chalan_no` varchar(100) DEFAULT NULL,
+  `receivable_amount` decimal(10,2) DEFAULT NULL,
+  `vat_amount` decimal(10,2) DEFAULT NULL,
+  `chalan_date` date DEFAULT NULL,
+  `execute_date` date DEFAULT NULL,
+  `business_type` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -11682,6 +11877,13 @@ CREATE TABLE `receive_vds` (
   `total_receive` decimal(10,2) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `receive_vds`
+--
+
+INSERT INTO `receive_vds` (`id`, `vds_no`, `vds_type`, `entry_date`, `vds_certificate_no`, `receive_date`, `customer_id`, `total_amount`, `total_vat`, `total_vds`, `total_receive`, `user_id`) VALUES
+(1, '1001', 3, '2022-11-14', '7541241554', '2022-11-14', 1, '6773.50', '883.50', '883.50', '883.50', 2);
 
 -- --------------------------------------------------------
 
@@ -11706,6 +11908,13 @@ CREATE TABLE `receive_vds_line` (
   `deposit_date` date DEFAULT NULL,
   `entry_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `receive_vds_line`
+--
+
+INSERT INTO `receive_vds_line` (`id`, `vds_id`, `invoice_no`, `customer_id`, `inv_amount`, `inv_date`, `vat_amount`, `vds_amount`, `receive_amount`, `branch_name`, `bank_name`, `account_code`, `deposit_serial`, `deposit_date`, `entry_date`) VALUES
+(1, 1, NULL, 1, 6773.5, '2022-11-14', 883.5, 883.5, 883.5, 'Nikunju', 'DBBL', '56548525', '87445145', '2022-11-14', '2022-11-14');
 
 -- --------------------------------------------------------
 
@@ -11739,7 +11948,8 @@ CREATE TABLE `sales` (
 --
 
 INSERT INTO `sales` (`id`, `customer_id`, `sale_center_id`, `sales_transfer_id`, `sale_date`, `sales_invoice`, `vehicle_info`, `destination`, `sales_challan`, `entry_date`, `sales_type`, `trans_type`, `total_discount`, `total_sd`, `total_vat`, `grand_total`, `notes`, `user_id`) VALUES
-(1, 1, NULL, NULL, '2022-10-31', NULL, 'Truck', 'Chittagong', NULL, NULL, 3, NULL, NULL, '950.00', '2205.00', '40605.00', NULL, 2);
+(1, 1, NULL, NULL, '2022-11-14', 'INV1001', 'Truck', 'Dhaka', NULL, '2022-11-14 17:08:38', 3, NULL, NULL, '540.00', '883.50', '6773.50', NULL, 2),
+(2, 2, NULL, NULL, '2022-11-15', 'INV1002', 'Truck', 'Dhaka', NULL, '2022-11-15 11:07:45', 3, NULL, NULL, '462.50', '187.50', '5400.00', NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -11774,9 +11984,12 @@ CREATE TABLE `sales_line` (
 --
 
 INSERT INTO `sales_line` (`id`, `item_id`, `hs_code_id`, `sales_id`, `qty`, `rate`, `rate_value`, `discount_percent`, `discount_amount`, `value_after_discount`, `sd_percent`, `sd_amount`, `vatable_value`, `vat_type`, `vat_percent`, `vat_amount`, `vds`, `sales_date`, `sub_total`) VALUES
-(1, 3, 840, 1, 10, 500, 5000, 5, 250, 4750, 20, 950, 5700, '1', 15, 855, '1', '2022-10-31', 6555),
-(2, 2, 11020, 1, 50, 300, 15000, 2, 300, 14700, 0, 0, 14700, '2', 0, 0, '1', '2022-10-31', 14700),
-(3, 1, 10975, 1, 20, 1000, 20000, 10, 2000, 18000, 0, 0, 18000, '5', 7.5, 1350, '1', '2022-10-31', 19350);
+(1, 1, 10975, 1, 5, 550, 2750, 0, 0, 2750, 0, 0, 2750, '1', 15, 412.5, '1', '2022-11-14', 3162.5),
+(2, 2, 10965, 1, 5, 300, 1500, 0, 0, 1500, 25, 375, 1875, '1', 15, 281.25, '1', '2022-11-14', 2156.25),
+(3, 3, 10963, 1, 5, 220, 1100, 0, 0, 1100, 15, 165, 1265, '1', 15, 189.75, '1', '2022-11-14', 1454.75),
+(4, 2, 10965, 2, 5, 250, 1250, 0, 0, 1250, 25, 312.5, 1562.5, '2', 0, 0, '1', '2022-11-15', 1562.5),
+(5, 3, 10963, 2, 5, 200, 1000, 0, 0, 1000, 15, 150, 1150, '3', 0, 0, '1', '2022-11-15', 1150),
+(6, 1, 10975, 2, 5, 500, 2500, 0, 0, 2500, 0, 0, 2500, '5', 7.5, 187.5, '1', '2022-11-15', 2687.5);
 
 -- --------------------------------------------------------
 
@@ -11801,8 +12014,30 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`id`, `supplier_name`, `email_address`, `phone_number`, `country_id`, `supplier_type`, `supplier_address`, `supplier_bin`, `supplier_tin`) VALUES
-(1, 'Test Supplier', 'supplier1@gmail.com', '+8801850145577', '18', '1', 'Dhaka', '6845684535445', '1526148741215'),
-(2, 'SQ Cable', 'bmit@gmail.com', '+8801850145577', '18', '1', 'Banani', '6845684535445', '1526148741215');
+(1, 'Test Supplier 1', 'testsupplier1@gmail.com', '01710336620', '18', '1', 'Gulsan', '654789321', '258963147'),
+(2, 'Test Supplier 2', 'testcustomer2@gmail.com', '01710336621', '18', '1', 'Gulsan', '456321789', '654963258'),
+(3, 'Test Supplier 3', 'testcustomer3@gmail.com', '01710336622', '18', '1', 'Rampura', '852987123', '321741963');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `treasury_chalan`
+--
+
+CREATE TABLE `treasury_chalan` (
+  `id` int(11) NOT NULL,
+  `t_chalan_no` varchar(100) DEFAULT NULL,
+  `t_bank` varchar(100) DEFAULT NULL,
+  `t_branch` varchar(100) DEFAULT NULL,
+  `t_account_code` varchar(100) DEFAULT NULL,
+  `t_amount` decimal(10,2) DEFAULT NULL,
+  `t_date` date DEFAULT NULL,
+  `execute_date` date DEFAULT NULL,
+  `t_type` int(11) DEFAULT NULL,
+  `business_type` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -11879,9 +12114,33 @@ ALTER TABLE `countries`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `credit_note`
+--
+ALTER TABLE `credit_note`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `credit_note_line`
+--
+ALTER TABLE `credit_note_line`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `customers`
 --
 ALTER TABLE `customers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `debit_note`
+--
+ALTER TABLE `debit_note`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `debit_note_line`
+--
+ALTER TABLE `debit_note_line`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -11909,6 +12168,24 @@ ALTER TABLE `items`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `opening_balance`
+--
+ALTER TABLE `opening_balance`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `payable_mushak`
+--
+ALTER TABLE `payable_mushak`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `payable_voucher`
+--
+ALTER TABLE `payable_voucher`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `purchase`
 --
 ALTER TABLE `purchase`
@@ -11918,6 +12195,12 @@ ALTER TABLE `purchase`
 -- Indexes for table `purchase_line`
 --
 ALTER TABLE `purchase_line`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `receivable_voucher`
+--
+ALTER TABLE `receivable_voucher`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -11951,6 +12234,12 @@ ALTER TABLE `suppliers`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `treasury_chalan`
+--
+ALTER TABLE `treasury_chalan`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `units`
 --
 ALTER TABLE `units`
@@ -11981,10 +12270,34 @@ ALTER TABLE `countries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
 
 --
+-- AUTO_INCREMENT for table `credit_note`
+--
+ALTER TABLE `credit_note`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `credit_note_line`
+--
+ALTER TABLE `credit_note_line`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `debit_note`
+--
+ALTER TABLE `debit_note`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `debit_note_line`
+--
+ALTER TABLE `debit_note_line`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `hs_code`
@@ -12011,46 +12324,76 @@ ALTER TABLE `items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `opening_balance`
+--
+ALTER TABLE `opening_balance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `payable_mushak`
+--
+ALTER TABLE `payable_mushak`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `payable_voucher`
+--
+ALTER TABLE `payable_voucher`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `purchase`
 --
 ALTER TABLE `purchase`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `purchase_line`
 --
 ALTER TABLE `purchase_line`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `receivable_voucher`
+--
+ALTER TABLE `receivable_voucher`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `receive_vds`
 --
 ALTER TABLE `receive_vds`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `receive_vds_line`
 --
 ALTER TABLE `receive_vds_line`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sales_line`
 --
 ALTER TABLE `sales_line`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `treasury_chalan`
+--
+ALTER TABLE `treasury_chalan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `units`

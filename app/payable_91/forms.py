@@ -8,7 +8,7 @@ class PayableMushakForm(FlaskForm):
     pay_type = SelectField(u'pay_type', choices=[
         ('25', 'Payment not Payment Through Bank(25)'),
         ('41', 'Interest on Overdue VAT(41)'),
-        ('42', 'Interest on Overdue VAT(42)'),
+        ('42', 'Interest on Overdue SD(42)'),
         ('43', 'Fine/penalty/interest(43)'),
         ('44', 'Others Fine/penalty/interest(44)'),
         ('45', 'Payable Excise Duty(45)'),

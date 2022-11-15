@@ -10,6 +10,7 @@ from dateutil import relativedelta
 from app import db
 from reports import reports
 from reports.forms import ReportForm
+from reports.models import OpeningBalance
 from company.models import Company
 from sales.models import Sales, SalesLine, SalesSchema
 from purchase.models import Purchase, PurchaseLine
@@ -300,11 +301,85 @@ def reports_91_by_date():
         col_a33 = col_a29+col_a31
         col_34 = col_9c-col_b23+col_a28-col_a33
 
+    # opening_balance = text(
+    #     "SELECT * FROM opening_balance WHERE opening_balance.closing_date between :start_date AND :end_date"
+    # )
+    opening_balance = OpeningBalance.query.all()
+    # o_p = db.session.execute(opening_balance, {'start_date': start_date, 'end_date': end_date})
+    # for op in o_p:
+    #     opening_vat = op.opening_vat
+    #     opening_sd = op.opening_sd
+
+    treasury_chalan = text(
+        "SELECT * FROM treasury_chalan WHERE treasury_chalan.t_date between :start_date AND :end_date"
+    )
+    t_c = db.session.execute(treasury_chalan, {'start_date': start_date, 'end_date': end_date})
+
+    for tc in t_c:
+        t_amount = tc.t_amount
+        t_account_code = tc.t_account_code
+        t_type = tc.t_type
+        if t_type == 58:
+            col_58a = t_account_code
+            col_58b = t_amount
+        if t_type == 59:
+            col_59a = t_account_code
+            col_59b = t_amount
+        if t_type == 60:
+            col_60a = t_account_code
+            col_60b = t_amount
+        if t_type == 61:
+            col_61a = t_account_code
+            col_61b = t_amount
+        if t_type == 62:
+            col_62a = t_account_code
+            col_62b = t_amount
+        if t_type == 63:
+            col_63a = t_account_code
+            col_63b = t_amount
+        if t_type == 64:
+            col_64a = t_account_code
+            col_64b = t_amount
+
+    payable_mushak = text(
+        "SELECT * FROM payable_mushak WHERE payable_mushak.pay_date between :start_date AND :end_date"
+    )
+    p_m = db.session.execute(payable_mushak, {'start_date': start_date, 'end_date': end_date})
+
+    for pm in p_m:
+        pay_amount = pm.pay_amount
+        pay_type = pm.pay_type
+        if pay_type == 41:
+            col_41 = pay_amount
+        if pay_type == 42:
+            col_42 = pay_amount
+        if pay_type == 43:
+            col_43 = pay_amount
+        if pay_type == 44:
+            col_44 = pay_amount
+        if pay_type == 45:
+            col_45 = pay_amount
+        if pay_type == 46:
+            col_46 = pay_amount
+        if pay_type == 47:
+            col_47 = pay_amount
+        if pay_type == 48:
+            col_48 = pay_amount
+        if pay_type == 49:
+            col_49 = pay_amount
+
     return render_template('reports/reports_91.html', company_data=company_data,
                            t_1=t_1, t_2=t_2, t_3=t_3, t_4=t_4, t_5=t_5,
                            s_1=s_1, s_2=s_2, s_3=s_3, s_4=s_4, s_5=s_5,
                            s_o_t=s_o_t, col_9c=col_9c, col_23a=col_23a, col_23b=col_23b,
                            col_a24=col_a24, col_a26=col_a26,
                            col_a28=col_a28, col_a29=col_a29, col_a31=col_a31,
-                           col_a33=col_a33, col_34=col_34
+                           col_a33=col_a33, col_34=col_34,
+                           opening_balance=opening_balance,
+                           col_41=col_41, col_42=col_42, col_43=col_43, col_44=col_44, col_45=col_45,
+                           col_46=col_46, col_47=col_47, col_48=col_48, col_49=col_49,
+                           col_58a=col_58a, col_58b=col_58b, col_59a=col_59a, col_59b=col_59b,
+                           col_60a=col_60a, col_60b=col_60b, col_61a=col_61a,  col_61b=col_61b,
+                           col_62a=col_62a, col_62b=col_62b, col_63a=col_63a, col_63b=col_63b,
+                           col_64a=col_64a, col_64b=col_64b,
                            )
