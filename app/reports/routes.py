@@ -184,7 +184,8 @@ def reports_91_by_date():
     t_5 = db.session.execute(t5, {'start_date': start_date, 'end_date': end_date})
 
     t2 = text(
-        "SELECT SUM(purchase_line.`vatable_value`) AS vatable_value "
+        "SELECT SUM(purchase_line.`vatable_value`) AS vatable_value, "
+        "SUM(purchase_line.vat_amount) AS vat_amount "
         "FROM purchase "
         "JOIN purchase_line ON purchase.id = purchase_line.purchase_id "
         "WHERE purchase_line.vat_type = 2 "
@@ -279,13 +280,17 @@ def reports_91_by_date():
         "(SELECT SUM(purchase_line.`vat_amount`) FROM purchase_line "
         "WHERE purchase_line.purchase_date between :start_date AND :end_date) AS B23, "
         "(SELECT SUM(issue_vds_line.vds_amount) FROM issue_vds_line "
-        "WHERE issue_vds_line.entry_date between :start_date AND :end_date) AS A24 ,"        
+        "WHERE issue_vds_line.entry_date between :start_date AND :end_date) AS A24 ,"
         "(SELECT SUM(receive_vds_line.vds_amount) FROM receive_vds_line "
-        "WHERE receive_vds_line.entry_date between :start_date AND :end_date) AS A29 ,"      
-        "(SELECT SUM(debit_note_line.return_amount) FROM debit_note_line "
-        "WHERE debit_note_line.entry_date between :start_date AND :end_date) AS A26, "        
-        "(SELECT SUM(credit_note_line.return_amount) FROM credit_note_line "
-        "WHERE credit_note_line.entry_date between :start_date AND :end_date) AS A31 "
+        "WHERE receive_vds_line.entry_date between :start_date AND :end_date) AS A29 ,"
+        "(SELECT SUM(debit_note_line.return_vat) FROM debit_note_line "
+        "WHERE debit_note_line.entry_date between :start_date AND :end_date) AS A26, "
+        "(SELECT SUM(debit_note_line.return_sd) FROM debit_note_line "
+        "WHERE debit_note_line.entry_date between :start_date AND :end_date) AS A38, "
+        "(SELECT SUM(credit_note_line.return_vat) FROM credit_note_line "
+        "WHERE credit_note_line.entry_date between :start_date AND :end_date) AS A31, "
+        "(SELECT SUM(credit_note_line.return_sd) FROM credit_note_line "
+        "WHERE credit_note_line.entry_date between :start_date AND :end_date) AS A39 "
         "FROM `purchase_line`, sales_line, issue_vds_line, receive_vds_line, debit_note_line LIMIT 1"
     )
     n_t_c = db.session.execute(ntc, {'start_date': start_date, 'end_date': end_date})
@@ -295,11 +300,13 @@ def reports_91_by_date():
         col_b23 = Decimal(ntc.B23)
         col_a24 = Decimal(ntc.A24)
         col_a26 = Decimal(ntc.A26)
-        col_a28 = col_a24+col_a26
+        col_a28 = col_a24 + col_a26
         col_a29 = Decimal(ntc.A29)
         col_a31 = Decimal(ntc.A31)
-        col_a33 = col_a29+col_a31
-        col_34 = col_9c-col_b23+col_a28-col_a33
+        col_a33 = col_a29 + col_a31
+        col_34 = col_9c - col_b23 + col_a28 - col_a33
+        col_38 = ntc.A38
+        col_39 = ntc.A39
 
     # opening_balance = text(
     #     "SELECT * FROM opening_balance WHERE opening_balance.closing_date between :start_date AND :end_date"
@@ -368,18 +375,300 @@ def reports_91_by_date():
         if pay_type == 49:
             col_49 = pay_amount
 
-    return render_template('reports/reports_91.html', company_data=company_data,
+    return render_template('reports/reports_91.html', company_data=company_data, date=date,
+                           start_date=start_date, end_date=end_date,
                            t_1=t_1, t_2=t_2, t_3=t_3, t_4=t_4, t_5=t_5,
                            s_1=s_1, s_2=s_2, s_3=s_3, s_4=s_4, s_5=s_5,
                            s_o_t=s_o_t, col_9c=col_9c, col_23a=col_23a, col_23b=col_23b,
                            col_a24=col_a24, col_a26=col_a26,
                            col_a28=col_a28, col_a29=col_a29, col_a31=col_a31,
-                           col_a33=col_a33, col_34=col_34,
+                           col_a33=col_a33, col_34=col_34, col_38=col_38, col_39=col_39,
                            opening_balance=opening_balance,
                            col_41=col_41, col_42=col_42, col_43=col_43, col_44=col_44, col_45=col_45,
                            col_46=col_46, col_47=col_47, col_48=col_48, col_49=col_49,
                            col_58a=col_58a, col_58b=col_58b, col_59a=col_59a, col_59b=col_59b,
-                           col_60a=col_60a, col_60b=col_60b, col_61a=col_61a,  col_61b=col_61b,
+                           col_60a=col_60a, col_60b=col_60b, col_61a=col_61a, col_61b=col_61b,
                            col_62a=col_62a, col_62b=col_62b, col_63a=col_63a, col_63b=col_63b,
                            col_64a=col_64a, col_64b=col_64b,
                            )
+
+
+@reports.route('/reports/note4/<date>/')
+@login_required
+def note_4(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT sl.vatable_value, sl.sd_amount, sl.vat_amount, items.item_name, items.hs_code, hs_code.description "
+        "FROM `sales_line` sl JOIN items ON items.id = sl.item_id JOIN hs_code ON hs_code.id = sl.hs_code_id "
+        "WHERE sl.vat_type = '1'  AND sl.sales_date between :start_date AND :end_date "
+    )
+    note4 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_4.html', note4=note4)
+
+
+@reports.route('/reports/note1/<date>/')
+@login_required
+def note_1(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT sl.vatable_value, sl.sd_amount, sl.vat_amount, items.item_name, items.hs_code, hs_code.description "
+        "FROM `sales_line` sl JOIN items ON items.id = sl.item_id JOIN hs_code ON hs_code.id = sl.hs_code_id "
+        "WHERE sl.vat_type = '2'  AND sl.sales_date between :start_date AND :end_date "
+    )
+    note1 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_1.html', note1=note1)
+
+
+@reports.route('/reports/note3/<date>/')
+@login_required
+def note_3(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT sl.vatable_value, sl.sd_amount, sl.vat_amount, items.item_name, items.hs_code, hs_code.description "
+        "FROM `sales_line` sl JOIN items ON items.id = sl.item_id JOIN hs_code ON hs_code.id = sl.hs_code_id "
+        "WHERE sl.vat_type = '3'  AND sl.sales_date between :start_date AND :end_date "
+    )
+    note3 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_3.html', note3=note3)
+
+
+@reports.route('/reports/note6/<date>/')
+@login_required
+def note_6(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT sl.vatable_value, sl.sd_amount, sl.qty, sl.vat_amount, items.item_name, "
+        "items.hs_code, hs_code.description , units.unit_name "
+        "FROM `sales_line` sl JOIN items ON items.id = sl.item_id JOIN hs_code ON hs_code.id = sl.hs_code_id "
+        "JOIN units ON units.id = items.unit_id "
+        "WHERE sl.vat_type = '4'  AND sl.sales_date between :start_date AND :end_date "
+    )
+    note6 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_6.html', note6=note6)
+
+
+@reports.route('/reports/note7/<date>/')
+@login_required
+def note_7(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT sl.vatable_value, sl.sd_amount, sl.qty, sl.vat_amount, items.item_name, "
+        "items.hs_code, hs_code.description , units.unit_name "
+        "FROM `sales_line` sl JOIN items ON items.id = sl.item_id JOIN hs_code ON hs_code.id = sl.hs_code_id "
+        "JOIN units ON units.id = items.unit_id "
+        "WHERE sl.vat_type = '5'  AND sl.sales_date between :start_date AND :end_date "
+    )
+    note7 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_7.html', note7=note7)
+
+
+@reports.route('/reports/note10/<date>/')
+@login_required
+def note_10(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT pl.vatable_value, pl.sd_amount, pl.qty, pl.vat_amount, "
+        "items.item_name, items.hs_code, hs_code.description , units.unit_name "
+        "FROM purchase_line pl JOIN items ON items.id = pl.item_id "
+        "JOIN hs_code ON hs_code.id = pl.hs_code_id "
+        "JOIN units ON units.id = items.unit_id WHERE pl.vat_type=2 "
+        "AND pl.purchase_date between :start_date AND :end_date "
+    )
+    note10 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_10.html', note10=note10)
+
+
+@reports.route('/reports/note12/<date>/')
+@login_required
+def note_12(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT pl.vatable_value, pl.sd_amount, pl.qty, pl.vat_amount, "
+        "items.item_name, items.hs_code, hs_code.description , units.unit_name "
+        "FROM purchase_line pl JOIN items ON items.id = pl.item_id "
+        "JOIN hs_code ON hs_code.id = pl.hs_code_id "
+        "JOIN units ON units.id = items.unit_id WHERE pl.vat_type=3 "
+        "AND pl.purchase_date between :start_date AND :end_date "
+    )
+    note12 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_12.html', note12=note12)
+
+
+@reports.route('/reports/note14/<date>/')
+@login_required
+def note_14(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT pl.vatable_value, pl.sd_amount, pl.qty, pl.vat_amount, "
+        "items.item_name, items.hs_code, hs_code.description , units.unit_name "
+        "FROM purchase_line pl JOIN items ON items.id = pl.item_id "
+        "JOIN hs_code ON hs_code.id = pl.hs_code_id "
+        "JOIN units ON units.id = items.unit_id WHERE pl.vat_type=1 "
+        "AND pl.purchase_date between :start_date AND :end_date "
+    )
+    note14 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_14.html', note14=note14)
+
+
+@reports.route('/reports/note16/<date>/')
+@login_required
+def note_16(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT pl.vatable_value, pl.sd_amount, pl.qty, pl.vat_amount, "
+        "items.item_name, items.hs_code, hs_code.description , units.unit_name "
+        "FROM purchase_line pl JOIN items ON items.id = pl.item_id "
+        "JOIN hs_code ON hs_code.id = pl.hs_code_id "
+        "JOIN units ON units.id = items.unit_id WHERE pl.vat_type=5 "
+        "AND pl.purchase_date between :start_date AND :end_date "
+    )
+    note16 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_16.html', note16=note16)
+
+
+@reports.route('/reports/note18/<date>/')
+@login_required
+def note_18(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT pl.vatable_value, pl.sd_amount, pl.qty, pl.vat_amount, "
+        "items.item_name, items.hs_code, hs_code.description , units.unit_name "
+        "FROM purchase_line pl JOIN items ON items.id = pl.item_id "
+        "JOIN hs_code ON hs_code.id = pl.hs_code_id "
+        "JOIN units ON units.id = items.unit_id WHERE pl.vat_type=4 "
+        "AND pl.purchase_date between :start_date AND :end_date "
+    )
+    note18 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_18.html', note18=note18)
+
+
+@reports.route('/reports/note24/<date>/')
+@login_required
+def note_24(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT svi.*,sv.vds_no,s.supplier_name,s.supplier_bin,s.supplier_address "
+        "FROM issue_vds_line AS svi,issue_vds AS sv,suppliers AS s "
+        "WHERE svi.vds_id=sv.id AND svi.supplier_id=s.id "
+        "AND svi.entry_date between :start_date AND :end_date "
+    )
+    note24 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_24.html', note24=note24)
+
+
+@reports.route('/reports/note26/<date>/')
+@login_required
+def note_26(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT items.item_name, dnl.* FROM debit_note_line AS dnl "
+        "JOIN items ON items.id = dnl.item_id "
+        "AND dnl.entry_date between :start_date AND :end_date "
+    )
+    note26 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_26.html', note26=note26)
+
+
+@reports.route('/reports/note29/<date>/')
+@login_required
+def note_29(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT rvi.*,rv.vds_no,c.customer_name,c.customer_bin,c.customer_address "
+        "FROM receive_vds_line AS rvi,receive_vds AS rv,customers AS c "
+        "WHERE rvi.vds_id=rv.id AND rvi.customer_id=c.id "
+        "AND rvi.entry_date between :start_date AND :end_date "
+    )
+    note29 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_29.html', note29=note29)
+
+
+@reports.route('/reports/note31/<date>/')
+@login_required
+def note_31(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT cdi.*, cd.credit_note_no, cd.total_vat, cd.total_sd, "
+        "c.customer_name, c.customer_bin, c.customer_address "
+        "FROM credit_note_line AS cdi, credit_note AS cd, customers AS c "
+        "WHERE cdi.credit_note_id=cd.id AND cd.customer_id=c.id "
+        "AND cdi.entry_date between :start_date AND :end_date "
+    )
+    note31 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_31.html', note31=note31)
+
+
+@reports.route('/reports/note38/<date>/')
+@login_required
+def note_38(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT svi.*,sv.debit_note_no,sv.total_vat,sv.total_sd, "
+        "s.supplier_name,s.supplier_bin,s.supplier_address "
+        "FROM debit_note_line AS svi,debit_note AS sv,suppliers AS s "
+        "WHERE svi.debit_note_id=sv.id AND sv.supplier_id=s.id "
+        "AND svi.entry_date between :start_date AND :end_date "
+    )
+    note38 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_38.html', note38=note38)
+

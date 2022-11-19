@@ -80,16 +80,7 @@
                   <tr>
                      <td width="36%" style="border: 1px solid black;">(1)Tax Period	</td>
                      <td style="border: 1px solid black;text-align: center;width: 1%;">:</td>
-                     <td colspan="12" style="border: 1px solid black;">
-                        <?php $mydate=$date;
-                           $newdate =date("d-m-Y", strtotime($mydate));
-
-
-
-                           echo date("F",strtotime($newdate)).'-'.date("Y",strtotime($newdate));
-
-                           ?>
-                     </td>
+                     <td colspan="12" style="border: 1px solid black;">{{ start_date }}</td>
                   </tr>
                   <tr>
                      <td style="border: 1px solid black;">(2) Type Of Return <br>[Please select your desired option]	</td>
@@ -127,12 +118,7 @@
                   <tr>
                      <td style="border: 1px solid black;">(4) Date of Submision</td>
                      <td style="border: 1px solid black;text-align: center;">:</td>
-                     <td colspan="4" style="border: 1px solid black; ">
-                        <?php
-                           $final=date("d-m-Y",strtotime("+1 month".$date));
-                           echo $final;
-                           ?>
-                     </td>
+                     <td colspan="4" style="border: 1px solid black; ">{{ date }} </td>
                   </tr>
                </table>
             </div>
@@ -164,7 +150,7 @@
                      <td style="border: 1px solid black;"> {{ s2.vatable_value }}</td>
                      <td style="border: 1px solid black;">{{ s2.sd_amount }}</td>
                      <td style="border: 1px solid black;">{{ s2.vat_amount }}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note1?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="/reports/note1/{{ date }}">Sub-form</a></td>
                   </tr>
                    {% endfor %}
                   <tr>
@@ -182,7 +168,7 @@
                      <td style="border: 1px solid black;">{{ s3.vatable_value }}</td>
                      <td style="border: 1px solid black;">{{ s3.sd_amount }}</td>
                      <td style="border: 1px solid black;">{{ s3.vat_amount }}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note3?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="/reports/note3/{{ date }}">Sub-form</a></td>
                   </tr>
                   {% endfor %}
                   {% for s1 in s_1 %}
@@ -192,7 +178,7 @@
                      <td style="border: 1px solid black;">{{ s1.vatable_value }}</td>
                      <td style="border: 1px solid black;">{{ s1.sd_amount }}</td>
                      <td style="border: 1px solid black;">{{ s1.vat_amount }}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note4?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="/reports/note4/{{ date }}">Sub-form</a></td>
                   </tr>
                   {% endfor %}
                   <tr>
@@ -201,7 +187,7 @@
                      <td style="border: 1px solid black;"> <?php echo $maxRetailsPriceAmount; ?></td>
                      <td style="border: 1px solid black;"> <?php  echo $maxRetailsPriceSd; ?></td>
                      <td style="border: 1px solid black;"><?php echo $maxRetailsPriceVat; ?> </td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note5?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank" href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note5?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
                   {% for s4 in s_4 %}
                   <tr>
@@ -210,7 +196,7 @@
                      <td style="border: 1px solid black;">{{ s4.vatable_value }}</td>
                      <td style="border: 1px solid black;">{{ s4.sd_amount }}</td>
                      <td style="border: 1px solid black;">{{ s4.vat_amount }}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note6?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="/reports/note6/{{ date }}">Sub-form</a></td>
                   </tr>
                   {% endfor %}
                   {% for s5 in s_5 %}
@@ -220,7 +206,7 @@
                      <td style="border: 1px solid black;">{{ s5.vatable_value }}</td>
                      <td style="border: 1px solid black;">{{ s5.sd_amount }}</td>
                      <td style="border: 1px solid black;">{{ s5.vat_amount }}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note7?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="/reports/note7/{{ date }}">Sub-form</a></td>
                   </tr>
                   {% endfor %}
                   <tr>
@@ -268,9 +254,9 @@
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Local Purchase</td>
                      <td style="border: 1px solid black;">10</td>
                      <td style="border: 1px solid black;">{{ t2.vatable_value }}</td>
-                     <td style="border: 1px solid black;"></td>
+                     <td style="border: 1px solid black;">{%- if t2.vat_amount -%} {{ t2.vat_amount }} {% else %} 0 {% endif %}</td>
                      <td style="border: 1px solid black;">
-                        <a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note10?month=<?php echo $date;?>">Sub-form</a>
+                        <a class="btn btn-info" target="_blank" href="/reports/note10/{{ date }}">Sub-form</a>
                      </td>
                   </tr>
                   {% endfor %}
@@ -288,7 +274,7 @@
                      <td style="border: 1px solid black;">12</td>
                      <td style="border: 1px solid black;">{{ t3.vatable_value }}</td>
                      <td style="border: 1px solid black;"></td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note12?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="/reports/note12/{{ date }}">Sub-form</a></td>
                   </tr>
                   {% endfor %}
                   <tr>
@@ -305,7 +291,7 @@
                      <td style="border: 1px solid black;">14</td>
                      <td style="border: 1px solid black;">{{ t1.vatable_value }}</td>
                      <td style="border: 1px solid black;">{{ t1.vat_amount }}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank" href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note14?month=<?php echo $date;?>" >Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank" href="/reports/note14/{{ date }}" >Sub-form</a></td>
                   </tr>
                   {% endfor %}
                   <tr>
@@ -313,7 +299,7 @@
                      <td style="border: 1px solid black;">15</td>
                      <td style="border: 1px solid black;"><?php echo $purchaseRularFAmount;?></td>
                      <td style="border: 1px solid black;"><?php echo $purchaseRularFVat;?></td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note15?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note15?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
                   {% for t5 in t_5 %}
                   <tr>
@@ -322,7 +308,7 @@
                      <td style="border: 1px solid black;">16</td>
                      <td style="border: 1px solid black;">{%- if t5.vatable_value -%} {{ t5.vatable_value }} {% else %} 0 {% endif %}</td>
                      <td style="border: 1px solid black;">{%- if t5.vat_amount -%} {{ t5.vat_amount }} {% else %} 0 {% endif %}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note16?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="/reports/note16/{{ date }}">Sub-form</a></td>
                   </tr>
                   {% endfor %}
                   <tr>
@@ -339,7 +325,7 @@
                      <td style="border: 1px solid black;">18</td>
                      <td style="border: 1px solid black;">{%- if t4.vatable_value -%} {{ t4.vatable_value }} {% else %} 0 {% endif %}</td>
                      <td style="border: 1px solid black;">{%- if t4.vat_amount -%}{{ t4.vat_amount }} {% else %} 0 {% endif %}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note18?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="/reports/note18/{{ date }}">Sub-form</a></td>
                   </tr>
                   {% endfor %}
 
@@ -409,7 +395,7 @@
                      <td style="border: 1px solid black;"> Due to VAT Deducted at Source by the Supply Receiver</td>
                      <td style="border: 1px solid black;"> 24</td>
                      <td style="border: 1px solid black;">{{ col_a24 }}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank" href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note24?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank" href="/reports/note24/{{ date }}">Sub-form</a></td>
                   </tr>
 
                   <tr>
@@ -422,7 +408,7 @@
                      <td style="border: 1px solid black;"> Issues of Debit Note</td>
                      <td style="border: 1px solid black;"> 26</td>
                      <td style="border: 1px solid black;">{{ col_a26 }}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note26?month=<?php echo $date;?>">Table</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="/reports/note26/{{ date }}">Table</a></td>
                   </tr>
                   <tr>
                      <!-- note-27 -->
@@ -464,20 +450,20 @@
                      <td style="border: 1px solid black;"> Due To VAT Deducted at source from the supplies delivered</td>
                      <td style="border: 1px solid black;"> 29</td>
                      <td style="border: 1px solid black;">{{ col_a29 }}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note29?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="/reports/note29/{{ date }}">Sub-form</a></td>
                   </tr>
 
                   <tr>
                      <td style="border: 1px solid black;"> Advance Tax Paid At Import Stage </td>
                      <td style="border: 1px solid black;"> 30</td>
                      <td style="border: 1px solid black;"><?php  echo $note30;?></td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note30?month=<?php echo $date;?>">Sub-form</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note30?month=<?php echo $date;?>">Sub-form</a></td>
                   </tr>
                   <tr>
                      <td style="border: 1px solid black;">Issuance of credit note</td>
                      <td style="border: 1px solid black;">31</td>
                      <td style="border: 1px solid black;">{{ col_a31 }}</td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note31?month=<?php echo $date;?>">Table</a></td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="/reports/note31/{{ date }}">Table</a></td>
                   </tr>
                   <tr>
                      <td style="border: 1px solid black;"> Any Other Adjustment(please specify below) <br>
@@ -541,13 +527,13 @@
                   <tr>
                      <td style="border: 1px solid black;">Supplementary Duty Against Debit Note</td>
                      <td style="border: 1px solid black;">38</td>
-                     <td style="border: 1px solid black;"><?php  echo number_format($note38,2);?></td>
-                     <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note38?month=<?php echo $date;?>">Table</a></td>
+                     <td style="border: 1px solid black;">{{ col_38 }}</td>
+                     <td style="border: 1px solid black;"><a class="btn btn-info" target="_blank" href="/reports/note38/{{ date }}">Table</a></td>
                   </tr>
                   <tr>
                      <td style="border: 1px solid black;">Supplementary Duty Against Credit Note</td>
                      <td style="border: 1px solid black;">39</td>
-                     <td style="border: 1px solid black;"><?php  echo number_format($note39,2);?></td>
+                     <td style="border: 1px solid black;">{{ col_39 }}</td>
                      <td style="border: 1px solid black;"><a class="btn btn-info"target="_blank"href="<?php echo base_url();?>ServiceReport/Service_Mushak_91/note39?month=<?php echo $date;?>">Table</a></td>
                   </tr>
                   <tr>

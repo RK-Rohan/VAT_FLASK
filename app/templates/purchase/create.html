@@ -318,10 +318,18 @@
                             $('#vat_bdt_'+itemid).val(vat_bdt.toFixed(2));
                             let sub_amount = parseFloat(vatable_value)+parseFloat(vat_bdt);
                             $('#sub_amount_'+itemid).val(sub_amount.toFixed(2));
-                        } else if (vat_type == "0"){
+                        }  else if (vat_type == "Specific"){
                             $('#vat_percent_'+itemid).show();
                             $('#vat_cal_other_'+itemid).hide();
-                            $('#vat_percent_'+itemid).val("0.00");
+                            $('#vat_percent_' + itemid).removeAttr('readonly');
+                            $('#vat_bdt_'+itemid).val(vat_bdt.toFixed(2));
+                            let sub_amount = parseFloat(vatable_value)+parseFloat(vat_bdt);
+                            $('#sub_amount_'+itemid).val(sub_amount.toFixed(2));
+                        } else if (vat_type == "0") {
+                            $('#vat_percent_' + itemid).show();
+                            $('#vat_cal_other_' + itemid).hide();
+                            $('#vat_percent_' + itemid).val("0.00");
+
 
                             $('#vat_bdt_'+itemid).val(vat_bdt.toFixed(2));
                             let sub_amount = parseFloat(vatable_value)+parseFloat(vat_bdt);
