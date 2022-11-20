@@ -672,3 +672,134 @@ def note_38(date):
 
     return render_template('reports/note/note_38.html', note38=note38)
 
+
+@reports.route('/reports/note39/<date>/')
+@login_required
+def note_39(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT cdi.*,cd.credit_note_no,cd.total_vat,cd.total_sd, "
+        "c.customer_name,c.customer_bin,c.customer_address "
+        "FROM credit_note_line AS cdi,credit_note AS cd,customers AS c "
+        "WHERE cdi.credit_note_id=cd.id AND cd.customer_id=c.id "
+        "AND cdi.entry_date between :start_date AND :end_date "
+    )
+    note39 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_39.html', note39=note39)
+
+
+@reports.route('/reports/note58/<date>/')
+@login_required
+def note_58(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT tc.* FROM treasury_chalan AS tc WHERE tc.t_type=58 "
+        "AND tc.execute_date between :start_date AND :end_date "
+    )
+    note58 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_58.html', note58=note58)
+
+
+@reports.route('/reports/note59/<date>/')
+@login_required
+def note_59(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT tc.* FROM treasury_chalan AS tc WHERE tc.t_type=59 "
+        "AND tc.execute_date between :start_date AND :end_date "
+    )
+    note59 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_59.html', note59=note59)
+
+
+@reports.route('/reports/note60/<date>/')
+@login_required
+def note_60(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT tc.* FROM treasury_chalan AS tc WHERE tc.t_type=60 "
+        "AND tc.execute_date between :start_date AND :end_date "
+    )
+    note60 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_60.html', note60=note60)
+
+
+@reports.route('/reports/note61/<date>/')
+@login_required
+def note_61(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT tc.* FROM treasury_chalan AS tc WHERE tc.t_type=61 "
+        "AND tc.execute_date between :start_date AND :end_date "
+    )
+    note61 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_61.html', note61=note61)
+
+
+@reports.route('/reports/note62/<date>/')
+@login_required
+def note_62(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT tc.* FROM treasury_chalan AS tc WHERE tc.t_type=62 "
+        "AND tc.execute_date between :start_date AND :end_date "
+    )
+    note62 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_62.html', note62=note62)
+
+
+@reports.route('/reports/note63/<date>/')
+@login_required
+def note_63(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT tc.* FROM treasury_chalan AS tc WHERE tc.t_type=63 "
+        "AND tc.execute_date between :start_date AND :end_date "
+    )
+    note63 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_63.html', note63=note63)
+
+
+@reports.route('/reports/note64/<date>/')
+@login_required
+def note_64(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    start_date = datetime.date(date.year, date.month, 1)
+    end_date = start_date + relativedelta.relativedelta(months=1, day=1, days=-1)
+
+    query = text(
+        "SELECT tc.* FROM treasury_chalan AS tc WHERE tc.t_type=64 "
+        "AND tc.execute_date between :start_date AND :end_date "
+    )
+    note64 = db.session.execute(query, {'start_date': start_date, 'end_date': end_date})
+
+    return render_template('reports/note/note_64.html', note64=note64)
+
