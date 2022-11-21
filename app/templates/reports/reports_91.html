@@ -787,26 +787,14 @@
                      <td width="1%" style="border: 1px solid black;"> Note</td>
                      <td style="border: 1px solid black;  ">YES <input type="radio"class="refund" id="refundyes" name="refund" value="yes" checked>/NO <input id="refundno"name="refund"class="refund" type="radio"value="no" ></td>
                   </tr>
-                  <?php
-                     $requestrefundvat=0;
-                         foreach($requestrefundVat as $value){
-                             $requestrefundvat += $value->t_amount;
-                     }
-                     $note67=$requestrefundvat;
-                     ?>
+
                   <tr>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Request Amount For Refund(VAT)</td>
                      <td style="border: 1px solid black;">67</td>
                      <!-- <td style="border: 1px solid black;"><?php //echo $note67;?></td> -->
                      <td style="border: 1px solid black;"><input type="number" id="note67" name="note67"></td>
                   </tr>
-                  <?php
-                     $requestrefundsd=0;
-                         foreach($requestrefundSd as $value){
-                             $requestrefundsd += $value->t_amount;
-                     }
-                     $note68=$requestrefundsd;
-                     ?>
+
                   <tr>
                      <td bgcolor="#dfe6e9"style="border: 1px solid black;">Request Amount For Refund(SD)</td>
                      <td style="border: 1px solid black;">68</td>
@@ -820,6 +808,7 @@
       <div class="container-fluid">
          <div class="row">
             <div class="col-sm mt-3 mb-3">
+               {%for company in company_data %}
                <table class="table table-bordered">
                   <tr>
                      <td bgcolor="#7f8fa6"colspan="2"style="border: 1px solid black;"><b>Part-12: DECLARATION<b> </td>
@@ -831,36 +820,37 @@
                         2012 or any other applicable Act preventing at present.
                      </td>
                   </tr>
+
                   <tr>
                      <td width="35%" style="border: 1px solid black;">Name : </td>
-                     <td colspan="2"style="border: 1px solid black; ">{{ current_user.first_name }} {{ current_user.last_name }}</td>
+                     <td colspan="2"style="border: 1px solid black; ">{{ company.person_name }} </td>
                   </tr>
                   <tr>
                      <td style="border: 1px solid black;">Designation :</td>
-                     <td style="border: 1px solid black; "><?php echo $this->session->userdata('designation'); ?></td>
+                     <td style="border: 1px solid black; ">{{ company.designation }}</td>
                   </tr>
                   <tr>
                      <td style="border: 1px solid black;">Mobile no :</td>
-                     <td style="border: 1px solid black; "><?php echo $this->session->userdata('phone'); ?></td>
+                     <td style="border: 1px solid black; ">{{ company.person_phone_number }}</td>
                   </tr>
                   <tr>
                      <td style="border: 1px solid black;">National ID/Passport Number : </td>
-                     <td style="border: 1px solid black; "><?php echo $this->session->userdata('nid'); ?></td>
+                     <td style="border: 1px solid black; ">{{ company.nid }}</td>
                   </tr>
                   <tr>
                      <td style="border: 1px solid black;">Email : </td>
-                     <td style="border: 1px solid black; ">{{ current_user.email }}</td>
+                     <td style="border: 1px solid black; ">{{ company.person_email }}</td>
                   </tr>
                   <tr>
                      <td  style="border: 1px solid black;">Signature[Not required for electronic submission]</td>
                      <td style="border: 1px solid black; "></td>
                   </tr>
                </table>
-
-               <form action="<?php echo base_url('ServiceReport/Service_Mushak_91/closingsave'); ?>" method="POST">
+{% endfor %}
+               <form action="" method="POST">
                   <input type="hidden" value="<?php echo $note65;?>" name="closingvat">
                   <input type="hidden" value="<?php echo $note66;?>" name="closingsd">
-                  <input type="text" value="<?php echo $date;?>" name="closing_date">
+                  <input type="text" value="{{ date }}" name="closing_date">
                   <input type="submit" value="Submit closing">
                </form>
             </div>

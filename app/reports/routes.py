@@ -329,24 +329,45 @@ def reports_91_by_date():
         if t_type == 58:
             col_58a = t_account_code
             col_58b = t_amount
+        else:
+            col_58a = '0'
+            col_58b = '0'
         if t_type == 59:
             col_59a = t_account_code
             col_59b = t_amount
+        else:
+            col_59a = '0'
+            col_59b = '0'
         if t_type == 60:
             col_60a = t_account_code
             col_60b = t_amount
+        else:
+            col_60a = '0'
+            col_60b = '0'
         if t_type == 61:
             col_61a = t_account_code
             col_61b = t_amount
+        else:
+            col_61a = '0'
+            col_61b = '0'
         if t_type == 62:
             col_62a = t_account_code
             col_62b = t_amount
+        else:
+            col_62a = '0'
+            col_62b = '0'
         if t_type == 63:
             col_63a = t_account_code
             col_63b = t_amount
+        else:
+            col_63a = '0'
+            col_63b = '0'
         if t_type == 64:
             col_64a = t_account_code
             col_64b = t_amount
+        else:
+            col_64a = '0'
+            col_64b = '0'
 
     payable_mushak = text(
         "SELECT * FROM payable_mushak WHERE payable_mushak.pay_date between :start_date AND :end_date"
@@ -358,22 +379,40 @@ def reports_91_by_date():
         pay_type = pm.pay_type
         if pay_type == 41:
             col_41 = pay_amount
+        else:
+            col_41 = '0'
         if pay_type == 42:
             col_42 = pay_amount
+        else:
+            col_42 = '0'
         if pay_type == 43:
             col_43 = pay_amount
+        else:
+            col_43 = '0'
         if pay_type == 44:
             col_44 = pay_amount
+        else:
+            col_44 = '0'
         if pay_type == 45:
             col_45 = pay_amount
+        else:
+            col_45 = '0'
         if pay_type == 46:
             col_46 = pay_amount
+        else:
+            col_46 = '0'
         if pay_type == 47:
             col_47 = pay_amount
+        else:
+            col_47 = '0'
         if pay_type == 48:
             col_48 = pay_amount
+        else:
+            col_48 = '0'
         if pay_type == 49:
             col_49 = pay_amount
+        else:
+            col_49 = '0'
 
     return render_template('reports/reports_91.html', company_data=company_data, date=date,
                            start_date=start_date, end_date=end_date,
@@ -389,7 +428,7 @@ def reports_91_by_date():
                            col_58a=col_58a, col_58b=col_58b, col_59a=col_59a, col_59b=col_59b,
                            col_60a=col_60a, col_60b=col_60b, col_61a=col_61a, col_61b=col_61b,
                            col_62a=col_62a, col_62b=col_62b, col_63a=col_63a, col_63b=col_63b,
-                           col_64a=col_64a, col_64b=col_64b,
+                           col_64a=col_64a, col_64b=col_64b
                            )
 
 
