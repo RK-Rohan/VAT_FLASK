@@ -3,6 +3,12 @@ from app import db, ma
 
 class Customers(db.Model):
     __tablename__ = 'customers'
+    __permissions__ = dict(
+        owner=['read', 'update', 'delete', 'revoke'],
+        group=['read', 'update'],
+        other=['read']
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(100))
     email_address = db.Column(db.String(100))

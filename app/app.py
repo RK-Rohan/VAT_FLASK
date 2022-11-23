@@ -4,6 +4,8 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
 from flask_marshmallow import Marshmallow
+from flask_authorize import Authorize
+from flask_bcrypt import Bcrypt
 
 
 db = SQLAlchemy()
@@ -11,6 +13,8 @@ migrate = Migrate()
 login_manager = LoginManager()
 csrf = CSRFProtect()
 ma = Marshmallow()
+authorize = Authorize()
+bcrypt = Bcrypt()
 
 
 def create_app():
@@ -28,6 +32,8 @@ def create_app():
     login_manager.init_app(app)
     csrf.init_app(app)
     ma.init_app(app)
+    authorize.init_app(app)
+    bcrypt.init_app(app)
 
     # Import models file
     from auth.models import Users

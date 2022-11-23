@@ -3,10 +3,9 @@ from flask_login import login_user, current_user, logout_user
 from auth import auth
 from auth.models import Users
 
-from app import db
+from app import db, bcrypt
 
 from auth.forms import LoginForm, CreateAccountForm, EmployeesForm
-from auth.util import verify_pass, hash_pass
 
 
 @auth.route('/', methods=['GET', 'POST'])
@@ -25,17 +24,16 @@ def login():
 
         # if user not found
         if not user:
-
             user = Users.find_by_email(username)
 
             if not user:
                 return render_template('auth/login.html', msg='Unknown User or Email', form=login_form)
 
         # Check the password
-        if verify_pass(password, user.password):
-
-            login_user(user)
-            return redirect(url_for('auth.login'))
+        if user:
+            if bcrypt.check_password_hash(user.password, password):
+                login_user(user)
+                return redirect(url_for('auth.login'))
 
         # Something (user or pass) is not ok
         return render_template('auth/login.html',
@@ -56,6 +54,7 @@ def register():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
+        hashed_password = bcrypt.generate_password_hash(password)
 
         # Check username exists
         user = Users.query.filter_by(username=username).first()
@@ -73,7 +72,7 @@ def register():
                                    success=False,
                                    form=create_account_form)
         # else we can create the user
-        user = Users(username=username, email=email, password=hash_pass(password))
+        user = Users(username=username, email=email, password=hashed_password)
         db.session.add(user)
         db.session.commit()
 

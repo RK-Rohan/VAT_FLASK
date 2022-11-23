@@ -1,8 +1,8 @@
 from flask import render_template, request, flash, redirect, url_for, jsonify
 from flask_login import LoginManager, login_required
+from app import db, authorize
 
 from customers import customers
-from app import db
 from customers.models import Customers, CustomersSchema
 from customers.forms import CustomersForm
 from company.models import Country
@@ -11,6 +11,7 @@ login_manager = LoginManager()
 
 
 @customers.route('/customers/')
+@login_required
 def customers_page():
     form = CustomersForm(request.form)
     form.country_id.choices = [(country.id, country.country_name) for country in Country.query.all()]
@@ -27,6 +28,7 @@ def customers_page():
 
 @customers.route('/customers/create', methods=['GET', 'POST'])
 @login_required
+@authorize.create(Customers)
 def customers_create():
     form = CustomersForm(request.form)
     if 'add_customer' in request.form:
