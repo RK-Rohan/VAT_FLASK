@@ -127,7 +127,7 @@ def employees_create():
             first_name=form.first_name.data,
             last_name=form.last_name.data,
             email=form.email.data,
-            password=hash_pass(request.form['password'])
+            password=bcrypt.generate_password_hash(request.form['password'])
         )
         db.session.add(data)
         db.session.commit()

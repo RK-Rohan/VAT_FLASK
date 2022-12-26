@@ -44,6 +44,8 @@ def customers_create():
             customer_bin=form.customer_bin.data,
             customer_tin=form.customer_tin.data
         )
+        if not authorize.create(customers):
+            raise Unauthorized
         db.session.add(data)
         db.session.commit()
     flash("Customers Inserted Successfully")
