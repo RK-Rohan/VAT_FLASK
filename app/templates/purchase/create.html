@@ -1,0 +1,434 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <style>
+        table, th, td {
+          border: 1px solid #dee2e6;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+        <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <form role="form" method="POST" action="{{ url_for('purchase.purchase_store') }}" role="form" id="purchase_form">
+                                            {{ form.csrf_token }}
+                                        <div class="card-header">
+                                            <h5>Add New Purchase</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="row">
+
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="supplier_id">Supplier </label>
+                                                    {{ form.supplier_id(title="Select Supplier", class="form-control") }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="supplier_address">Supplier Address</label>
+                                                        {{ form.supplier_address(class="form-control") }}
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="entry_date">Entry Date </label>
+                                                        {{ form.entry_date(class="form-control") }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="challan_no">Challan Number </label>
+                                                        {{ form.challan_no(class="form-control") }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="challan_date">Challan Date </label>
+                                                        {{ form.challan_date(class="form-control") }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 mb-2">
+                                                    <div class="form-group">
+                                                        <label for="fiscal_year">Fiscal Year </label>
+                                                        {{ form.fiscal_year(class="form-control", title="Select Fiscal Year") }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                   <div class="form-group">
+                                                      <label for="item_search">Add Items</label>
+                                                      <input id="item_search" class="form-control item_search" type="text" placeholder="Enter Hs-Code or product name" autocomplete="off">
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="card-block table-border-style">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover purchase_table" id="purchase_table">
+                                                                <thead class="thead-light">
+                                                                <tr>
+                                                                    <th style='width:220px'>Item Name</th>
+                                                                    <th style='width:100px'>Quantity</th>
+                                                                    <th>Rate (BDT)</th>
+                                                                    <th style='width:120px'>Value</th>
+                                                                    <th style='width:110px'>SD%</th>
+                                                                    <th style='width:110px'>SD (BDT)</th>
+                                                                    <th>Vatable Value</th>
+                                                                    <th style='width:215px'>VAT Type</th>
+                                                                    <th style='width:100px'>VAT (%)</th>
+                                                                    <th style='width:110px'>VAT (BDT)</th>
+                                                                    <th style='width:115px'> VDS </th>
+                                                                    <th style="width:115px"> Rebate </th>
+                                                                    <th> Total Amount </th>
+                                                                    <th> Action </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody id="table_input">
+
+                                                                </tbody>
+                                                            </table>
+                                                            <table class="table table-bordered" id="table_footer">
+                                                                <tbody>
+                                                                <tr class="tableInfo" style="">
+                                                                   <td align="right" width="70%"><strong></strong></td>
+                                                                </tr>
+                                                                <tr class="tableInfo" style="">
+                                                                   <td align="right"><strong>Total Vat(BDT)</strong></td>
+                                                                   <td align="left">
+                                                                      <input type="text" class="form-control total_vat" name="total_vat" id="total_vat" readonly>
+                                                                   </td>
+                                                                </tr>
+                                                                <tr class="tableInfo" style="">
+                                                                   <td align="right"><strong>Total SD(BDT)</strong></td>
+                                                                   <td align="left">
+                                                                      <input type="text" class="form-control total_sd" name="total_sd" id="total_sd" readonly>
+                                                                   </td>
+                                                                </tr>
+                                                                <tr class="tableInfo" style="">
+                                                                   <td align="right"><strong>Grand Total(BDT)</strong></td>
+                                                                   <td align="left">
+                                                                      <input type="text" name="grand_total" class="form-control grand_total" id="grand_total" value="0.00" readonly>
+                                                                      <p style="color:#990000;"></p>
+                                                                   </td>
+                                                                </tr>
+                                                             </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="allpurchase" id="allpurchase">
+                                                        <center>
+                                                            <button type="submit" name="purchase_store" id="purchase_store" class="btn btn-primary">Submit</button>
+                                                            <a type="button" class="btn btn-warning">Cancel</a>
+                                                        </center>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </form>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script src="{{ url_for('static', filename='assets/js/bootstrap-select.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('select').selectpicker();
+
+            $('#supplier_id').on('change', '', function (e) {
+                let supplier_id = $(this).val();
+                let csrf_token = "{{ csrf_token() }}";
+                   $.ajax({
+                       url: "/api/suppliers/"+supplier_id+"/",
+                       headers: {
+                           "X-CSRFToken": csrf_token,
+                       },
+                       type: "GET",
+                       dataType: "json",
+                       success: function(data) {
+                           $("#supplier_address").val(data['supplier_address']);
+                       }
+                   })
+            });
+
+        // Autocomplete Item Name
+        $( "#item_search" ).autocomplete({
+            minChars: 1,
+
+            source: function(request, response){
+                let term = request.term;
+                   $.ajax({
+                       url: "/api/items/terms/"+term+"/",
+                       type: "GET",
+                       dataType: "json",
+                      success: function(data){
+                        var suggestions = [];
+                        for(var i = 0; i < data.length; ++i){
+                            suggestions.push(data[i].item_name);
+                         }
+                        //response(suggestions);
+                        response($.map(data, function(objet){
+                            return {
+                                label: objet.item_name,
+                                value: objet.item_name,
+                                id: objet.id
+                                };
+                        }));
+                      }
+                   });
+            },
+            select: function (event, ui) {
+                let itemid = ui.item.id;
+                $.ajax({
+                    method: 'GET',
+                    url: '/api/items/'+itemid+'/',
+                    dataType: 'json'
+                }).done(function (data1) {
+                    $.map(data1, function (items, i) {
+                        $('#table_input').append(
+                            "<tr class='purchase_data'><input type='hidden' name='items_id' id='item_id' value='" + itemid + "' />" +
+                            '<input type="hidden" class="hs_code_id" name="hs_code_id" id="hs_code_id_'+itemid+'" value="'+ items.hs_code_id +' " />' +
+                            '<input type="hidden" class="hs_code" name="hs_code" value="' + items.hs_code +'" id="hs_code_'+itemid+'" />' +
+                            '<td><input type="text" class="form-control" name="item_name" id="item_name_'+itemid+'" value="' + items.item_name + '" readonly/></td>' +
+                            '<td><input type="text" class="form-control qty" id="qty_'+itemid+'" value="0" name="quantity" /></td>' +
+                            '<td><input type="text" class="form-control rate" name="rate" value="0.00" id="rate_'+itemid+'" /></td>' +
+                            '<td><input type="text" class="form-control rate_value" name="rate_value" value="0.00" id="rate_value_'+itemid+'"  readonly/></td>' +
+                            '<td><input type="text" class="form-control sd_percent" name="sd_percent" value="'+items.sd+'" id="sd_percent_'+ itemid +'" readonly/></td>' +
+                            '<td><input type="text" class="form-control sd_bdt" name="sd_bdt" value="0.00" id="sd_bdt_'+ itemid +'" /></td>' +
+                            '<td><input type="text" class="form-control vatable_value" name="vatable_value" value="0.00" id="vatable_value_'+itemid+'" /></td>' +
+                            "<td>" +
+                                '<select name="vat_type" id="vat_type_'+itemid+'" class="form-control vat_type">'+
+                                    '<option  value="1" data-vds = "0" data-category ="1" data-vat="15">Standard Rate(15%)</option>'+
+                                    '<option  value="2" data-vds = "0" data-category ="2" data-vat="0">Zero Rate(0%)</option>'+
+                                    '<option  value="3" data-vds = "0" data-category ="2" data-vat="0">Exempted</option>'+
+                                    '<option  value="4" data-vds = "1" data-category ="1" data-vat="Specific">Specific</option>'+
+                                    '<option  value="5" data-vds = "1" data-category ="1" data-vat="others">Other Than Standard Rate </option>'+
+                                '</select>'+
+                            "</td>" +
+                            '<td>' +
+                            '<input type="text" class="form-control vat_percent" name="vat_percent" id="vat_percent_'+itemid+'"  value="'+items.vat+'" readonly/>' +
+                                 '<select style="width:100px;" name="vat_cal_other[]" id="vat_cal_other_'+itemid+'" class="form-control vat_cal_other" >'+
+                                    '<option  value="" >Select Value</option>'+
+                                    '<option  value="2" >2</option>'+
+                                    '<option  value="2.4">2.4</option>'+
+                                    '<option  value="3">3</option>'+
+                                    '<option  value="5">5</option>'+
+                                    '<option  value="7.5">7.5</option>'+
+                                    '<option  value="10">10</option>'+
+                                 '</select>'+
+                            '</td>' +
+                            '<td><input type="text" class="form-control vat_bdt" name="vat_bdt" value="0.00" id="vat_bdt_'+itemid+'" readonly/></td>' +
+                            "<td>" +
+                                '<select name="vds" id="vds_" class="form-control vds">'+
+                                    '<option value="1" >Yes</option>'+
+                                    '<option value="0" >No</option>'+
+                                '</select>'+
+                            "</td>" +
+                            "<td>" +
+                                '<select name="rebate" id="rebate_" class="form-control rebate">'+
+                                    '<option value="1">Yes</option>'+
+                                    '<option value="0">No</option>'+
+                                    '<option value="2">Zero/Exmptd/Turn/unreg</option>'+
+                                '</select>'+
+                            "</td>" +
+                            '<td><input type="text" class="form-control sub_amount" name="sub_amount" id="sub_amount_'+itemid+'" value="0.00" readonly /></td>' +
+                            '<td>' +
+                                '<button type="button" class="btn btn-outline-danger delete">' +
+                                '<span><i class="fa-solid fa-xmark"></i></span>' +
+                                '</button>' +
+                            '</td></tr>'
+                        )
+                    })
+                    $('#item_search').val('');
+                    $('#vat_cal_other_'+itemid).hide();
+
+                    $( ".qty, .rate, .vat_type, .vat_cal_other, .vat_percent, .vat_bdt" ).on('keyup change click',function() {
+                        let qty=$('#qty_'+itemid).val();
+                        let rate=$('#rate_'+itemid).val();
+                        let rate_value=parseFloat(rate)*qty;
+                        let sd_rate = $('#sd_percent_'+itemid).val();
+                        let vat_percent = $('#vat_percent_'+itemid).val();
+                        let sd_amount=parseFloat(rate_value)*sd_rate/100;
+                        let vatable_value = parseFloat(rate_value)+parseFloat(sd_amount);
+                        let vat_bdt = parseFloat(vatable_value)*vat_percent/100;
+                        $('#rate_value_'+itemid).val(rate_value.toFixed(2));
+                        $('#sd_bdt_'+itemid).val(sd_amount.toFixed(2));
+                        $('#vatable_value_'+itemid).val(vatable_value.toFixed(2));
+
+
+                        let vat_other = $('#vat_cal_other_'+itemid).val();
+                        let vat_bdt_other = parseFloat(vatable_value)*vat_other/100;
+                        $('#vat_bdt_'+itemid).val(vat_bdt_other.toFixed(2));
+
+
+                        let vat_type = $('#vat_type_'+itemid).find(':selected').data('vat');
+                        console.log(vat_type);
+
+                        if (vat_type == "others"){
+                            $('#vat_cal_other_'+itemid).show();
+                            $('#vat_percent_'+itemid).hide();
+                            let sub_amount = parseFloat(vatable_value)+parseFloat(vat_bdt_other);
+                            $('#sub_amount_'+itemid).val(sub_amount.toFixed(2));
+                        } else if (vat_type == "15"){
+                            $('#vat_percent_'+itemid).show();
+                            $('#vat_cal_other_'+itemid).hide();
+                            $('#vat_percent_'+itemid).val("15.00");
+
+                            $('#vat_bdt_'+itemid).val(vat_bdt.toFixed(2));
+                            let sub_amount = parseFloat(vatable_value)+parseFloat(vat_bdt);
+                            $('#sub_amount_'+itemid).val(sub_amount.toFixed(2));
+                        }  else if (vat_type == "Specific"){
+                            $('#vat_percent_'+itemid).show();
+                            $('#vat_cal_other_'+itemid).hide();
+                            $('#vat_percent_' + itemid).removeAttr('readonly');
+                            $('#vat_bdt_'+itemid).val(vat_bdt.toFixed(2));
+                            let sub_amount = parseFloat(vatable_value)+parseFloat(vat_bdt);
+                            $('#sub_amount_'+itemid).val(sub_amount.toFixed(2));
+                        } else if (vat_type == "0") {
+                            $('#vat_percent_' + itemid).show();
+                            $('#vat_cal_other_' + itemid).hide();
+                            $('#vat_percent_' + itemid).val("0.00");
+
+
+                            $('#vat_bdt_'+itemid).val(vat_bdt.toFixed(2));
+                            let sub_amount = parseFloat(vatable_value)+parseFloat(vat_bdt);
+                            $('#sub_amount_'+itemid).val(sub_amount.toFixed(2));
+                        }
+                        grandTotal();
+                        vatTotal();
+                        total_sd();
+                    });
+                });
+               // End Ajax
+            }
+        });
+        // End Autocomplete
+
+        // Remove Item Row
+       $('#purchase_table').on('click', '.delete', function(){
+           var row_id = $(this).attr("id");
+           $(this).closest('tr').remove();
+       });
+
+
+       // Table Footer Calculation
+       function grandTotal(){
+          var Total = 0;
+          $("table.purchase_table").find('.sub_amount').each(function () {
+             Total += +$(this).val();
+          });
+          $("#grand_total").val(Total.toFixed(2));
+       }
+       function vatTotal(){
+          var vatTotal = 0;
+          $("table.purchase_table").find('.vat_bdt').each(function () {
+          vatTotal += +$(this).val();
+          });
+          $("#total_vat").val(vatTotal.toFixed(2));
+       }
+       function total_sd(){
+          var sdTotal = 0;
+          $("table.purchase_table").find('.sd_bdt').each(function () {
+             sdTotal += +$(this).val();
+          });
+          $("#total_sd").val(sdTotal.toFixed(2));
+       }
+
+       $("#purchase_store").on("click", function() {
+
+           var i=0;
+           let itemArray = new Array();
+
+           $('.purchase_data').each(function () {
+               let row = $(this).closest('tr');
+               let items_id =+row.find('#item_id').val();
+               let hs_code_id =+row.find('.hs_code_id').val();
+               let hs_code =+row.find('.hs_code').val();
+               let quantity =+row.find('.qty').val();
+               let rate =+row.find('.rate').val();
+               let rate_value =+row.find('.rate_value').val();
+               let sd_percent =+row.find('.sd_percent').val();
+               let sd_bdt =+row.find('.sd_bdt').val();
+               let vatable_value =+row.find('.vatable_value').val();
+               let vat_type =+row.find('.vat_type').val();
+               // let vat_percent =+row.find('.vat_percent').val();
+               // let vat_cal_other =+row.find('.vat_cal_other').val();
+               let vat_bdt =+row.find('.vat_bdt').val();
+               let vds =+row.find('.vds').val();
+               let rebate =+row.find('.rebate').val();
+               let sub_amount =+row.find('.sub_amount').val();
+
+               if (vat_type == '5') {
+                   vat =+row.find('.vat_cal_other').val();
+               } else {
+                   vat =+row.find('.vat_percent').val();
+               }
+
+               var items={
+                   "item_id": items_id,
+                   "hs_code_id": hs_code_id,
+                   "qty": quantity,
+                   "rate": rate,
+                   "rate_value": rate_value,
+                   "sd_percent": sd_percent,
+                   "sd_amount": sd_bdt,
+                   "vatable_value": vatable_value,
+                   "vat_type": vat_type,
+                   "vat_percent": vat,
+                   "vat_amount": vat_bdt,
+                   "vds": vds,
+                   "rebate": rebate,
+                   "sub_total": sub_amount,
+               }
+
+           itemArray[i]=items;
+           $('#allpurchase').val(JSON.stringify(itemArray));
+           i++;
+           });
+
+       });
+
+    });
+</script>
+{% endblock javascripts %}

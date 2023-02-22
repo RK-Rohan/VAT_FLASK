@@ -1,0 +1,257 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Supplier {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+     <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Suppliers List </h5>
+                                                <button type="button" class="btn btn-success float-right"
+                                                                data-toggle="modal" data-target="#suppliermodal">Add Supplier</button>
+                                            </div>
+                                            <div class="card-block table-border-style">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Supplier Name</th>
+                                                                <th>Email Address</th>
+                                                                <th>Phone Number</th>
+                                                                <th>Country</th>
+                                                                <th>Supplier Address</th>
+                                                                <th>Supplier Type</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for row in suppliers %}
+                                                            <tr>
+                                                                <th>{{loop.index}}</th>
+                                                                <td>{{row.supplier_name}}</td>
+                                                                <td>{{row.email_address}}</td>
+                                                                <td>{{row.phone_number}}</td>
+                                                                <td>{{row.country_name}}</td>
+                                                                <td>{{row.supplier_address}}</td>
+                                                                <td>{{row.supplier_type}}</td>
+                                                                <td>
+                                                                    <a href="update/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal"
+                                                                        data-target="#modaledit{{row.id}}">Edit</a>
+                                                                </td>
+                                                            </tr>
+                                <!-- Modal Edit Supplier -->
+                                <div class="modal fade" id="modaledit{{row.id}}" role="dialog">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Edit Supplier</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ url_for('suppliers.suppliers_update') }}" method="POST">
+                                                {{ form.csrf_token }}
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="supplier_name">Supplier Name:</label>
+                                                                <input type="hidden" name="id" value="{{row.id}}">
+                                                                <input type="text" name="supplier_name" value="{{row.supplier_name}}" required="1" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="email_address">Email Address:</label>
+                                                                <input type="email" name="email_address" value="{{row.email_address}}" required="1" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="phone_number">Phone Number:</label>
+                                                                <input type="text" name="phone_number" value="{{row.phone_number}}" required="1" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="country">Country:</label>
+{#                                                                <select name="country" class="form-control">#}
+{#                                                                    <option value="{{ row.country }}">{{ row.country }}</option>#}
+{#                                                                </select>#}
+                                                                {{ form.country_id(placeholder="Select Shipping Country", class="form-control") }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="supplier_address">Supplier Address:</label>
+                                                                <input type="text" name="supplier_address" value="{{row.supplier_address}}" required="1" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="supplier_type">Supplier Type:</label>
+                                                                {{ form.supplier_type(placeholder="Select Type", class="form-control") }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="shipping_address">Shipping Address:</label>
+                                                                <input type="text" name="shipping_address" value="{{row.shipping_address}}" required="1" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="supplier_bin">Supplier BIN:</label>
+                                                                <input type="text" name="supplier_bin" value="{{row.supplier_bin}}" required="1" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="supplier_tin">Supplier TIN:</label>
+                                                                <input type="text" name="supplier_tin" value="{{row.supplier_tin}}" required="1" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary" type="submit">Update</button>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Edit Employee Modal -->
+
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                <!-- Modal Add Supplier -->
+                                <div class="modal fade" id="suppliermodal" role="dialog">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Add Supplier</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ url_for('suppliers.suppliers_create') }}" method="POST" role="form">
+                                                {{ form.csrf_token }}
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="supplier_name">Supplier Name:</label>
+                                                                {{ form.supplier_name(placeholder="Enter Supplier Name", class="form-control") }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="email_address">Email Address:</label>
+                                                                {{ form.email_address(placeholder="Enter Email Address", class="form-control") }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="phone_number">Phone Number:</label>
+                                                                {{ form.phone_number(placeholder="Enter Phone Number", class="form-control") }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="country">Country:</label>
+                                                                {{ form.country_id(placeholder="Select Country", class="form-control") }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="supplier_address">Supplier Address:</label>
+                                                                {{ form.supplier_address(placeholder="Enter Supplier Address", class="form-control") }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="supplier_type">Supplier Type:</label>
+                                                                {{ form.supplier_type(placeholder="Select Type", class="form-control") }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="supplier_bin">Supplier BIN:</label>
+                                                                {{ form.supplier_bin(placeholder="Enter Supplier BIN", class="form-control") }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="supplier_tin">Supplier TIN:</label>
+                                                                {{ form.supplier_tin(placeholder="Enter Supplier TIN", class="form-control") }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <button name="add_supplier" class="btn btn-primary" type="submit">Add Supplier</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Add Employee Modal -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

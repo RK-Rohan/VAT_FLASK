@@ -1,0 +1,85 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Purchase {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+     <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Purchase </h5>
+                                                <a href="{{ url_for('purchase.purchase_create') }}" class="btn btn-success float-right">Add Purchase</a>
+                                            </div>
+                                            <div class="card-block table-border-style">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Supplier Name</th>
+                                                                <th>Invoice No</th>
+                                                                <th>Purchase Type</th>
+                                                                <th>Entry Date</th>
+                                                                <th>Challan Date</th>
+                                                                <th>Vendor inoice</th>
+                                                                <th>Grand Total</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for row in purchase %}
+                                                            <tr>
+                                                                <th>{{loop.index}}</th>
+                                                                <td>{{row.supplier_id}}</td>
+                                                                <td> {{ row.p_invoice_no }}</td>
+                                                                <td>{{row.purchase_type}}</td>
+                                                                <td>{{row.entry_date}}</td>
+                                                                <td>{{row.challan_date}}</td>
+                                                                <td>{{row.vendor_invoice}}</td>
+                                                                <td>{{row.grand_total}}</td>
+                                                                <td>
+                                                                    <a href="update/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal"
+                                                                        data-target="#modaledit{{row.id}}">Edit</a>
+                                                                </td>
+                                                            </tr>
+
+
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

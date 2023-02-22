@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>মূসক- ৬.৩</title>
+   </head>
+   <body>
+      <br>
+      <br>
+      <br>
+      <div align="right">
+         <form method="GET">
+            <input type="button" name="server" value="Print" onClick="printData()" id="prt" >
+         </form>
+      </div>
+      <div>
+         {%for company in company_data %}
+         <table width="100%" class="table1" id = "table1" style="text-align:center">
+            <tr>
+               <p width=" 20%" style="display:none; float: right; margin-right:10px;"id="org">Orginal Copy</p>
+               <td width="25%"></td>
+               <td width="50%">গণপ্রজতন্ত্রী বাংলাদেশ সরকার</td>
+               <td width="25%"></td>
+            </tr>
+            <tr>
+               <td ></td>
+               <td>জাতীয় রাজস্ব বোর্ড</td>
+               <td></td>
+            </tr>
+            <tr>
+               <td></td>
+               <td></td>
+               <td>
+                  <p style="border:1px solid black; width:150px">মূসক- ৬.৩</p>
+               </td>
+            </tr>
+            <tr>
+               <td ></td>
+               <td>কর চালান পত্র</td>
+               <td></td>
+            </tr>
+            <tr>
+               <td ></td>
+               <td>[বিধি ৪০  উপ-বিধি এর (১) এর দফা (গ) ও  দফা (চ) দ্রষ্টব্য]</td>
+               <td></td>
+            </tr>
+            <tr>
+               <td ></td>
+               <td>&nbsp;</td>
+               <td></td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>&nbsp;</td>
+               <td></td>
+            </tr>
+            <tr>
+               <td ></td>
+               <td>নিবন্ধিত বাক্তির নাম:-{{company.company_name}}</td>
+               <td></td>
+            </tr>
+            <tr>
+               <td ></td>
+               <td>নিবন্ধিত বাক্তির বিআইএন:-{{company.bin_number}}</td>
+               <td></td>
+            </tr>
+            <tr>
+               <td ></td>
+               <td>চালানপত্র ইস্যুর ঠিকানা:- {{company.address}}
+               <td></td>
+            </tr>
+         </table>
+         {%endfor%}
+      </div>
+      <div>
+         <br>
+         <br>
+         <div style="float:left;width:50%;">
+            {% for customer in customers %}
+            <table>
+               <tr>
+                  <td></td>
+                  <td></td>
+               </tr>
+               <tr>
+                  <td></td>
+                  <td></td>
+               </tr>
+
+               <tr>
+                  <td>ক্রেতার নাম: {{ customer.customer_name }}</td>
+                  <td></td>
+               </tr>
+               <tr>
+                  <td>ক্রেতার বিআইএন: {{ customer.customer_bin }} </td>
+                  <td></td>
+               </tr>
+               <tr>
+                  <td>পন্নের গন্তব্বস্থল: {{ customer.destination }}</td>
+                  <td></td>
+               </tr>
+               <tr>
+                  <td></td>
+                  <td></td>
+               </tr>
+               <tr>
+                  <td></td>
+                  <td></td>
+               </tr>
+               <tr>
+                  <td></td>
+                  <td></td>
+               </tr>
+            </table>
+         </div>
+         <br>
+         <br>
+         <div style="overflow:hidden; float: right; text-align:left">
+            <table>
+               <tr>
+                  <td>চালানপত্র নম্বর</td>
+                  <td>: {{ customer.sales_invoice }} </td>
+               </tr>
+               <tr>
+                  <td>ইস্যুর তারিখ</td>
+                  <td>:{{ customer.DATEONLY }}</td>
+               </tr>
+               <tr>
+                  <td>ইস্যুর সময়</td>
+                  <td>:{{ customer.TIMEONLY }}</td>
+               </tr>
+            </table>
+            {%endfor%}
+         </div>
+      </div>
+      <div>
+         <table width="100%" style="border: 1px solid black;
+            border-collapse: collapse;">
+            <tr>
+               <th style="border: 1px solid black;">ক্রমিক সংখ্যা</th>
+               <th style="border: 1px solid black;">পন্ন বা সেবার বর্ণনা( প্রযোজ্য ক্ষেত্রে ব্র্যান্ড নামসহ)</th>
+               <th style="border: 1px solid black;">সরবরাহের একক</th>
+               <th style="border: 1px solid black;">পরিমান</th>
+               <th style="border: 1px solid black;">একক মূল্য (টাকায়)</th>
+               <th style="border: 1px solid black;">মোটমূল্য (টাকায়)</th>
+               <th style="border: 1px solid black;">সম্পূরক শুল্কের পরিমান (টাকায়)</th>
+               <th style="border: 1px solid black;">মূল্য সংযজন করের হার/ সুনিদ্রিসট  কর</th>
+               <th style="border: 1px solid black;">মূল্য সংযজন কর এর পরিমান(টাকায়)</th>
+               <th style="border: 1px solid black;">সকল প্রকার শুল্ক ও করসহ মূল্য</th>
+            </tr>
+            {% for sales in sales_data %}
+            <tr>
+               <td style="border: 1px solid black;height:40px">{{loop.index}}</td>
+               <td style="border: 1px solid black;">{{ sales.item_name}} </td>
+               <td style="border: 1px solid black; text-align:center">{{ sales.unit_name}}</td>
+               <td style="border: 1px solid black;text-align:center">{{ sales.qty}}</td>
+               <td style="border: 1px solid black;text-align:center">{{ sales.rate}}</td>
+               <td style="border: 1px solid black;text-align:center">{{ sales.rate_value}}</td>
+               <td style="border: 1px solid black;text-align:center">{{ sales.sd_amount}}</td>
+               <td style="border: 1px solid black;text-align:center">{{ sales.vat_percent}}</td>
+               <td style="border: 1px solid black;text-align:center">{{ sales.vat_amount}}</td>
+               <td style="border: 1px solid black;text-align:center">{{ sales.sub_total}}</td>
+            </tr>
+            {%endfor%}
+            {% for total in totals %}
+            <tr>
+               <td colspan="5" align="right">সর্বমোট</td>
+               <td style="border: 1px solid black;text-align:center"></td>
+               <td style="border: 1px solid black;text-align:center">{{ total.total_sd}}</td>
+               <td style="border: 1px solid black;text-align:center"></td>
+               <td style="border: 1px solid black;text-align:center">{{ total.total_vat}}</td>
+               <td style="border: 1px solid black;text-align:center">{{ total.grand_total}}</td>
+            </tr>
+            {%endfor%}
+         </table>
+      </div>
+      <h4>প্রতিষ্ঠান করতিপক্ষের দায়িত্বপ্রাপ্ত বাক্তির নাম: {{ current_user.first_name }} {{ current_user.last_name }}</h4>
+      <h4>পদবি</h4>
+      <h4>স্বাক্ষর</h4>
+      <h4>সিল</h4>
+      <h4>*উৎসে কর্তনযোগ্য  সরবরাহের ক্ষেত্রে ফর্মটি সমন্নিত কর চালানপত্র ও উৎসে কর সনদপত্র হিসাবে বিবেচিত হইবে এবং  উৎসে কর্তনযোগ্য সরবরাহের ক্ষেত্রে প্রযোজ্য হইবে</h4>
+      </div>
+      <script>
+         var v1=0;
+         function printData() {
+             document.getElementById("prt").style.display = "none";
+             document.getElementById("org").style.display = "block";
+         if (v1==0) {
+         window.print();
+         }
+         else {
+         window.print();
+         $('#org').text('Duplicate');
+         }
+         v1++;
+         }
+
+      </script>
+   </body>
+</html>
