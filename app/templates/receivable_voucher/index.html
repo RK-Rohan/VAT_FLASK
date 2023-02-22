@@ -1,0 +1,76 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Receivable Voucher {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+     <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Receivable Voucher</h5>
+                                                <a href="{{ url_for('receivable_voucher.receivable_voucher_create') }}" class="btn btn-success float-right">New Receivable Voucher</a>
+                                            </div>
+                                            <div class="card-block table-border-style">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Receivable Description</th>
+                                                                <th>Chalan Date</th>
+                                                                <th>Execution Date</th>
+                                                                <th>Amount</th>
+                                                                <th>VAT Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for row in receivable_voucher %}
+                                                            <tr>
+                                                                <th>{{loop.index}}</th>
+                                                                <td>{{row.receivable_desc}}</td>
+                                                                <td>{{row.chalan_date}}</td>
+                                                                <td>{{row.execute_date}}</td>
+                                                                <td>{{row.receivable_amount}}</td>
+                                                                <td>{{row.vat_amount}}</td>
+                                                            </tr>
+
+
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

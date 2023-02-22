@@ -1,0 +1,80 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Credit Note {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+     <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Credit Note </h5>
+                                                <a href="{{ url_for('credit_note.credit_note_create') }}" class="btn btn-success float-right">Add Credit Note</a>
+                                            </div>
+                                            <div class="card-block table-border-style">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Credit Invoice</th>
+                                                                <th>Issue Date</th>
+                                                                <th>Total Amount</th>
+                                                                <th>Total VAT</th>
+                                                                <th>Total SD</th>
+                                                                <th>Mushak</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for row in credit_note %}
+                                                            <tr>
+                                                                <th>{{loop.index}}</th>
+                                                                <td>{{row.credit_note_no}}</td>
+                                                                <td>{{ row.cn_issue_date }}</td>
+                                                                <td>{{row.total_amount}}</td>
+                                                                <td>{{row.total_vat}}</td>
+                                                                <td>{{row.total_sd}}</td>
+                                                                <td>
+                                                                    <a href="/reports/67/{{row.id}}" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-print">-Mushak-6.7</i></a>
+                                                                </td>
+                                                            </tr>
+
+
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
