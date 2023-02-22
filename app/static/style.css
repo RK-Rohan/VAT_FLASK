@@ -1,0 +1,150 @@
+body{
+    color: black;
+}
+
+body[data-layout=detached] .page-title-box .breadcrumb-item>a {
+    color: #E90A4D;
+    } 
+    body[data-topbar=colored] .header-item, body[data-topbar=dark] .header-item {
+        color: #e9ecef;
+        margin-left: -170px;
+        margin-top: -121px;
+    }
+    .itag{
+    color: #fff;
+    height: 26px !important;
+    width: 30px !important;
+    margin-right: 20px;
+    border-right: 2px solid rgb(241, 238, 238);
+    }
+    .itag2{
+    color: #fff;
+    padding-left: 18px;
+    height: 23px;
+    width: 82px;
+    border: 2px solid white;
+    border-radius: 25px;
+    margin-right: 33px;
+    }
+    .sms{
+    background-color: #E90A4D;
+    height: 40px; 
+    color: #fff;
+    padding-top: 10px;
+    padding-left: 10px;
+    border-radius: 10px 100px / 120px;
+    }
+    @media (max-width: 575.98px) { 
+    .itag2{
+    display: none;
+    }
+    .itag{
+    display: none;
+    }
+    .item3{
+    margin-right: -13px;
+    }
+    .imgss{
+    margin: 10px;
+    }
+    }
+    .switch {
+    position: relative;
+    display: inline-block;
+    width: 54px;
+    height: 25px;
+    }
+    .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+    }
+    .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    -webkit-transition: .4s;
+    transition: .4s;
+    }
+    .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    left: 2px;
+    bottom: 2px;
+    background-color:#1984bd;
+    -webkit-transition: .4s;
+    transition: .4s;
+    }
+    input:checked + .slider {
+    /* background-color: #2196F3; */
+    background-color: #fff;
+    }
+    input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+    }
+    input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+    }
+    /* Rounded sliders */
+    .slider.round {
+    border-radius: 34px;
+    }
+    .slider.round:before {
+    border-radius: 50%;
+    } 
+    .welcome{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    height: 68vh;
+    }
+    .btn-danger {
+    color: #fff;
+    background-color: #E90A4D;
+    border-color: #E90A4D;
+    width: 100px;
+    padding-left: 28px;
+    margin-top: 25px;
+    }
+    /* .pi1{
+    background-color: #E90A4D;
+    } */
+    @include media-breakpoint-up(sm) { 
+    .itemss{
+    max-width: 100%;
+    }
+    }
+    @media (min-width: 992px){
+    body[data-layout=detached] .page-title-box {
+    padding-bottom: 22px;
+    }
+    }
+    @media (min-width: 992px){
+    body[data-layout=detached] .page-title-box {
+    padding-bottom: 0px;
+    }
+    }
+
+/* LOGIN PAGE */
+
+@media (min-width: 1400px) { 
+
+    .welcome {
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        height: 68vh;
+        margin-top: -100px;
+    }
+ }
+
+
+
+
+
+

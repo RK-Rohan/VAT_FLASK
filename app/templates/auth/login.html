@@ -1,54 +1,83 @@
-{% extends "layouts/base-fullscreen.html" %}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-{% block title %} Login {% endblock %}
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-{% block content %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Hello, world!</title>
+</head>
+<body>
 
-    <div class="auth-wrapper">
-        <div class="auth-content">
-            <div class="auth-bg">
-                <span class="r"></span>
-                <span class="r s"></span>
-                <span class="r s"></span>
-                <span class="r"></span>
-            </div>
-            <div class="card">
-                <div class="card-body text-center">
 
-                    <h3 class="mb-4">Login</h3>
+<section class="vh-100">
+    <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100 ">
+            <div style="background-color: #fff; height: 100vh;width: 90vh;"
+                 class="col-md-6 col-lg-6 col-xl-5 d-flex justify-content-end ">
 
-                    <span class="mb-0 text-muted">
-                        {% if msg %}
-                            <span class="text-danger">{{ msg | safe }}</span>
-                        {% else %}
-                            Add your credentials
-                        {% endif %}
-                    </span>
-
-                    <br />
-                    <br />
-
-                    <form role="form" method="post" action="">
-
-                        {{ form.hidden_tag() }}
-
-                        <div class="input-group mb-3">
-                            {{ form.username(placeholder="Username or eMail", class="form-control") }}
-                        </div>
-
-                        <div class="input-group mb-4">
-                            {{ form.password(placeholder="Password", class="form-control", type="password") }}
-                        </div>
-
-                        <button type="submit" name="login" class="btn btn-primary shadow-2 mb-4">Login</button>
-
-                    </form>
-
-                    <p class="mb-0 text-muted">Don’t have an account? <a href="{{ url_for('auth.register') }}" >Sign UP</a></p>
+                <div style="background-color: #f82061; height: 68vh; width: 70vh; margin-top: 104px; margin-right: -12px; "
+                     class="">
+                    <img style="margin-top: 20%;" class="d-flex mx-auto " height="35%" ;
+                         src="{{ url_for('static', filename='images/BMIT Logo 164x82-01.png') }}" alt="">
+                    <span style="color: #fff; font-size: 30px; margin-left: 80px;">We are Creative Agency</span>
 
                 </div>
+            </div>
+
+
+            <div class="col-md-6 col-lg-6 col-xl-4 welcome">
+                <form class="m-5">
+                    <div>
+                        <h4 class="d-flex justify-content-center">Welcome</h4>
+                        <p style="font-weight: bold;" class="d-flex justify-content-center">Please Log in to your
+                            account below.</p>
+
+                    </div>
+
+
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <input type="email" id="form3Example3" class="form-control form-control-lg"
+                               placeholder="Enter email address"/>
+
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="form-outline mb-3">
+                        <input type="password" id="form3Example4" class="form-control form-control-lg"
+                               placeholder="Enter password"/>
+
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- Checkbox -->
+                        <div class="form-check mb-0">
+                            <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3"/>
+                            <label class="form-check-label" for="form2Example3">
+                                Remember me
+                            </label>
+                        </div>
+                        <a href="#!" class="text-body">Forgot password?</a>
+                    </div>
+
+                    <div class="text-center text-lg-start mt-4 pt-2 d-grid">
+                        <button class="btn btn-primary" type="button">Log In to Dashboard</button>
+                        <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
+                                                                                          class="link-danger">Register</a>
+                        </p>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-{% endblock content %}
+</section>
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
